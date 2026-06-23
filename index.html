@@ -212,6 +212,12 @@
   .tl-role { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.1rem; }
   .tl-org { font-size: 0.9rem; color: var(--accent); margin-bottom: 0.6rem; }
   .tl-desc { font-size: 0.92rem; color: var(--muted); line-height: 1.7; }
+  .tl-link {
+    display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.65rem;
+    font-family: var(--ff-mono); font-size: 0.8rem; color: var(--accent);
+    transition: opacity 0.2s;
+  }
+  .tl-link:hover { opacity: 0.72; }
 
   /* ── PROJECTS ──────────────────────── */
   .proj-grid { display: grid; gap: 1.1rem; }
@@ -406,6 +412,13 @@
     <div class="eyebrow">experience &amp; education</div>
     <h2 class="title">The path so far</h2>
     <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-meta">WS 2025/26</div>
+        <div class="tl-role">Lab Course — Motion Planning for Autonomous Vehicles</div>
+        <div class="tl-org">Chair of Robotics &amp; Real-Time Systems · TU Munich</div>
+        <div class="tl-desc"><i>“Constructing a Driving Dataset near a Bus Station”</i>: a computer-vision pipeline that extracts road-user trajectories from drone recordings and converts them into CommonRoad scenarios, paired with a visualization toolbox and an automated drivability checker (collision, road-compliance, and kinematic-feasibility validation). Built on the CommonRoad framework, with TPH-YOLOv5 for small-object detection and MobileSAM for efficient segmentation.</div>
+        <a class="tl-link" href="assets/commonroad.pdf" target="_blank" rel="noopener">↓ Read the paper (PDF)</a>
+      </div>
       <div class="tl-item">
         <div class="tl-meta">2024 — 2025</div>
         <div class="tl-role">Driving Strategy Engineer</div>

@@ -11,20 +11,10 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #0b0c0e;
-    --surface: #131418;
-    --card: #16181d;
-    --card-hover: #1b1e24;
-    --border: rgba(255,255,255,0.07);
-    --border-bright: rgba(255,255,255,0.14);
-    --accent: #5eead4;
-    --accent-2: #818cf8;
-    --text: #eef0f3;
-    --muted: #8b909b;
-    --faint: #5a5f6a;
-    --ff-sans: 'Space Grotesk', sans-serif;
-    --ff-mono: 'JetBrains Mono', monospace;
-    --max: 940px;
+    --bg: #0b0c0e; --surface: #131418; --card: #16181d; --card-hover: #1b1e24;
+    --border: rgba(255,255,255,0.07); --border-bright: rgba(255,255,255,0.14);
+    --accent: #5eead4; --accent-2: #818cf8; --text: #eef0f3; --muted: #8b909b; --faint: #5a5f6a;
+    --ff-sans: 'Space Grotesk', sans-serif; --ff-mono: 'JetBrains Mono', monospace; --max: 940px;
   }
   html { scroll-behavior: smooth; }
   body { font-family: var(--ff-sans); background: var(--bg); color: var(--text); line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
@@ -82,6 +72,33 @@
   .proj-grid { display: grid; gap: 1.1rem; }
   .proj { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.6rem 1.7rem; transition: border-color 0.2s, transform 0.2s, background 0.2s; display: block; }
   .proj:hover { border-color: var(--accent); transform: translateY(-3px); background: var(--card-hover); }
+  .proj-preview {
+    position: fixed;
+    width: 340px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-bright);
+    box-shadow: 0 24px 60px -12px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.05);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 999;
+    background: var(--card);
+  }
+  .proj-preview.visible { opacity: 1; transform: translateY(0) scale(1); }
+  .proj-preview img { width: 100%; display: block; }
+  .proj-preview-bar {
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.5rem 0.75rem; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .proj-preview-bar span { width: 8px; height: 8px; border-radius: 50%; }
+  .proj-preview-label {
+    padding: 0.55rem 0.85rem;
+    font-family: var(--ff-mono); font-size: 0.7rem; color: var(--muted);
+    border-top: 1px solid var(--border); background: var(--surface);
+  }
   .proj-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.7rem; gap: 1rem; }
   .proj-name { font-size: 1.12rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
   .proj-name .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
@@ -92,6 +109,42 @@
   .tag { font-family: var(--ff-mono); font-size: 0.7rem; padding: 0.22rem 0.6rem; border-radius: 5px; background: rgba(129,140,248,0.1); color: #a5b0f9; letter-spacing: 0.02em; }
   .more-link { margin-top: 1.75rem; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--ff-mono); font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
   .more-link:hover { color: var(--accent); }
+
+  /* featured card */
+  .proj-featured {
+    display: block; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); background: var(--card);
+    transition: border-color 0.2s, transform 0.2s;
+    margin-bottom: 1rem;
+  }
+  .proj-featured:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .proj-featured-screen { background: var(--surface); }
+  .proj-featured-bar {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 0.9rem; background: #0d0f12;
+  }
+  .proj-featured-bar span { width: 9px; height: 9px; border-radius: 50%; }
+  .proj-featured-screen img { width: 100%; display: block; max-height: 320px; object-fit: cover; object-position: top; }
+  .proj-featured-body { padding: 1.4rem 1.6rem; }
+  .proj-featured-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; gap: 1rem; }
+  .proj-featured-name { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .proj-featured-sub { font-size: 0.88rem; color: var(--muted); }
+  .proj-featured-cta { font-family: var(--ff-mono); font-size: 0.78rem; color: var(--accent); white-space: nowrap; padding-top: 0.2rem; }
+
+  /* mini grid */
+  .proj-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 0; }
+  .proj-mini {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem 1.3rem;
+    display: block; transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    position: relative;
+  }
+  .proj-mini:hover { border-color: var(--accent); transform: translateY(-2px); background: var(--card-hover); }
+  .proj-mini-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem; }
+  .proj-mini-name { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+  .proj-mini-arrow { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--faint); transition: color 0.2s; }
+  .proj-mini:hover .proj-mini-arrow { color: var(--accent); }
+  @media (max-width: 720px) { .proj-mini-grid { grid-template-columns: 1fr; } }
   .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
   .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.3rem 1.4rem; }
   .skill-card h3 { font-family: var(--ff-mono); font-size: 0.74rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 1rem; }
@@ -215,52 +268,62 @@
   <section class="block reveal" id="projects">
     <div class="eyebrow">selected work</div>
     <h2 class="title">Things I've built</h2>
-    <div class="proj-grid">
-      <a class="proj" href="infralens.html" data-repo="InfraLens">
-        <div class="proj-top">
-          <span class="proj-name"><span class="dot"></span>InfraLens</span>
-          <span class="proj-arrow">learn more ↗</span>
+
+    <!-- FEATURED: InfraLens -->
+    <a class="proj-featured" href="infralens.html" data-repo="InfraLens">
+      <div class="proj-featured-screen">
+        <div class="proj-featured-bar">
+          <span style="background:#ff5f57"></span>
+          <span style="background:#ffbd2e"></span>
+          <span style="background:#28ca42"></span>
         </div>
-        <div class="proj-stats" data-stats></div>
-        <p class="proj-desc">A full-stack Proxmox homelab monitor that auto-discovers nodes, VMs, and containers, renders them as a live interactive topology graph, and streams CPU/RAM/disk/network telemetry. Feeds structured live context into a local LLM chat interface for infrastructure diagnostics.</p>
+        <img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/hero-banner.png"
+             alt="InfraLens dashboard"
+             onerror="this.style.opacity='0'" />
+      </div>
+      <div class="proj-featured-body">
+        <div class="proj-featured-top">
+          <div>
+            <div class="proj-featured-name">InfraLens</div>
+            <div class="proj-featured-sub">Proxmox homelab monitor &amp; LLM diagnostics</div>
+          </div>
+          <span class="proj-featured-cta">Learn more ↗</span>
+        </div>
+        <div class="proj-stats" data-stats style="margin-bottom:0.75rem;"></div>
         <div class="tags">
           <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">React</span><span class="tag">Proxmox API</span><span class="tag">Ollama</span><span class="tag">Docker</span>
         </div>
-      </a>
-      <a class="proj" href="https://github.com/AdamYahmadi/vertex" target="_blank" rel="noopener" data-repo="vertex">
-        <div class="proj-top">
-          <span class="proj-name"><span class="dot"></span>Vertex</span>
-          <span class="proj-arrow">github ↗</span>
+      </div>
+    </a>
+
+    <!-- COMPACT GRID -->
+    <div class="proj-mini-grid">
+      <a class="proj-mini" href="https://github.com/AdamYahmadi/vertex" target="_blank" rel="noopener" data-repo="vertex" data-preview="vertex">
+        <div class="proj-mini-top">
+          <span class="proj-mini-name"><span class="dot"></span>Vertex</span>
+          <span class="proj-mini-arrow">↗</span>
         </div>
         <div class="proj-stats" data-stats></div>
-        <p class="proj-desc">A CLI tool that turns document photos into scanner-quality PDFs through a computer-vision pipeline: GrabCut boundary detection, homographic perspective correction, morphological illumination normalization, and batch PDF export.</p>
-        <div class="tags">
-          <span class="tag">Python</span><span class="tag">OpenCV</span><span class="tag">scikit-image</span><span class="tag">NumPy</span>
-        </div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">OpenCV</span><span class="tag">scikit-image</span><span class="tag">NumPy</span></div>
       </a>
-      <a class="proj" href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener" data-repo="cache-simulator">
-        <div class="proj-top">
-          <span class="proj-name"><span class="dot"></span>Cache Simulator</span>
-          <span class="proj-arrow">github ↗</span>
+      <a class="proj-mini" href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener" data-repo="cache-simulator" data-preview="cache-simulator">
+        <div class="proj-mini-top">
+          <span class="proj-mini-name"><span class="dot"></span>Cache Simulator</span>
+          <span class="proj-mini-arrow">↗</span>
         </div>
         <div class="proj-stats" data-stats></div>
-        <p class="proj-desc">A cycle-accurate cache simulator modeling direct-mapped and fully-associative caches with LRU eviction, configurable line count/size and latency. Tracks per-access gate counts to estimate hardware complexity alongside hit/miss rates.</p>
-        <div class="tags">
-          <span class="tag">C++</span><span class="tag">SystemC</span><span class="tag">Computer Arch</span>
-        </div>
+        <div class="tags"><span class="tag">C++</span><span class="tag">SystemC</span><span class="tag">Computer Arch</span></div>
       </a>
-      <a class="proj" href="https://github.com/AdamYahmadi/mdtopdf" target="_blank" rel="noopener" data-repo="mdtopdf">
-        <div class="proj-top">
-          <span class="proj-name"><span class="dot"></span>mdtopdf</span>
-          <span class="proj-arrow">github ↗</span>
+      <a class="proj-mini" href="https://github.com/AdamYahmadi/mdtopdf" target="_blank" rel="noopener" data-repo="mdtopdf" data-preview="mdtopdf">
+        <div class="proj-mini-top">
+          <span class="proj-mini-name"><span class="dot"></span>mdtopdf</span>
+          <span class="proj-mini-arrow">↗</span>
         </div>
         <div class="proj-stats" data-stats></div>
-        <p class="proj-desc">A no-frills CLI that converts Markdown files into clean PDFs straight from the terminal — no GUI, no browser, just one command.</p>
-        <div class="tags">
-          <span class="tag">JavaScript</span><span class="tag">CLI</span>
-        </div>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">CLI</span></div>
       </a>
     </div>
+
     <a class="more-link" href="https://github.com/AdamYahmadi" target="_blank" rel="noopener">See everything on GitHub →</a>
   </section>
   <hr class="sep" />
@@ -312,6 +375,64 @@
     function tick(){ const full = phrases[p]; el.textContent = full.slice(0, i); if (!deleting && i < full.length) { i++; setTimeout(tick, 55); } else if (!deleting && i === full.length) { deleting = true; setTimeout(tick, 1900); } else if (deleting && i > 0) { i--; setTimeout(tick, 28); } else { deleting = false; p = (p + 1) % phrases.length; setTimeout(tick, 350); } }
     tick();
   })();
+  // hover previews
+  (function(){
+    const htmlPreviews = {
+      'vertex': `<div style="background:#0d1117;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;line-height:1.8;color:#8b949e;"><div style="color:#3fb950;">$ vertex scan document.jpg</div><div>→ detecting edges...</div><div>→ correcting perspective...</div><div>→ normalizing illumination...</div><div style="color:#3fb950;">✓ exported document.pdf</div><div style="margin-top:0.75rem;padding:0.65rem;background:#161b22;border-radius:6px;border:1px solid #30363d;display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;"><div><div style="color:#58a6ff;font-size:0.65rem;">INPUT</div><div style="color:#e6edf3;margin-top:0.2rem;">📷 photo · JPEG · 4.2 MB</div></div><div><div style="color:#58a6ff;font-size:0.65rem;">OUTPUT</div><div style="color:#e6edf3;margin-top:0.2rem;">📄 scan · PDF · 0.8 MB</div></div></div></div>`,
+      'cache-simulator': `<div style="background:#0d1117;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;line-height:1.7;color:#8b949e;"><div style="color:#58a6ff;">Cache Simulator · direct-mapped · 256 lines</div><div style="margin-top:0.6rem;display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;"><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#3fb950;font-size:0.65rem;">HIT RATE</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">94.7%</div></div><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#f85149;font-size:0.65rem;">MISS RATE</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">5.3%</div></div><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#d29922;font-size:0.65rem;">CYCLES</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">18 432</div></div><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#a371f7;font-size:0.65rem;">GATE OPS</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">2.1 M</div></div></div><div style="margin-top:0.6rem;">LRU eviction · configurable latency</div></div>`,
+      'mdtopdf': `<div style="background:#0d1117;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;line-height:1.8;color:#8b949e;"><div style="color:#3fb950;">$ mdtopdf README.md</div><div>→ parsing markdown...</div><div style="color:#3fb950;">✓ README.pdf</div><div style="margin-top:0.6rem;color:#58a6ff;"># batch mode</div><div style="color:#3fb950;">$ mdtopdf docs/*.md -o out/</div><div>→ 6 files converted</div><div style="color:#3fb950;">✓ out/README.pdf</div><div style="color:#3fb950;">✓ out/CHANGELOG.pdf</div><div style="color:#3fb950;">✓ out/API.pdf <span style="color:#8b949e;">+ 3 more</span></div></div>`
+    };
+
+    const preview = document.createElement('div');
+    preview.className = 'proj-preview';
+    preview.innerHTML = '<div class="proj-preview-bar"><span style="background:#ff5f57"></span><span style="background:#ffbd2e"></span><span style="background:#28ca42"></span></div><div id="preview-content"></div><div class="proj-preview-label" id="preview-label"></div>';
+    document.body.appendChild(preview);
+
+    const contentEl = document.getElementById('preview-content');
+    const labelEl = document.getElementById('preview-label');
+    let hideTimer;
+
+    document.querySelectorAll('.proj[data-preview]').forEach(card => {
+      card.addEventListener('mouseenter', function(e) {
+        clearTimeout(hideTimer);
+        const repo = this.dataset.repo;
+        if (htmlPreviews[repo]) {
+          contentEl.innerHTML = htmlPreviews[repo];
+        } else {
+          contentEl.innerHTML = '<img src="' + this.dataset.preview + '" alt="" style="width:100%;display:block;" />';
+        }
+        labelEl.textContent = this.dataset.previewLabel || '';
+        pos(e); preview.classList.add('visible');
+      });
+      card.addEventListener('mousemove', pos);
+      card.addEventListener('mouseleave', () => { hideTimer = setTimeout(() => preview.classList.remove('visible'), 80); });
+    });
+
+    document.querySelectorAll('.proj-mini[data-preview]').forEach(card => {
+      card.addEventListener('mouseenter', function(e) {
+        clearTimeout(hideTimer);
+        const repo = this.dataset.preview;
+        if (htmlPreviews[repo]) {
+          contentEl.innerHTML = htmlPreviews[repo];
+        }
+        labelEl.textContent = this.querySelector('.proj-mini-name').textContent.trim();
+        pos(e); preview.classList.add('visible');
+      });
+      card.addEventListener('mousemove', pos);
+      card.addEventListener('mouseleave', () => { hideTimer = setTimeout(() => preview.classList.remove('visible'), 80); });
+    });
+
+    function pos(e) {
+      const pw = 340, ph = 280, gap = 20;
+      let x = e.clientX + gap, y = e.clientY - ph / 2;
+      if (x + pw > window.innerWidth - 10) x = e.clientX - pw - gap;
+      if (y < 10) y = 10;
+      if (y + ph > window.innerHeight - 10) y = window.innerHeight - ph - 10;
+      preview.style.left = x + 'px'; preview.style.top = y + 'px';
+    }
+  })();
+
+  // live github stats
   (function(){
     const user = 'AdamYahmadi';
     function ago(iso){ const d = Math.floor((Date.now() - new Date(iso)) / 86400000); if (d < 1) return 'today'; if (d < 30) return d + 'd ago'; if (d < 365) return Math.floor(d/30) + 'mo ago'; return Math.floor(d/365) + 'y ago'; }
@@ -319,9 +440,9 @@
       const repo = card.getAttribute('data-repo');
       const slot = card.querySelector('[data-stats]');
       if (!slot) return;
-      fetch(`https://api.github.com/repos/${user}/${repo}`)
+      fetch('https://api.github.com/repos/' + user + '/' + repo)
         .then(r => r.ok ? r.json() : Promise.reject(r.status))
-        .then(d => { const parts = [`<span class="live">live</span>`]; parts.push(`<span>★ ${d.stargazers_count}</span>`); if (d.language) parts.push(`<span>● ${d.language}</span>`); parts.push(`<span>updated ${ago(d.pushed_at)}</span>`); slot.innerHTML = parts.join(''); })
+        .then(d => { const parts = ['<span class="live">live</span>']; parts.push('<span>★ ' + d.stargazers_count + '</span>'); if (d.language) parts.push('<span>● ' + d.language + '</span>'); parts.push('<span>updated ' + ago(d.pushed_at) + '</span>'); slot.innerHTML = parts.join(''); })
         .catch(() => { if(slot) slot.remove(); });
     });
   })();

@@ -114,10 +114,11 @@
   .proj-featured {
     display: block; border-radius: 16px; overflow: hidden;
     border: 1px solid var(--border); background: var(--card);
-    transition: border-color 0.2s, transform 0.2s;
-    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    flex: 0 0 100%;
+    width: 100%;
   }
-  .proj-featured:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .proj-featured:hover { border-color: var(--accent); }
   .proj-featured-screen { background: var(--surface); }
   .proj-featured-bar {
     display: flex; align-items: center; gap: 0.4rem;
@@ -131,8 +132,27 @@
   .proj-featured-sub { font-size: 0.88rem; color: var(--muted); }
   .proj-featured-cta { font-family: var(--ff-mono); font-size: 0.78rem; color: var(--accent); white-space: nowrap; padding-top: 0.2rem; }
 
+  /* slider */
+  .proj-slider { position: relative; margin-bottom: 1rem; }
+  .proj-slider-window { overflow: hidden; border-radius: 16px; }
+  .proj-slider-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .proj-slider-track .proj-featured { border-radius: 16px; }
+
+  /* slim story-style bar */
+  .slider-tabs { display: flex; gap: 0.4rem; margin-bottom: 0.9rem; padding: 0 0.1rem; }
+  .slider-tab {
+    flex: 1; height: 3px; border-radius: 3px;
+    background: var(--border-bright); border: none; padding: 0;
+    cursor: pointer; transition: background 0.3s;
+  }
+  .slider-tab:hover { background: rgba(255,255,255,0.28); }
+  .slider-tab.active { background: var(--accent); }
+
   /* mini grid */
-  .proj-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 0; }
+  .proj-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 0; }
   .proj-mini {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.25rem 1.3rem;
@@ -277,32 +297,74 @@
     <div class="eyebrow">selected work</div>
     <h2 class="title">Things I've built</h2>
 
-    <!-- FEATURED: InfraLens -->
-    <a class="proj-featured" href="infralens.html" data-repo="InfraLens">
-      <div class="proj-featured-screen">
-        <div class="proj-featured-bar">
-          <span style="background:#ff5f57"></span>
-          <span style="background:#ffbd2e"></span>
-          <span style="background:#28ca42"></span>
-        </div>
-        <img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
-             alt="InfraLens dashboard"
-             onerror="this.style.opacity='0'" />
+    <!-- FEATURED SLIDER -->
+    <div class="proj-slider">
+      <!-- slim story-style bar -->
+      <div class="slider-tabs" id="sliderTabs">
+        <button class="slider-tab active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
+        <button class="slider-tab" onclick="goToSlide(1)" aria-label="Slide 2"></button>
       </div>
-      <div class="proj-featured-body">
-        <div class="proj-featured-top">
-          <div>
-            <div class="proj-featured-name">InfraLens</div>
-            <div class="proj-featured-sub">Proxmox homelab monitor &amp; LLM diagnostics</div>
-          </div>
-          <span class="proj-featured-cta">Learn more ↗</span>
-        </div>
-        <div class="proj-stats" data-stats style="margin-bottom:0.75rem;"></div>
-        <div class="tags">
-          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">React</span><span class="tag">Proxmox API</span><span class="tag">Ollama</span><span class="tag">Docker</span>
+
+      <div class="proj-slider-window">
+        <div class="proj-slider-track" id="sliderTrack">
+
+          <!-- Slide 1: InfraLens -->
+          <a class="proj-featured" href="infralens.html" data-repo="InfraLens">
+            <div class="proj-featured-screen">
+              <div class="proj-featured-bar">
+                <span style="background:#ff5f57"></span>
+                <span style="background:#ffbd2e"></span>
+                <span style="background:#28ca42"></span>
+              </div>
+              <img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
+                   alt="InfraLens dashboard"
+                   onerror="this.style.opacity='0'" />
+            </div>
+            <div class="proj-featured-body">
+              <div class="proj-featured-top">
+                <div>
+                  <div class="proj-featured-name">InfraLens</div>
+                  <div class="proj-featured-sub">Proxmox homelab monitor &amp; LLM diagnostics</div>
+                </div>
+                <span class="proj-featured-cta">Learn more ↗</span>
+              </div>
+              <div class="proj-stats" data-stats style="margin-bottom:0.75rem;"></div>
+              <div class="tags">
+                <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">React</span><span class="tag">Proxmox API</span><span class="tag">Ollama</span><span class="tag">Docker</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Slide 2: mdtopdf -->
+          <a class="proj-featured" href="https://mdtopdf.adamyahmadi.com" target="_blank" rel="noopener" data-repo="mdtopdf">
+            <div class="proj-featured-screen">
+              <div class="proj-featured-bar">
+                <span style="background:#ff5f57"></span>
+                <span style="background:#ffbd2e"></span>
+                <span style="background:#28ca42"></span>
+              </div>
+              <img src="assets/mdtopdf-preview.png"
+                   alt="mdtopdf site"
+                   onerror="this.style.opacity='0'" />
+            </div>
+            <div class="proj-featured-body">
+              <div class="proj-featured-top">
+                <div>
+                  <div class="proj-featured-name">mdtopdf</div>
+                  <div class="proj-featured-sub">Markdown → PDF, straight from the terminal</div>
+                </div>
+                <span class="proj-featured-cta">Visit site ↗</span>
+              </div>
+              <div class="proj-stats" data-stats style="margin-bottom:0.75rem;"></div>
+              <div class="tags">
+                <span class="tag">JavaScript</span><span class="tag">CLI</span>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
-    </a>
+    </div>
 
     <!-- COMPACT GRID -->
     <div class="proj-mini-grid">
@@ -326,17 +388,6 @@
         </div>
         <p class="proj-mini-desc">Cycle-accurate cache simulator with direct-mapped and fully-associative caches, LRU eviction, and per-access gate count tracking to estimate hardware complexity.</p>
         <div class="tags"><span class="tag">C++</span><span class="tag">SystemC</span></div>
-        <div class="proj-stats" data-stats></div>
-      </div>
-      <div class="proj-mini" data-repo="mdtopdf">
-        <div class="proj-mini-top">
-          <span class="proj-mini-name"><span class="dot"></span>mdtopdf</span>
-          <a class="proj-mini-gh" href="https://github.com/AdamYahmadi/mdtopdf" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="GitHub">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-          </a>
-        </div>
-        <p class="proj-mini-desc">CLI that converts Markdown files into clean PDFs straight from the terminal including LaTeX math equations — no GUI, no browser, just one command. Supports batch mode.</p>
-        <div class="tags"><span class="tag">JavaScript</span><span class="tag">CLI</span></div>
         <div class="proj-stats" data-stats></div>
       </div>
     </div>
@@ -392,6 +443,30 @@
     function tick(){ const full = phrases[p]; el.textContent = full.slice(0, i); if (!deleting && i < full.length) { i++; setTimeout(tick, 55); } else if (!deleting && i === full.length) { deleting = true; setTimeout(tick, 1900); } else if (deleting && i > 0) { i--; setTimeout(tick, 28); } else { deleting = false; p = (p + 1) % phrases.length; setTimeout(tick, 350); } }
     tick();
   })();
+  // featured project slider
+  (function(){
+    const track = document.getElementById('sliderTrack');
+    const tabs = document.querySelectorAll('.slider-tab');
+    if (!track) return;
+    const slideCount = track.children.length;
+    let current = 0;
+    let timer;
+
+    function render() {
+      track.style.transform = `translateX(-${current * 100}%)`;
+      tabs.forEach((t, i) => t.classList.toggle('active', i === current));
+    }
+    window.goToSlide = function(i) { current = i; render(); resetTimer(); };
+    function autoAdvance() { current = (current + 1) % slideCount; render(); }
+    function resetTimer() { clearInterval(timer); timer = setInterval(autoAdvance, 5000); }
+
+    const sliderEl = document.querySelector('.proj-slider');
+    sliderEl.addEventListener('mouseenter', () => clearInterval(timer));
+    sliderEl.addEventListener('mouseleave', resetTimer);
+    render();
+    resetTimer();
+  })();
+
   // hover previews
   (function(){
     const htmlPreviews = {

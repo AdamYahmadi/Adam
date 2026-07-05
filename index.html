@@ -110,7 +110,6 @@
   .more-link { margin-top: 1.75rem; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--ff-mono); font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
   .more-link:hover { color: var(--accent); }
 
-  /* featured card */
   .proj-featured {
     display: block; border-radius: 16px; overflow: hidden;
     border: 1px solid var(--border); background: var(--card);
@@ -132,8 +131,25 @@
   .proj-featured-sub { font-size: 0.88rem; color: var(--muted); }
   .proj-featured-cta { font-family: var(--ff-mono); font-size: 0.78rem; color: var(--accent); white-space: nowrap; padding-top: 0.2rem; }
 
-  /* slider */
   .proj-slider { position: relative; margin-bottom: 1rem; }
+  .slider-arrow {
+    position: absolute; top: calc(50% + 8px); transform: translateY(-50%);
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(11,12,14,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-bright); color: var(--text);
+    font-size: 1.4rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    z-index: 20;
+  }
+  .slider-arrow:hover { background: var(--accent); color: #04211d; border-color: var(--accent); }
+  .slider-arrow-prev { left: -14px; }
+  .slider-arrow-next { right: -14px; }
+  @media (max-width: 720px) {
+    .slider-arrow { width: 34px; height: 34px; font-size: 1.2rem; }
+    .slider-arrow-prev { left: 8px; }
+    .slider-arrow-next { right: 8px; }
+  }
   .proj-slider-window { overflow: hidden; border-radius: 16px; }
   .proj-slider-track {
     display: flex;
@@ -141,17 +157,24 @@
   }
   .proj-slider-track .proj-featured { border-radius: 16px; }
 
-  /* slim story-style bar */
   .slider-tabs { display: flex; gap: 0.4rem; margin-bottom: 0.9rem; padding: 0 0.1rem; }
   .slider-tab {
     flex: 1; height: 3px; border-radius: 3px;
     background: var(--border-bright); border: none; padding: 0;
-    cursor: pointer; transition: background 0.3s;
+    cursor: pointer; position: relative; overflow: hidden;
   }
   .slider-tab:hover { background: rgba(255,255,255,0.28); }
-  .slider-tab.active { background: var(--accent); }
+  .slider-tab-fill {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+    background: var(--accent); border-radius: 3px;
+  }
+  .slider-tab.done .slider-tab-fill { width: 100%; }
+  .slider-tab.active .slider-tab-fill { animation: barfill 5s linear forwards; }
+  @keyframes barfill { from { width: 0; } to { width: 100%; } }
+  @media (prefers-reduced-motion: reduce) {
+    .slider-tab.active .slider-tab-fill { animation: none; width: 100%; }
+  }
 
-  /* mini grid */
   .proj-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 0; }
   .proj-mini {
     background: var(--card); border: 1px solid var(--border);
@@ -297,18 +320,18 @@
     <div class="eyebrow">selected work</div>
     <h2 class="title">Things I've built</h2>
 
-    <!-- FEATURED SLIDER -->
     <div class="proj-slider">
-      <!-- slim story-style bar -->
       <div class="slider-tabs" id="sliderTabs">
-        <button class="slider-tab active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
-        <button class="slider-tab" onclick="goToSlide(1)" aria-label="Slide 2"></button>
+        <button class="slider-tab active" onclick="goToSlide(0)" aria-label="Slide 1"><span class="slider-tab-fill"></span></button>
+        <button class="slider-tab" onclick="goToSlide(1)" aria-label="Slide 2"><span class="slider-tab-fill"></span></button>
       </div>
+
+      <button class="slider-arrow slider-arrow-prev" onclick="slideProj(-1)" aria-label="Previous">‹</button>
+      <button class="slider-arrow slider-arrow-next" onclick="slideProj(1)" aria-label="Next">›</button>
 
       <div class="proj-slider-window">
         <div class="proj-slider-track" id="sliderTrack">
 
-          <!-- Slide 1: InfraLens -->
           <a class="proj-featured" href="infralens.html" data-repo="InfraLens">
             <div class="proj-featured-screen">
               <div class="proj-featured-bar">
@@ -335,7 +358,6 @@
             </div>
           </a>
 
-          <!-- Slide 2: mdtopdf -->
           <a class="proj-featured" href="https://mdtopdf.adamyahmadi.com" target="_blank" rel="noopener" data-repo="mdtopdf">
             <div class="proj-featured-screen">
               <div class="proj-featured-bar">
@@ -366,7 +388,6 @@
       </div>
     </div>
 
-    <!-- COMPACT GRID -->
     <div class="proj-mini-grid">
       <div class="proj-mini" data-repo="vertex">
         <div class="proj-mini-top">
@@ -443,7 +464,6 @@
     function tick(){ const full = phrases[p]; el.textContent = full.slice(0, i); if (!deleting && i < full.length) { i++; setTimeout(tick, 55); } else if (!deleting && i === full.length) { deleting = true; setTimeout(tick, 1900); } else if (deleting && i > 0) { i--; setTimeout(tick, 28); } else { deleting = false; p = (p + 1) % phrases.length; setTimeout(tick, 350); } }
     tick();
   })();
-  // featured project slider
   (function(){
     const track = document.getElementById('sliderTrack');
     const tabs = document.querySelectorAll('.slider-tab');
@@ -454,20 +474,39 @@
 
     function render() {
       track.style.transform = `translateX(-${current * 100}%)`;
-      tabs.forEach((t, i) => t.classList.toggle('active', i === current));
+      tabs.forEach((t, i) => {
+        t.classList.toggle('active', i === current);
+        t.classList.toggle('done', i < current);
+        const fill = t.querySelector('.slider-tab-fill');
+        if (fill && i === current) {
+          fill.style.animation = 'none';
+          void fill.offsetWidth; 
+          fill.style.animation = '';
+        }
+      });
     }
     window.goToSlide = function(i) { current = i; render(); resetTimer(); };
+    window.slideProj = function(dir) {
+      current = (current + dir + slideCount) % slideCount;
+      render(); resetTimer();
+    };
     function autoAdvance() { current = (current + 1) % slideCount; render(); }
     function resetTimer() { clearInterval(timer); timer = setInterval(autoAdvance, 5000); }
 
     const sliderEl = document.querySelector('.proj-slider');
-    sliderEl.addEventListener('mouseenter', () => clearInterval(timer));
-    sliderEl.addEventListener('mouseleave', resetTimer);
+    sliderEl.addEventListener('mouseenter', () => {
+      clearInterval(timer);
+      tabs.forEach(t => { const f = t.querySelector('.slider-tab-fill'); if (f) f.style.animationPlayState = 'paused'; });
+    });
+    sliderEl.addEventListener('mouseleave', () => {
+      tabs.forEach(t => { const f = t.querySelector('.slider-tab-fill'); if (f) f.style.animationPlayState = 'running'; });
+      resetTimer();
+    });
     render();
     resetTimer();
   })();
 
-    (function(){
+  (function(){
     const htmlPreviews = {
       'vertex': `<div style="background:#0d1117;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;line-height:1.8;color:#8b949e;"><div style="color:#3fb950;">$ vertex scan document.jpg</div><div>→ detecting edges...</div><div>→ correcting perspective...</div><div>→ normalizing illumination...</div><div style="color:#3fb950;">✓ exported document.pdf</div><div style="margin-top:0.75rem;padding:0.65rem;background:#161b22;border-radius:6px;border:1px solid #30363d;display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;"><div><div style="color:#58a6ff;font-size:0.65rem;">INPUT</div><div style="color:#e6edf3;margin-top:0.2rem;">📷 photo · JPEG · 4.2 MB</div></div><div><div style="color:#58a6ff;font-size:0.65rem;">OUTPUT</div><div style="color:#e6edf3;margin-top:0.2rem;">📄 scan · PDF · 0.8 MB</div></div></div></div>`,
       'cache-simulator': `<div style="background:#0d1117;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;line-height:1.7;color:#8b949e;"><div style="color:#58a6ff;">Cache Simulator · direct-mapped · 256 lines</div><div style="margin-top:0.6rem;display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;"><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#3fb950;font-size:0.65rem;">HIT RATE</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">94.7%</div></div><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#f85149;font-size:0.65rem;">MISS RATE</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">5.3%</div></div><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#d29922;font-size:0.65rem;">CYCLES</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">18 432</div></div><div style="background:#161b22;padding:0.5rem;border-radius:5px;border:1px solid #30363d;"><div style="color:#a371f7;font-size:0.65rem;">GATE OPS</div><div style="color:#e6edf3;font-size:1.1rem;margin-top:0.15rem;">2.1 M</div></div></div><div style="margin-top:0.6rem;">LRU eviction · configurable latency</div></div>`,
@@ -509,7 +548,6 @@
     }
   })();
 
-  // live github stats
   (function(){
     const user = 'AdamYahmadi';
     function ago(iso){ const d = Math.floor((Date.now() - new Date(iso)) / 86400000); if (d < 1) return 'today'; if (d < 30) return d + 'd ago'; if (d < 365) return Math.floor(d/30) + 'mo ago'; return Math.floor(d/365) + 'y ago'; }

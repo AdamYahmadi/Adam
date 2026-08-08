@@ -1,486 +1,1202 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>InfraLens — Proxmox Topology Monitor</title>
-<meta name="description" content="Real-time Proxmox topology visualization, streaming telemetry, and local-LLM diagnostics. Built by Adam Yahmadi." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg:      #fbfbfd;
-  --bg2:     #f5f5f7;
-  --white:   #ffffff;
-  --border:  rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.13);
-  --text:    #1d1d1f;
-  --muted:   #6e6e73;
-  --faint:   #a1a1a6;
-  --blue:    #0071e3;
-  --green:   #30d158;
-  --purple:  #5e5ce6;
-  --ff:      'Inter', -apple-system, sans-serif;
-  --ffm:     'JetBrains Mono', monospace;
-  --max:     1060px;
-  --r:       16px;
-}
-html { scroll-behavior: smooth; }
-body { font-family: var(--ff); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-a { color: inherit; text-decoration: none; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InfraLens — Proxmox Topology Monitor</title>
+    <meta
+      name="description"
+      content="Real-time Proxmox topology visualization, streaming telemetry, and local-LLM diagnostics. Built by Adam Yahmadi."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #fbfbfd;
+        --bg2: #f5f5f7;
+        --white: #ffffff;
+        --border: rgba(0, 0, 0, 0.08);
+        --border2: rgba(0, 0, 0, 0.13);
+        --text: #1d1d1f;
+        --muted: #6e6e73;
+        --faint: #a1a1a6;
+        --blue: #0071e3;
+        --green: #30d158;
+        --purple: #5e5ce6;
+        --ff: "Inter", -apple-system, sans-serif;
+        --ffm: "JetBrains Mono", monospace;
+        --max: 1060px;
+        --r: 16px;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--ff);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
 
-/* NAV */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 0 2rem; height: 52px;
-  background: rgba(251,251,253,0.85);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo { display: flex; align-items: center; gap: 0.55rem; font-size: 0.95rem; font-weight: 600; }
-.nav-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
-.nav-links { display: flex; gap: 2rem; }
-.nav-links a { font-size: 0.82rem; color: var(--muted); transition: color 0.2s; }
-.nav-links a:hover { color: var(--text); }
-.nav-back { font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s; }
-.nav-back:hover { color: var(--blue); }
-.nav-r { display: flex; align-items: center; gap: 1rem; }
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+        height: 52px;
+        background: rgba(251, 251, 253, 0.85);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+      .nav-logo img {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        object-fit: cover;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+      .nav-links a {
+        font-size: 0.82rem;
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-back {
+        font-size: 0.82rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: color 0.2s;
+      }
+      .nav-back:hover {
+        color: var(--blue);
+      }
+      .nav-r {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
 
-/* OS PICKER — nav level */
-.os-picker-nav {
-  display: flex; align-items: center; gap: 0.4rem;
-  background: var(--bg2); border: 1px solid var(--border2);
-  border-radius: 980px; padding: 0.22rem 0.3rem;
-}
-.os-btn-nav {
-  font-size: 0.75rem; font-weight: 500; padding: 0.28rem 0.75rem;
-  border-radius: 980px; border: none; background: transparent;
-  color: var(--muted); cursor: pointer; transition: all 0.18s; white-space: nowrap;
-}
-.os-btn-nav.active { background: var(--white); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
+      .os-picker-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--bg2);
+        border: 1px solid var(--border2);
+        border-radius: 980px;
+        padding: 0.22rem 0.3rem;
+      }
+      .os-btn-nav {
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.28rem 0.75rem;
+        border-radius: 980px;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.18s;
+        white-space: nowrap;
+      }
+      .os-btn-nav.active {
+        background: var(--white);
+        color: var(--text);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+      }
 
-/* HERO */
-.hero {
-  text-align: center; padding: 5rem 2rem 3.5rem;
-  background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
-  position: relative; overflow: hidden;
-}
-.hero::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,113,227,0.07), transparent 70%);
-}
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em;
-  color: var(--blue); text-transform: uppercase; margin-bottom: 1.5rem;
-}
-.hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-.hero-icon {
-  width: 88px; height: 88px; border-radius: 20px; object-fit: cover;
-  margin: 0 auto 1.75rem; display: block;
-  box-shadow: 0 16px 48px -8px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
-}
-.hero h1 {
-  font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 700;
-  letter-spacing: -0.04em; line-height: 1.04; margin-bottom: 1.1rem;
-}
-.hero h1 em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hero-sub {
-  font-size: 1.15rem; color: var(--muted); font-weight: 400;
-  max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.7;
-}
-.hero-sub b { color: var(--text); font-weight: 500; }
+      .hero {
+        text-align: center;
+        padding: 5rem 2rem 3.5rem;
+        background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(
+          ellipse 70% 50% at 50% 0%,
+          rgba(0, 113, 227, 0.07),
+          transparent 70%
+        );
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        color: var(--blue);
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+      .hero-icon {
+        width: 88px;
+        height: 88px;
+        border-radius: 20px;
+        object-fit: cover;
+        margin: 0 auto 1.75rem;
+        display: block;
+        box-shadow:
+          0 16px 48px -8px rgba(0, 0, 0, 0.18),
+          0 0 0 1px rgba(0, 0, 0, 0.06);
+      }
+      .hero h1 {
+        font-size: clamp(2.6rem, 7vw, 4.6rem);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.04;
+        margin-bottom: 1.1rem;
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero-sub {
+        font-size: 1.15rem;
+        color: var(--muted);
+        font-weight: 400;
+        max-width: 520px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.7;
+      }
+      .hero-sub b {
+        color: var(--text);
+        font-weight: 500;
+      }
 
-/* HERO DOWNLOAD PICKER */
-.hero-dl {
-  display: flex; justify-content: center; align-items: center;
-  gap: 0.75rem; flex-wrap: wrap; margin-bottom: 3.5rem;
-}
-.os-tab-wrap {
-  display: flex; background: var(--bg2); border: 1px solid var(--border2);
-  border-radius: 980px; padding: 0.25rem 0.3rem; gap: 0.25rem;
-}
-.os-tab {
-  font-size: 0.82rem; font-weight: 500; padding: 0.38rem 1rem;
-  border-radius: 980px; border: none; background: transparent;
-  color: var(--muted); cursor: pointer; transition: all 0.18s;
-}
-.os-tab.active { background: var(--white); color: var(--text); box-shadow: 0 1px 5px rgba(0,0,0,0.12); }
-.dl-btn {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.95rem; font-weight: 600; padding: 0.72rem 1.6rem;
-  border-radius: 980px; background: var(--blue); color: #fff; border: none;
-  cursor: pointer; transition: all 0.18s; text-decoration: none;
-}
-.dl-btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 10px 28px -8px rgba(0,113,227,0.5); }
-.dl-sub { font-size: 0.78rem; color: var(--faint); margin-top: 0.5rem; }
-.btn-ghost-sm {
-  font-size: 0.88rem; font-weight: 500; padding: 0.65rem 1.4rem;
-  border-radius: 980px; background: rgba(0,0,0,0.04);
-  border: 1px solid var(--border2); color: var(--text);
-  transition: background 0.18s; display: inline-flex; align-items: center; gap: 0.4rem;
-}
-.btn-ghost-sm:hover { background: rgba(0,0,0,0.07); }
+      .hero-dl {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 3.5rem;
+      }
+      .os-tab-wrap {
+        display: flex;
+        background: var(--bg2);
+        border: 1px solid var(--border2);
+        border-radius: 980px;
+        padding: 0.25rem 0.3rem;
+        gap: 0.25rem;
+      }
+      .os-tab {
+        font-size: 0.82rem;
+        font-weight: 500;
+        padding: 0.38rem 1rem;
+        border-radius: 980px;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.18s;
+      }
+      .os-tab.active {
+        background: var(--white);
+        color: var(--text);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+      }
+      .dl-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        padding: 0.72rem 1.6rem;
+        border-radius: 980px;
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.18s;
+        text-decoration: none;
+      }
+      .dl-btn:hover {
+        filter: brightness(1.1);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px -8px rgba(0, 113, 227, 0.5);
+      }
+      .dl-sub {
+        font-size: 0.78rem;
+        color: var(--faint);
+        margin-top: 0.5rem;
+      }
+      .btn-ghost-sm {
+        font-size: 0.88rem;
+        font-weight: 500;
+        padding: 0.65rem 1.4rem;
+        border-radius: 980px;
+        background: rgba(0, 0, 0, 0.04);
+        border: 1px solid var(--border2);
+        color: var(--text);
+        transition: background 0.18s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .btn-ghost-sm:hover {
+        background: rgba(0, 0, 0, 0.07);
+      }
 
-/* HERO SCREENSHOT */
-.hero-screen {
-  max-width: 880px; margin: 0 auto;
-  border-radius: var(--r); overflow: hidden;
-  box-shadow: 0 32px 80px -16px rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.06);
-}
-.hero-bar {
-  background: #e8e8ed; padding: 0.6rem 1rem;
-  display: flex; align-items: center; gap: 0.4rem;
-}
-.hd { width: 10px; height: 10px; border-radius: 50%; }
-.hd-r{background:#ff5f57}.hd-y{background:#ffbd2e}.hd-g{background:#28ca42}
-.hero-screen img { width: 100%; display: block; }
+      .hero-screen {
+        max-width: 880px;
+        margin: 0 auto;
+        border-radius: var(--r);
+        overflow: hidden;
+        box-shadow:
+          0 32px 80px -16px rgba(0, 0, 0, 0.16),
+          0 0 0 1px rgba(0, 0, 0, 0.06);
+      }
+      .hero-bar {
+        background: #e8e8ed;
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .hd {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .hd-r {
+        background: #ff5f57;
+      }
+      .hd-y {
+        background: #ffbd2e;
+      }
+      .hd-g {
+        background: #28ca42;
+      }
+      .hero-screen img {
+        width: 100%;
+        display: block;
+      }
 
-/* STATS */
-.stats-band { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.stats { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); }
-.stat { padding: 1.75rem 1.5rem; text-align: center; border-right: 1px solid var(--border); }
-.stat:last-child { border-right: none; }
-.stat-n { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.04em; color: var(--text); margin-bottom: 0.25rem; }
-.stat-l { font-size: 0.8rem; color: var(--muted); }
+      .stats-band {
+        background: var(--white);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .stats {
+        max-width: var(--max);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .stat {
+        padding: 1.75rem 1.5rem;
+        text-align: center;
+        border-right: 1px solid var(--border);
+      }
+      .stat:last-child {
+        border-right: none;
+      }
+      .stat-n {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        color: var(--text);
+        margin-bottom: 0.25rem;
+      }
+      .stat-l {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
 
-/* SECTION */
-.block { max-width: var(--max); margin: 0 auto; padding: 5.5rem 2rem; }
-.section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.65rem; }
-h2.s-title { font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.08; margin-bottom: 0.85rem; }
-.s-sub { font-size: 1rem; color: var(--muted); max-width: 500px; line-height: 1.72; margin-bottom: 3rem; }
+      .block {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 5.5rem 2rem;
+      }
+      .section-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 0.65rem;
+      }
+      h2.s-title {
+        font-size: clamp(1.9rem, 5vw, 2.8rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+        margin-bottom: 0.85rem;
+      }
+      .s-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        max-width: 500px;
+        line-height: 1.72;
+        margin-bottom: 3rem;
+      }
 
-/* BENTO */
-.bento { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
-.bc { background: var(--white); padding: 1.75rem 1.6rem; transition: background 0.18s; }
-.bc:hover { background: #fafafa; }
-.bc.wide { grid-column: span 2; }
-.bc-icon { width: 40px; height: 40px; border-radius: 11px; margin-bottom: 1.1rem; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-.bc-icon.bl{background:rgba(0,113,227,0.09)} .bc-icon.gr{background:rgba(48,209,88,0.09)}
-.bc-icon.pu{background:rgba(94,92,230,0.09)} .bc-icon.or{background:rgba(255,149,0,0.09)}
-.bc-icon.re{background:rgba(255,59,48,0.09)} .bc-icon.te{background:rgba(0,199,190,0.09)}
-.bc h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.45rem; }
-.bc p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+      .bento {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border-radius: var(--r);
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .bc {
+        background: var(--white);
+        padding: 1.75rem 1.6rem;
+        transition: background 0.18s;
+      }
+      .bc:hover {
+        background: #fafafa;
+      }
+      .bc.wide {
+        grid-column: span 2;
+      }
+      .bc-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        margin-bottom: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+      }
+      .bc-icon.bl {
+        background: rgba(0, 113, 227, 0.09);
+      }
+      .bc-icon.gr {
+        background: rgba(48, 209, 88, 0.09);
+      }
+      .bc-icon.pu {
+        background: rgba(94, 92, 230, 0.09);
+      }
+      .bc-icon.or {
+        background: rgba(255, 149, 0, 0.09);
+      }
+      .bc-icon.re {
+        background: rgba(255, 59, 48, 0.09);
+      }
+      .bc-icon.te {
+        background: rgba(0, 199, 190, 0.09);
+      }
+      .bc h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.45rem;
+      }
+      .bc p {
+        font-size: 0.875rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
 
-/* SCREENSHOTS — only left card now */
-.shot-single {
-  border-radius: var(--r); overflow: hidden;
-  border: 1px solid var(--border); box-shadow: 0 4px 24px -8px rgba(0,0,0,0.08);
-  max-width: 680px;
-}
-.shot-single img { width: 100%; display: block; }
-.shot-cap { padding: 1rem 1.25rem; background: var(--white); }
-.shot-cap h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
-.shot-cap p { font-size: 0.82rem; color: var(--muted); }
+      .shot-single {
+        border-radius: var(--r);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.08);
+        max-width: 680px;
+      }
+      .shot-single img {
+        width: 100%;
+        display: block;
+      }
+      .shot-cap {
+        padding: 1rem 1.25rem;
+        background: var(--white);
+      }
+      .shot-cap h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+      }
+      .shot-cap p {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
 
-/* STEPS */
-.steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
-.step { padding: 1.75rem 1.5rem; background: var(--white); border-radius: var(--r); border: 1px solid var(--border); text-align: center; }
-.step-n { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,var(--blue),var(--purple)); color:#fff; font-size:0.82rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin:0 auto 1.1rem; }
-.step h3 { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.45rem; }
-.step p { font-size: 0.86rem; color: var(--muted); line-height: 1.7; }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+      }
+      .step {
+        padding: 1.75rem 1.5rem;
+        background: var(--white);
+        border-radius: var(--r);
+        border: 1px solid var(--border);
+        text-align: center;
+      }
+      .step-n {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.1rem;
+      }
+      .step h3 {
+        font-size: 0.98rem;
+        font-weight: 600;
+        margin-bottom: 0.45rem;
+      }
+      .step p {
+        font-size: 0.86rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
 
-/* INSTALL */
-.install-wrap { background: #1c1c1e; border-radius: var(--r); overflow: hidden; }
-.install-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.08); background: #111; }
-.itab { font-family:var(--ffm); font-size:0.78rem; padding:0.7rem 1.2rem; color:rgba(255,255,255,0.35); cursor:pointer; background:none; border:none; border-bottom:2px solid transparent; transition:all 0.18s; }
-.itab.active { color:#fff; border-bottom-color:var(--blue); }
-.install-pane { display:none; padding:1.75rem 2rem; }
-.install-pane.active { display:block; }
-pre { font-family:var(--ffm); font-size:0.82rem; line-height:1.9; color:#aeaeb2; overflow-x:auto; }
-pre .c{color:rgba(255,255,255,0.22)} pre .k{color:#64d2ff} pre .s{color:#a2d9a5}
+      .install-wrap {
+        background: #1c1c1e;
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .install-tabs {
+        display: flex;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: #111;
+      }
+      .itab {
+        font-family: var(--ffm);
+        font-size: 0.78rem;
+        padding: 0.7rem 1.2rem;
+        color: rgba(255, 255, 255, 0.35);
+        cursor: pointer;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        transition: all 0.18s;
+      }
+      .itab.active {
+        color: #fff;
+        border-bottom-color: var(--blue);
+      }
+      .install-pane {
+        display: none;
+        padding: 1.75rem 2rem;
+      }
+      .install-pane.active {
+        display: block;
+      }
+      pre {
+        font-family: var(--ffm);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        color: #aeaeb2;
+        overflow-x: auto;
+      }
+      pre .c {
+        color: rgba(255, 255, 255, 0.22);
+      }
+      pre .k {
+        color: #64d2ff;
+      }
+      pre .s {
+        color: #a2d9a5;
+      }
 
-/* DOWNLOAD SECTION */
-.dl-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 2.5rem; }
-.dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
-.dl-card {
-  border: 1px solid var(--border2); border-radius: 12px; padding: 1.5rem;
-  display: flex; flex-direction: column; gap: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.dl-card:hover { border-color: var(--blue); box-shadow: 0 4px 20px -8px rgba(0,113,227,0.15); }
-.dl-card-top { display: flex; align-items: center; gap: 0.75rem; }
-.dl-os-icon { font-size: 1.6rem; }
-.dl-os-name { font-size: 1rem; font-weight: 600; }
-.dl-os-sub { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
-.dl-links { display: flex; flex-direction: column; gap: 0.5rem; }
-.dl-link {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.6rem 0.9rem; border-radius: 8px; background: var(--bg2);
-  border: 1px solid var(--border); font-size: 0.82rem; color: var(--text);
-  transition: all 0.18s; font-family: var(--ffm);
-}
-.dl-link:hover { background: rgba(0,113,227,0.06); border-color: rgba(0,113,227,0.25); color: var(--blue); }
-.dl-link span { color: var(--faint); font-size: 0.74rem; }
-.dl-note { font-size: 0.78rem; color: var(--faint); line-height: 1.6; }
+      .dl-section {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 2.5rem;
+      }
+      .dl-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .dl-card {
+        border: 1px solid var(--border2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .dl-card:hover {
+        border-color: var(--blue);
+        box-shadow: 0 4px 20px -8px rgba(0, 113, 227, 0.15);
+      }
+      .dl-card-top {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .dl-os-icon {
+        font-size: 1.6rem;
+      }
+      .dl-os-name {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .dl-os-sub {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 0.1rem;
+      }
+      .dl-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .dl-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 0.9rem;
+        border-radius: 8px;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        font-size: 0.82rem;
+        color: var(--text);
+        transition: all 0.18s;
+        font-family: var(--ffm);
+      }
+      .dl-link:hover {
+        background: rgba(0, 113, 227, 0.06);
+        border-color: rgba(0, 113, 227, 0.25);
+        color: var(--blue);
+      }
+      .dl-link span {
+        color: var(--faint);
+        font-size: 0.74rem;
+      }
+      .dl-note {
+        font-size: 0.78rem;
+        color: var(--faint);
+        line-height: 1.6;
+      }
 
-/* STACK */
-.stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.s-pill { font-family:var(--ffm); font-size:0.78rem; padding:0.35rem 0.8rem; border-radius:980px; background:rgba(0,0,0,0.04); border:1px solid var(--border2); color:var(--text); transition:background 0.15s; }
-.s-pill:hover { background:rgba(0,113,227,0.08); color:var(--blue); border-color:rgba(0,113,227,0.2); }
+      .stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .s-pill {
+        font-family: var(--ffm);
+        font-size: 0.78rem;
+        padding: 0.35rem 0.8rem;
+        border-radius: 980px;
+        background: rgba(0, 0, 0, 0.04);
+        border: 1px solid var(--border2);
+        color: var(--text);
+        transition: background 0.15s;
+      }
+      .s-pill:hover {
+        background: rgba(0, 113, 227, 0.08);
+        color: var(--blue);
+        border-color: rgba(0, 113, 227, 0.2);
+      }
 
-/* CTA */
-.cta-wrap {
-  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
-  border-radius: 22px; padding: 4rem 2rem; text-align: center;
-  position: relative; overflow: hidden;
-  max-width: var(--max); margin: 0 auto 5rem;
-}
-.cta-wrap h2 { font-size: clamp(1.8rem,4vw,2.4rem); font-weight:700; letter-spacing:-0.03em; color:#fff; margin-bottom:0.65rem; position:relative; }
-.cta-wrap p { color:rgba(255,255,255,0.8); max-width:380px; margin:0 auto 2rem; position:relative; }
-.cta-btns { display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap; position:relative; }
-.btn-white { background:#fff; color:var(--blue); font-weight:600; font-size:0.92rem; padding:0.68rem 1.5rem; border-radius:980px; border:none; cursor:pointer; transition:all 0.18s; display:inline-flex; align-items:center; gap:0.4rem; }
-.btn-white:hover { transform:translateY(-2px); box-shadow:0 10px 28px -8px rgba(0,0,0,0.25); }
-.btn-glass { background:rgba(255,255,255,0.14); color:#fff; border:1px solid rgba(255,255,255,0.3); font-size:0.92rem; padding:0.68rem 1.5rem; border-radius:980px; cursor:pointer; transition:background 0.18s; display:inline-flex; align-items:center; gap:0.4rem; }
-.btn-glass:hover { background:rgba(255,255,255,0.22); }
+      .cta-wrap {
+        background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+        border-radius: 22px;
+        padding: 4rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        max-width: var(--max);
+        margin: 0 auto 5rem;
+      }
+      .cta-wrap h2 {
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: #fff;
+        margin-bottom: 0.65rem;
+        position: relative;
+      }
+      .cta-wrap p {
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 380px;
+        margin: 0 auto 2rem;
+        position: relative;
+      }
+      .cta-btns {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        position: relative;
+      }
+      .btn-white {
+        background: #fff;
+        color: var(--blue);
+        font-weight: 600;
+        font-size: 0.92rem;
+        padding: 0.68rem 1.5rem;
+        border-radius: 980px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.18s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .btn-white:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px -8px rgba(0, 0, 0, 0.25);
+      }
+      .btn-glass {
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 0.92rem;
+        padding: 0.68rem 1.5rem;
+        border-radius: 980px;
+        cursor: pointer;
+        transition: background 0.18s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .btn-glass:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
 
-/* FOOTER */
-footer { border-top:1px solid var(--border); padding:2rem; text-align:center; color:var(--faint); font-size:0.8rem; }
-footer a { color:var(--muted); transition:color 0.2s; }
-footer a:hover { color:var(--blue); }
-footer .sep { margin:0 0.6rem; }
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2rem;
+        text-align: center;
+        color: var(--faint);
+        font-size: 0.8rem;
+      }
+      footer a {
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      footer a:hover {
+        color: var(--blue);
+      }
+      footer .sep {
+        margin: 0 0.6rem;
+      }
 
-/* BAND */
-.band { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .band {
+        background: var(--white);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
 
-/* REVEAL */
-.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.55s ease,transform 0.55s ease; }
-.reveal.in { opacity:1; transform:none; }
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.55s ease,
+          transform 0.55s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
 
-@media (max-width: 760px) {
-  .bento { grid-template-columns:1fr; }
-  .bc.wide { grid-column:span 1; }
-  .steps { grid-template-columns:1fr; }
-  .stats { grid-template-columns:repeat(2,1fr); }
-  .stat:nth-child(2){border-right:none;}
-  .dl-grid { grid-template-columns:1fr; }
-  .nav-links { display:none; }
-  .os-picker-nav { display:none; }
-  .block { padding:4rem 1.4rem; }
-}
-</style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <a href="index.html" class="nav-logo">
-    <img src="assets/appicon.png" alt="InfraLens"
-         onerror="this.src='https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/src-tauri/icons/icon.png';this.onerror=null;" />
-    InfraLens
-  </a>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#screenshots">Screenshots</a>
-    <a href="#install">Install</a>
-    <a href="index.html" class="nav-back">← adamyahmadi.com</a>
-  </div>
-  <div class="nav-r">
-    <a href="https://github.com/AdamYahmadi/InfraLens/releases/tag/v0.1.0"
-       target="_blank" rel="noopener"
-       style="font-size:0.82rem;font-weight:600;padding:0.38rem 1rem;border-radius:980px;background:var(--blue);color:#fff;white-space:nowrap;">
-      Download v0.1.0
-    </a>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">v0.1.0 — Now available for macOS &amp; Linux</div>
-  <img src="assets/appicon.png" alt="InfraLens" class="hero-icon"
-       onerror="this.src='https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/src-tauri/icons/icon.png';this.onerror=null;" />
-  <h1>Your Proxmox lab,<br><em>mapped in real time.</em></h1>
-  <p class="hero-sub">InfraLens auto-discovers your <b>nodes, VMs, and containers</b>, renders them as a live topology graph, and lets you query your infrastructure in plain language — entirely on your own hardware.</p>
-
-  <!-- OS PICKER — single row -->
-  <div style="display:flex;flex-direction:column;align-items:center;gap:0.55rem;margin-bottom:3.5rem;">
-    <div style="display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap;justify-content:center;">
-      <div class="os-tab-wrap">
-        <button class="os-tab active" onclick="setOS('mac',this)">🍎 macOS</button>
-        <button class="os-tab" onclick="setOS('linux',this)">🐧 Linux</button>
-      </div>
-      <a id="dl-main-btn" class="dl-btn"
-         href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_aarch64.dmg">
-        Download ↓
+      @media (max-width: 760px) {
+        .bento {
+          grid-template-columns: 1fr;
+        }
+        .bc.wide {
+          grid-column: span 1;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+        }
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .stat:nth-child(2) {
+          border-right: none;
+        }
+        .dl-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        .os-picker-nav {
+          display: none;
+        }
+        .block {
+          padding: 4rem 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <img
+          src="assets/appicon.png"
+          alt="InfraLens"
+          onerror="
+            this.src =
+              'https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/src-tauri/icons/icon.png';
+            this.onerror = null;
+          "
+        />
+        InfraLens
       </a>
-      <a href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener" class="btn-ghost-sm">GitHub →</a>
-    </div>
-    <div id="dl-sub-text" class="dl-sub">macOS · Apple Silicon (.dmg)</div>
-    <div id="linux-opts" style="display:none;gap:0.5rem;flex-wrap:wrap;justify-content:center;">
-      <a href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_amd64.AppImage"
-         class="btn-ghost-sm">.AppImage (any distro)</a>
-      <a href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_amd64.deb"
-         class="btn-ghost-sm">.deb (Debian / Ubuntu)</a>
-    </div>
-  </div>
-
-  <div class="hero-screen">
-    <div class="hero-bar">
-      <span class="hd hd-r"></span><span class="hd hd-y"></span><span class="hd hd-g"></span>
-    </div>
-    <img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/hero-banner.png"
-         alt="InfraLens dashboard"
-         onerror="this.style.display='none'" />
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-band">
-  <div class="stats">
-    <div class="stat"><div class="stat-n">v0.1</div><div class="stat-l">Desktop release</div></div>
-    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Local — no cloud</div></div>
-    <div class="stat"><div class="stat-n">4</div><div class="stat-l">Live metric streams</div></div>
-    <div class="stat"><div class="stat-n">MIT</div><div class="stat-l">Open source</div></div>
-  </div>
-</div>
-
-<!-- FEATURES -->
-<section class="block reveal" id="features">
-  <div class="section-label">Features</div>
-  <h2 class="s-title">Everything your homelab<br>dashboard should be.</h2>
-  <p class="s-sub">Built for self-hosters who want to understand what's actually running — without shipping data anywhere.</p>
-  <div class="bento">
-    <div class="bc">
-      <div class="bc-icon bl">🕸</div>
-      <h3>Automatic topology mapping</h3>
-      <p>Auto-discovers Proxmox hosts, LXC containers, and VMs via the API and renders them as a live, interactive connected graph — updated in real time. No manual configuration.</p>
-    </div>
-    <div class="bc">
-      <div class="bc-icon gr">⚡</div>
-      <h3>Live telemetry</h3>
-      <p>Per-node CPU, RAM, disk, and network RX/TX streamed continuously. Click any node to see a full breakdown.</p>
-    </div>
-    <div class="bc">
-      <div class="bc-icon pu">🧠</div>
-      <h3>Local LLM diagnostics</h3>
-      <p>Feeds live cluster state to an Ollama-powered chat. Ask about bottlenecks or service status in plain language.</p>
-    </div>
-    <div class="bc">
-      <div class="bc-icon te">🔍</div>
-      <h3>Service detection</h3>
-      <p>Probes containers via SSH to identify running services — Docker, databases, web servers — without any agents installed.</p>
-    </div>
-    <div class="bc">
-      <div class="bc-icon or">🖥</div>
-      <h3>Native desktop app</h3>
-      <p>Built with Tauri 2 — ships as a native app for macOS and Linux. No browser tab to lose, no port to remember.</p>
-    </div>
-    <div class="bc">
-      <div class="bc-icon re">🔒</div>
-      <h3>Stays on your network</h3>
-      <p>No telemetry, no SaaS, no cloud APIs. Everything runs on your own hardware and never leaves your homelab.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SCREENSHOTS -->
-<div class="band">
-  <section class="block reveal" id="screenshots">
-    <div class="section-label">Screenshots</div>
-    <h2 class="s-title">See it in action.</h2>
-    <p class="s-sub">Real views from a live Proxmox homelab. <span style="color:var(--faint);font-size:0.88em;">Click image to zoom.</span></p>
-    <div class="shot-single" style="max-width:100%;cursor:zoom-in;" onclick="openLightbox(this.querySelector('img').src)">
-      <img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/chat-interface.png"
-           alt="LLM diagnostics chat"
-           onerror="this.style.display='none'" />
-      <div class="shot-cap">
-        <h4>LLM diagnostics</h4>
-        <p>Ask about service status, bottlenecks, or resource usage in natural language — powered by a local Ollama model.</p>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#install">Install</a>
+        <a href="index.html" class="nav-back">← adamyahmadi.com</a>
       </div>
-    </div>
-  </section>
-</div>
+      <div class="nav-r">
+        <a
+          href="https://github.com/AdamYahmadi/InfraLens/releases/tag/v0.2.0"
+          target="_blank"
+          rel="noopener"
+          style="
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.38rem 1rem;
+            border-radius: 980px;
+            background: var(--blue);
+            color: #fff;
+            white-space: nowrap;
+          "
+        >
+          Download v0.2.0
+        </a>
+      </div>
+    </nav>
 
-<!-- LIGHTBOX -->
-<div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);cursor:zoom-out;align-items:center;justify-content:center;padding:2rem;">
-  <img id="lightbox-img" src="" alt="" style="max-width:95vw;max-height:92vh;border-radius:10px;box-shadow:0 32px 80px rgba(0,0,0,0.5);object-fit:contain;" />
-</div>
+    <section class="hero">
+      <div class="hero-eyebrow">
+        v0.2.0 — Now available for macOS &amp; Linux
+      </div>
+      <img
+        src="assets/appicon.png"
+        alt="InfraLens"
+        class="hero-icon"
+        onerror="
+          this.src =
+            'https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/src-tauri/icons/icon.png';
+          this.onerror = null;
+        "
+      />
+      <h1>Your Proxmox lab,<br /><em>mapped in real time.</em></h1>
+      <p class="hero-sub">
+        InfraLens auto-discovers your <b>nodes, VMs, and containers</b>, renders
+        them as a live topology graph, and lets you query your infrastructure in
+        plain language — entirely on your own hardware.
+      </p>
 
-<!-- HOW IT WORKS -->
-<section class="block reveal">
-  <div class="section-label">Setup</div>
-  <h2 class="s-title">Up in minutes.</h2>
-  <p class="s-sub">Connects to your existing Proxmox API — no agents, no changes to your setup.</p>
-  <div class="steps">
-    <div class="step"><div class="step-n">1</div><h3>Connect Proxmox</h3><p>Provide your Proxmox API token and host in the <code style="font-family:var(--ffm);font-size:0.85em;color:var(--blue)">.env</code> config. InfraLens discovers everything automatically.</p></div>
-    <div class="step"><div class="step-n">2</div><h3>Start Ollama</h3><p>Pull any supported model locally. InfraLens feeds it live cluster state as context — no internet required.</p></div>
-    <div class="step"><div class="step-n">3</div><h3>Launch the app</h3><p>Start the backend, open the desktop app, and see your full infrastructure mapped live.</p></div>
-  </div>
-</section>
-
-<!-- DOWNLOAD -->
-<div class="band">
-  <section class="block reveal" id="install">
-    <div class="section-label">Download</div>
-    <h2 class="s-title">Get InfraLens v0.1.0</h2>
-    <p class="s-sub" style="margin-bottom:0">Native desktop app built with Tauri 2. Available for macOS and Linux.</p>
-    <div class="dl-section" style="margin-top:2rem;">
-      <div class="dl-grid">
-        <!-- macOS -->
-        <div class="dl-card">
-          <div class="dl-card-top">
-            <div class="dl-os-icon">🍎</div>
-            <div>
-              <div class="dl-os-name">macOS</div>
-              <div class="dl-os-sub">Apple Silicon (M1 and later)</div>
-            </div>
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.55rem;
+          margin-bottom: 3.5rem;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <div class="os-tab-wrap">
+            <button class="os-tab active" onclick="setOS('mac', this)">
+              🍎 macOS
+            </button>
+            <button class="os-tab" onclick="setOS('linux', this)">
+              🐧 Linux
+            </button>
           </div>
-          <div class="dl-links">
-            <a class="dl-link" href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_aarch64.dmg">
-              InfraLens_0.1.0_aarch64.dmg <span>.dmg</span>
-            </a>
-          </div>
-          <div class="dl-note">
-            After installing, run in Terminal:<br>
-            <code style="font-family:var(--ffm);font-size:0.78em;color:var(--text);">sudo codesign --force --deep --sign - /Applications/InfraLens.app</code><br><br>
-            Then go to <b>System Settings → Privacy &amp; Security → Local Network</b> and enable InfraLens. The app is ad-hoc signed — Apple notarization coming in a future release.
-          </div>
+          <a
+            id="dl-main-btn"
+            class="dl-btn"
+            href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg"
+          >
+            Download ↓
+          </a>
+          <a
+            href="https://github.com/AdamYahmadi/InfraLens"
+            target="_blank"
+            rel="noopener"
+            class="btn-ghost-sm"
+            >GitHub →</a
+          >
         </div>
-        <!-- Linux -->
-        <div class="dl-card">
-          <div class="dl-card-top">
-            <div class="dl-os-icon">🐧</div>
-            <div>
-              <div class="dl-os-name">Linux</div>
-              <div class="dl-os-sub">x86_64 — any modern distro</div>
-            </div>
-          </div>
-          <div class="dl-links">
-            <a class="dl-link" href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_amd64.AppImage">
-              InfraLens_0.1.0_amd64.AppImage <span>.AppImage</span>
-            </a>
-            <a class="dl-link" href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_amd64.deb">
-              InfraLens_0.1.0_amd64.deb <span>.deb</span>
-            </a>
-          </div>
-          <div class="dl-note">No additional steps required. Use the <b>.AppImage</b> for any distro, or the <b>.deb</b> for Debian / Ubuntu.</div>
+        <div id="dl-sub-text" class="dl-sub">macOS · Apple Silicon (.dmg)</div>
+        <div
+          id="linux-opts"
+          style="
+            display: none;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <a
+            href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.AppImage"
+            class="btn-ghost-sm"
+            >.AppImage (any distro)</a
+          >
+          <a
+            href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.deb"
+            class="btn-ghost-sm"
+            >.deb (Debian / Ubuntu)</a
+          >
+        </div>
+      </div>
+
+      <div class="hero-screen">
+        <div class="hero-bar">
+          <span class="hd hd-r"></span><span class="hd hd-y"></span
+          ><span class="hd hd-g"></span>
+        </div>
+        <img
+          src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/hero-banner.png"
+          alt="InfraLens dashboard"
+          onerror="this.style.display = 'none'"
+        />
+      </div>
+    </section>
+
+    <div class="stats-band">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-n">v0.1</div>
+          <div class="stat-l">Desktop release</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">100%</div>
+          <div class="stat-l">Local — no cloud</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">4</div>
+          <div class="stat-l">Live metric streams</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">MIT</div>
+          <div class="stat-l">Open source</div>
         </div>
       </div>
     </div>
-  </section>
-</div>
 
-<!-- INSTALL CODE -->
-<section class="block reveal">
-  <div class="section-label">Build from source</div>
-  <h2 class="s-title" style="margin-bottom:1.5rem">Or run it yourself.</h2>
-  <div class="install-wrap">
-    <div class="install-tabs">
-      <button class="itab active" onclick="tab(this,'tb')">Backend</button>
-      <button class="itab" onclick="tab(this,'tf')">Frontend</button>
+    <section class="block reveal" id="features">
+      <div class="section-label">Features</div>
+      <h2 class="s-title">Everything your homelab<br />dashboard should be.</h2>
+      <p class="s-sub">
+        Built for self-hosters who want to understand what's actually running —
+        without shipping data anywhere.
+      </p>
+      <div class="bento">
+        <div class="bc">
+          <div class="bc-icon bl">🕸</div>
+          <h3>Automatic topology mapping</h3>
+          <p>
+            Auto-discovers Proxmox hosts, LXC containers, and VMs via the API
+            and renders them as a live, interactive connected graph — updated in
+            real time. No manual configuration.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon gr">⚡</div>
+          <h3>Live telemetry</h3>
+          <p>
+            Per-node CPU, RAM, disk, and network RX/TX streamed continuously.
+            Click any node to see a full breakdown.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon pu">🧠</div>
+          <h3>Local LLM diagnostics</h3>
+          <p>
+            Feeds live cluster state to an Ollama-powered chat. Ask about
+            bottlenecks or service status in plain language.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon te">🔍</div>
+          <h3>Service detection</h3>
+          <p>
+            Probes containers via SSH to identify running services — Docker,
+            databases, web servers — without any agents installed.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon or">🖥</div>
+          <h3>Native desktop app</h3>
+          <p>
+            Built with Tauri 2 — ships as a native app for macOS and Linux. No
+            browser tab to lose, no port to remember.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon re">🔒</div>
+          <h3>Stays on your network</h3>
+          <p>
+            No telemetry, no SaaS, no cloud APIs. Everything runs on your own
+            hardware and never leaves your homelab.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="band">
+      <section class="block reveal" id="screenshots">
+        <div class="section-label">Screenshots</div>
+        <h2 class="s-title">See it in action.</h2>
+        <p class="s-sub">
+          Real views from a live Proxmox homelab.
+          <span style="color: var(--faint); font-size: 0.88em"
+            >Click image to zoom.</span
+          >
+        </p>
+        <div
+          class="shot-single"
+          style="max-width: 100%; cursor: zoom-in"
+          onclick="openLightbox(this.querySelector('img').src)"
+        >
+          <img
+            src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/chat-interface.png"
+            alt="LLM diagnostics chat"
+            onerror="this.style.display = 'none'"
+          />
+          <div class="shot-cap">
+            <h4>LLM diagnostics</h4>
+            <p>
+              Ask about service status, bottlenecks, or resource usage in
+              natural language — powered by a local Ollama model.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
-    <div id="tb" class="install-pane active">
-<pre><span class="c"># Clone the repo</span>
+
+    <div
+      id="lightbox"
+      onclick="closeLightbox()"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        cursor: zoom-out;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      "
+    >
+      <img
+        id="lightbox-img"
+        src=""
+        alt=""
+        style="
+          max-width: 95vw;
+          max-height: 92vh;
+          border-radius: 10px;
+          box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+          object-fit: contain;
+        "
+      />
+    </div>
+
+    <section class="block reveal">
+      <div class="section-label">Setup</div>
+      <h2 class="s-title">Up in minutes.</h2>
+      <p class="s-sub">
+        Connects to your existing Proxmox API — no agents, no changes to your
+        setup.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <h3>Connect Proxmox</h3>
+          <p>
+            Provide your Proxmox API token and host in the
+            <code
+              style="
+                font-family: var(--ffm);
+                font-size: 0.85em;
+                color: var(--blue);
+              "
+              >.env</code
+            >
+            config. InfraLens discovers everything automatically.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <h3>Start Ollama</h3>
+          <p>
+            Pull any supported model locally. InfraLens feeds it live cluster
+            state as context — no internet required.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <h3>Launch the app</h3>
+          <p>
+            Start the backend, open the desktop app, and see your full
+            infrastructure mapped live.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="band">
+      <section class="block reveal" id="install">
+        <div class="section-label">Download</div>
+        <h2 class="s-title">Get InfraLens v0.2.0</h2>
+        <p class="s-sub" style="margin-bottom: 0">
+          Native desktop app built with Tauri 2. Available for macOS and Linux.
+        </p>
+        <div class="dl-section" style="margin-top: 2rem">
+          <div class="dl-grid">
+            <div class="dl-card">
+              <div class="dl-card-top">
+                <div class="dl-os-icon">🍎</div>
+                <div>
+                  <div class="dl-os-name">macOS</div>
+                  <div class="dl-os-sub">Apple Silicon (M1 and later)</div>
+                </div>
+              </div>
+              <div class="dl-links">
+                <a
+                  class="dl-link"
+                  href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg"
+                >
+                  InfraLens_0.2.0_aarch64.dmg <span>.dmg</span>
+                </a>
+              </div>
+              <div class="dl-note">
+                After installing, run in Terminal:<br />
+                <code
+                  style="
+                    font-family: var(--ffm);
+                    font-size: 0.78em;
+                    color: var(--text);
+                  "
+                  >sudo codesign --force --deep --sign -
+                  /Applications/InfraLens.app</code
+                ><br /><br />
+                Then go to
+                <b>System Settings → Privacy &amp; Security → Local Network</b>
+                and enable InfraLens. The app is ad-hoc signed — Apple
+                notarization coming in a future release.
+              </div>
+            </div>
+            <div class="dl-card">
+              <div class="dl-card-top">
+                <div class="dl-os-icon">🐧</div>
+                <div>
+                  <div class="dl-os-name">Linux</div>
+                  <div class="dl-os-sub">x86_64 — any modern distro</div>
+                </div>
+              </div>
+              <div class="dl-links">
+                <a
+                  class="dl-link"
+                  href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.AppImage"
+                >
+                  InfraLens_0.2.0_amd64.AppImage <span>.AppImage</span>
+                </a>
+                <a
+                  class="dl-link"
+                  href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.deb"
+                >
+                  InfraLens_0.2.0_amd64.deb <span>.deb</span>
+                </a>
+              </div>
+              <div class="dl-note">
+                No additional steps required. Use the <b>.AppImage</b> for any
+                distro, or the <b>.deb</b> for Debian / Ubuntu.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="block reveal">
+      <div class="section-label">Build from source</div>
+      <h2 class="s-title" style="margin-bottom: 1.5rem">Or run it yourself.</h2>
+      <div class="install-wrap">
+        <div class="install-tabs">
+          <button class="itab active" onclick="tab(this, 'tb')">Backend</button>
+          <button class="itab" onclick="tab(this, 'tf')">Frontend</button>
+        </div>
+        <div id="tb" class="install-pane active">
+          <pre><span class="c"># Clone the repo</span>
 <span class="k">git</span> clone https://github.com/AdamYahmadi/InfraLens.git
 <span class="k">cd</span> InfraLens/backend
 
@@ -493,86 +1209,115 @@ footer .sep { margin:0 0.6rem; }
 
 <span class="c"># Run</span>
 <span class="k">python</span> main.py</pre>
-    </div>
-    <div id="tf" class="install-pane">
-<pre><span class="k">cd</span> InfraLens/frontend
+        </div>
+        <div id="tf" class="install-pane">
+          <pre><span class="k">cd</span> InfraLens/frontend
 <span class="k">npm</span> install
 
 <span class="c"># Create .env and point to your backend</span>
 VITE_API_URL=<span class="s">"http://127.0.0.1:8000"</span>
 
 <span class="k">npm</span> run dev</pre>
+        </div>
+      </div>
+    </section>
+
+    <div style="padding: 0 2rem">
+      <div class="cta-wrap reveal">
+        <h2>Ready to map your homelab?</h2>
+        <p>Download InfraLens v0.2.0 or explore the source on GitHub.</p>
+        <div class="cta-btns">
+          <a
+            href="https://github.com/AdamYahmadi/InfraLens/releases/tag/v0.2.0"
+            target="_blank"
+            rel="noopener"
+            class="btn-white"
+            >Download v0.2.0 ↓</a
+          >
+          <a
+            href="https://github.com/AdamYahmadi/InfraLens"
+            target="_blank"
+            rel="noopener"
+            class="btn-glass"
+            >GitHub →</a
+          >
+        </div>
+      </div>
     </div>
-  </div>
-</section>
 
-<!-- CTA -->
-<div style="padding:0 2rem">
-  <div class="cta-wrap reveal">
-    <h2>Ready to map your homelab?</h2>
-    <p>Download InfraLens v0.1.0 or explore the source on GitHub.</p>
-    <div class="cta-btns">
-      <a href="https://github.com/AdamYahmadi/InfraLens/releases/tag/v0.1.0" target="_blank" rel="noopener" class="btn-white">Download v0.1.0 ↓</a>
-      <a href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener" class="btn-glass">GitHub →</a>
-    </div>
-  </div>
-</div>
+    <footer>
+      Built by <a href="https://adamyahmadi.com">Adam Yahmadi</a>
+      <span class="sep">·</span>
+      <a
+        href="https://github.com/AdamYahmadi/InfraLens"
+        target="_blank"
+        rel="noopener"
+        >GitHub</a
+      >
+      <span class="sep">·</span>
+      MIT License
+    </footer>
 
-<footer>
-  Built by <a href="https://adamyahmadi.com">Adam Yahmadi</a>
-  <span class="sep">·</span>
-  <a href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener">GitHub</a>
-  <span class="sep">·</span>
-  MIT License
-</footer>
+    <script>
+      function openLightbox(src) {
+        const lb = document.getElementById("lightbox");
+        document.getElementById("lightbox-img").src = src;
+        lb.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      }
+      function closeLightbox() {
+        document.getElementById("lightbox").style.display = "none";
+        document.body.style.overflow = "";
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLightbox();
+      });
 
-<script>
-  // lightbox
-  function openLightbox(src) {
-    const lb = document.getElementById('lightbox');
-    document.getElementById('lightbox-img').src = src;
-    lb.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+      const macUrl =
+        "https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg";
+      function setOS(os, btn) {
+        document
+          .querySelectorAll(".os-tab")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const mainBtn = document.getElementById("dl-main-btn");
+        const subText = document.getElementById("dl-sub-text");
+        const linuxOpts = document.getElementById("linux-opts");
+        if (os === "mac") {
+          mainBtn.href = macUrl;
+          mainBtn.style.display = "inline-flex";
+          subText.textContent = "macOS · Apple Silicon (.dmg)";
+          linuxOpts.style.display = "none";
+        } else {
+          mainBtn.style.display = "none";
+          subText.textContent = "Linux · x86_64 — choose your format";
+          linuxOpts.style.display = "flex";
+        }
+      }
 
-  // OS picker in hero
-  const macUrl = 'https://github.com/AdamYahmadi/InfraLens/releases/download/v0.1.0/InfraLens_0.1.0_aarch64.dmg';
-  function setOS(os, btn) {
-    document.querySelectorAll('.os-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const mainBtn = document.getElementById('dl-main-btn');
-    const subText = document.getElementById('dl-sub-text');
-    const linuxOpts = document.getElementById('linux-opts');
-    if (os === 'mac') {
-      mainBtn.href = macUrl;
-      mainBtn.style.display = 'inline-flex';
-      subText.textContent = 'macOS · Apple Silicon (.dmg)';
-      linuxOpts.style.display = 'none';
-    } else {
-      mainBtn.style.display = 'none';
-      subText.textContent = 'Linux · x86_64 — choose your format';
-      linuxOpts.style.display = 'flex';
-    }
-  }
+      function tab(btn, id) {
+        document
+          .querySelectorAll(".itab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".install-pane")
+          .forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(id).classList.add("active");
+      }
 
-  // install tabs
-  function tab(btn, id) {
-    document.querySelectorAll('.itab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.install-pane').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(id).classList.add('active');
-  }
-
-  // scroll reveal
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-</script>
-</body>
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    </script>
+  </body>
 </html>

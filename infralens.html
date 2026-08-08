@@ -931,7 +931,7 @@
     <div class="stats-band">
       <div class="stats">
         <div class="stat">
-          <div class="stat-n">v0.1</div>
+          <div class="stat-n">v0.2</div>
           <div class="stat-l">Desktop release</div>
         </div>
         <div class="stat">
@@ -968,10 +968,11 @@
         </div>
         <div class="bc">
           <div class="bc-icon gr">⚡</div>
-          <h3>Live telemetry</h3>
+          <h3>Live telemetry &amp; history</h3>
           <p>
-            Per-node CPU, RAM, disk, and network RX/TX streamed continuously.
-            Click any node to see a full breakdown.
+            Per-node CPU, RAM, disk, and network throughput streamed
+            continuously — with hour / day / week trend charts from Proxmox RRD
+            data.
           </p>
         </div>
         <div class="bc">
@@ -996,6 +997,22 @@
           <p>
             Built with Tauri 2 — ships as a native app for macOS and Linux. No
             browser tab to lose, no port to remember.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon or">⏻</div>
+          <h3>Power controls</h3>
+          <p>
+            Start, stop, reboot, and shut down any VM or container straight from
+            the app — with inline confirmation before anything destructive.
+          </p>
+        </div>
+        <div class="bc">
+          <div class="bc-icon bl">🧭</div>
+          <h3>Cluster overview</h3>
+          <p>
+            Totals, aggregate CPU and memory meters, an attention list that
+            surfaces offline or high-load nodes, and a live activity feed.
           </p>
         </div>
         <div class="bc">
@@ -1139,20 +1156,19 @@
                 </a>
               </div>
               <div class="dl-note">
-                After installing, run in Terminal:<br />
+                After installing, run this once in Terminal:<br />
                 <code
                   style="
                     font-family: var(--ffm);
                     font-size: 0.78em;
                     color: var(--text);
                   "
-                  >sudo codesign --force --deep --sign -
-                  /Applications/InfraLens.app</code
+                  >xattr -cr /Applications/InfraLens.app</code
                 ><br /><br />
-                Then go to
-                <b>System Settings → Privacy &amp; Security → Local Network</b>
-                and enable InfraLens. The app is ad-hoc signed — Apple
-                notarization coming in a future release.
+                Then open InfraLens and enable it under
+                <b>System Settings → Privacy &amp; Security → Local Network</b>.
+                The app is ad-hoc signed — Apple notarization coming in a future
+                release.
               </div>
             </div>
             <div class="dl-card">
@@ -1321,3 +1337,4 @@ VITE_API_URL=<span class="s">"http://127.0.0.1:8000"</span>
     </script>
   </body>
 </html>
+

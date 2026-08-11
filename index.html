@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -23,16 +23,17 @@
         padding: 0;
       }
       :root {
-        --bg: #0a0a0a;
-        --surface: #121212;
-        --card: #171717;
-        --card-hover: #1e1e1e;
-        --border: #262626;
-        --border-bright: #404040;
-        --accent: #ffffff;
-        --text: #ededed;
-        --muted: #a1a1aa;
-        --faint: #71717a;
+        --bg: #0a0908;
+        --surface: #131211;
+        --card: #171613;
+        --card-hover: #1d1b17;
+        --border: #262420;
+        --border-bright: #423e35;
+        --accent: #f2ead9;
+        --text: #ece7dc;
+        --muted: #a9a296;
+        --faint: #756f62;
+        --ff-serif: "Fraunces", "Iowan Old Style", serif;
         --ff-sans: "Inter", -apple-system, sans-serif;
         --ff-mono: "JetBrains Mono", monospace;
         --max: 860px;
@@ -43,11 +44,28 @@
       }
       body {
         font-family: var(--ff-sans);
-        background: var(--bg);
+        background:
+          radial-gradient(
+            ellipse 80% 45% at 50% -10%,
+            rgba(242, 234, 217, 0.045),
+            transparent
+          ),
+          var(--bg);
         color: var(--text);
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
+        position: relative;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        pointer-events: none;
+        opacity: 0.035;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       }
       a {
         color: inherit;
@@ -114,11 +132,30 @@
         margin: 0 auto;
         padding: 8rem 2rem 6rem;
       }
+      .eyebrow {
+        font-family: var(--ff-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        display: inline-block;
+      }
       .hero h1 {
-        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-family: var(--ff-serif);
+        font-size: clamp(2.75rem, 6.5vw, 4.4rem);
         font-weight: 600;
-        letter-spacing: -0.04em;
-        line-height: 1.1;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
         margin-bottom: 1.5rem;
       }
       .hero-tag {
@@ -140,12 +177,30 @@
         border-top: 1px solid var(--border);
       }
       .section-header {
+        display: flex;
+        align-items: baseline;
+        gap: 1.25rem;
         margin-bottom: 3rem;
       }
+      .section-num {
+        font-family: var(--ff-mono);
+        font-size: 0.8rem;
+        color: var(--faint);
+        letter-spacing: 0.05em;
+      }
       .section-header h2 {
-        font-size: 1.5rem;
+        font-family: var(--ff-serif);
+        font-style: italic;
+        font-size: 1.85rem;
         font-weight: 500;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+      .section-header::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
       }
       .about-wrap {
         display: grid;
@@ -200,10 +255,21 @@
         color: var(--faint);
       }
       .tl-role {
-        font-size: 1.1rem;
+        font-family: var(--ff-serif);
+        font-size: 1.2rem;
         font-weight: 500;
         color: var(--text);
         margin-bottom: 0.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .tl-role::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        background: var(--accent);
+        flex-shrink: 0;
       }
       .tl-org {
         font-size: 0.9rem;
@@ -228,7 +294,7 @@
       .tl-link:hover {
         text-decoration-color: var(--text);
       }
-      
+
       .proj-slider {
         position: relative;
         margin-bottom: 2rem;
@@ -269,8 +335,12 @@
         animation: barfill 5s linear forwards;
       }
       @keyframes barfill {
-        from { width: 0; }
-        to { width: 100%; }
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
       }
       @media (prefers-reduced-motion: reduce) {
         .slider-tab.active .slider-tab-fill {
@@ -293,7 +363,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.2s, border-color 0.2s;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
       }
       .slider-arrow:hover {
         background: var(--surface);
@@ -336,7 +408,8 @@
         margin-bottom: 0.5rem;
       }
       .proj-featured-name {
-        font-size: 1.1rem;
+        font-family: var(--ff-serif);
+        font-size: 1.25rem;
         font-weight: 500;
         color: var(--text);
       }
@@ -359,10 +432,15 @@
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.2s;
+        transition:
+          border-color 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
       }
       .proj-mini:hover {
         border-color: var(--border-bright);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.6);
       }
       .proj-mini-top {
         display: flex;
@@ -371,7 +449,8 @@
         margin-bottom: 1rem;
       }
       .proj-mini-name {
-        font-size: 1rem;
+        font-family: var(--ff-serif);
+        font-size: 1.1rem;
         font-weight: 500;
       }
       .proj-mini-desc {
@@ -433,7 +512,11 @@
       }
       footer {
         padding: 2rem;
-        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
         color: var(--faint);
         font-family: var(--ff-mono);
         font-size: 0.8rem;
@@ -441,10 +524,22 @@
         max-width: var(--max);
         margin: 0 auto;
       }
+      .status-line::before {
+        content: "";
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        margin-right: 0.6rem;
+        background: var(--accent);
+        border-radius: 50%;
+        vertical-align: middle;
+      }
       .reveal {
         opacity: 0;
         transform: translateY(10px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease;
       }
       .reveal.in {
         opacity: 1;
@@ -458,11 +553,15 @@
         }
       }
       @media (max-width: 768px) {
+        .section-header h2 {
+          font-size: 1.4rem;
+        }
         .tl-item {
           grid-template-columns: 1fr;
           gap: 0.5rem;
         }
-        .about-wrap, .proj-mini-grid {
+        .about-wrap,
+        .proj-mini-grid {
           grid-template-columns: 1fr;
         }
         .nav-links {
@@ -486,45 +585,77 @@
     </nav>
 
     <header class="hero" id="home">
+      <div class="eyebrow">Munich, DE — B.Sc. Informatics</div>
       <h1>Adam Yahmadi</h1>
       <p class="hero-tag">
-        Computer Science student at <strong>TU Munich</strong>.<br>
+        Computer Science student at <strong>TU Munich</strong>.<br />
         Focused on scientific computing, machine learning, and infrastructure.
       </p>
-      <div class="contact-links" style="font-family: var(--ff-sans); font-size: 0.95rem;">
+      <div
+        class="contact-links"
+        style="font-family: var(--ff-sans); font-size: 0.95rem"
+      >
         <a href="mailto:adam.yahmadi@tum.de">adam.yahmadi@tum.de</a>
-        <a href="https://github.com/AdamYahmadi" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/adamyahmadi/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/AdamYahmadi" target="_blank" rel="noopener"
+          >GitHub</a
+        >
+        <a
+          href="https://www.linkedin.com/in/adamyahmadi/"
+          target="_blank"
+          rel="noopener"
+          >LinkedIn</a
+        >
       </div>
     </header>
 
     <section class="block reveal" id="about">
       <div class="section-header">
+        <span class="section-num">01</span>
         <h2>About</h2>
       </div>
       <div class="about-wrap">
         <div class="about-text">
           <p>
-            I'm a Computer Science student at the Technical University of Munich, with experience drawn from both academic research and self-directed engineering. I'm drawn to problems where rigorous mathematical concepts meet practical implementation.
+            I'm a Computer Science student at the Technical University of
+            Munich, with experience drawn from both academic research and
+            self-directed engineering. I'm drawn to problems where rigorous
+            mathematical concepts meet practical implementation.
           </p>
           <p>
-            My interests revolve around machine learning, scientific computing, and low-level system design. I am most engaged when turning theory into functional systems that perform reliably in the real world.
+            My interests revolve around machine learning, scientific computing,
+            and low-level system design. I am most engaged when turning theory
+            into functional systems that perform reliably in the real world.
           </p>
           <p>
-            Outside of university coursework, I actively maintain a Proxmox homelab, build local LLM infrastructure, and continually refine my understanding of robust software architecture. I learn fastest by shipping code.
+            Outside of university coursework, I actively maintain a Proxmox
+            homelab, build local LLM infrastructure, and continually refine my
+            understanding of robust software architecture. I learn fastest by
+            shipping code.
           </p>
         </div>
         <div class="facts">
-          <div class="fact"><span class="lab">Location</span><span class="val">Munich, DE</span></div>
-          <div class="fact"><span class="lab">Degree</span><span class="val">B.Sc. Informatics</span></div>
-          <div class="fact"><span class="lab">Focus</span><span class="val">ML &amp; SciComp</span></div>
-          <div class="fact"><span class="lab">Languages</span><span class="val">DE, EN, AR, FR</span></div>
+          <div class="fact">
+            <span class="lab">Location</span><span class="val">Munich, DE</span>
+          </div>
+          <div class="fact">
+            <span class="lab">Degree</span
+            ><span class="val">B.Sc. Informatics</span>
+          </div>
+          <div class="fact">
+            <span class="lab">Focus</span
+            ><span class="val">ML &amp; SciComp</span>
+          </div>
+          <div class="fact">
+            <span class="lab">Languages</span
+            ><span class="val">DE, EN, AR, FR</span>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="block reveal" id="experience">
       <div class="section-header">
+        <span class="section-num">02</span>
         <h2>Experience &amp; Education</h2>
       </div>
       <div class="timeline">
@@ -534,20 +665,42 @@
             <div class="tl-role">Software: Python and Data Analytics</div>
             <div class="tl-org">Data Mining Seminar · TU Munich</div>
             <div class="tl-desc">
-              A comprehensive survey of Python's scientific ecosystem (pandas, NumPy, SciPy, scikit-learn). Examined how these libraries compose into a single iterative workflow spanning data preparation, modeling, and evaluation. Included a runnable Dash dashboard demonstrating an end-to-end analytical pipeline.
+              A comprehensive survey of Python's scientific ecosystem (pandas,
+              NumPy, SciPy, scikit-learn). Examined how these libraries compose
+              into a single iterative workflow spanning data preparation,
+              modeling, and evaluation. Included a runnable Dash dashboard
+              demonstrating an end-to-end analytical pipeline.
             </div>
-            <a class="tl-link" href="assets/data-mining-paper.pdf" target="_blank" rel="noopener">Read the paper</a>
+            <a
+              class="tl-link"
+              href="assets/data-mining-paper.pdf"
+              target="_blank"
+              rel="noopener"
+              >Read the paper</a
+            >
           </div>
         </div>
         <div class="tl-item">
           <div class="tl-meta">WS 25/26</div>
           <div>
             <div class="tl-role">Motion Planning for Autonomous Vehicles</div>
-            <div class="tl-org">Chair of Robotics &amp; Real-Time Systems · TU Munich</div>
-            <div class="tl-desc">
-              Engineered a computer-vision pipeline extracting road-user trajectories from drone footage into CommonRoad scenarios. Integrated TPH-YOLOv5 for detection, MobileSAM for segmentation, and implemented automated drivability validation checking for kinematic feasibility and collision avoidance.
+            <div class="tl-org">
+              Chair of Robotics &amp; Real-Time Systems · TU Munich
             </div>
-            <a class="tl-link" href="assets/commonroad.pdf" target="_blank" rel="noopener">Read the paper</a>
+            <div class="tl-desc">
+              Engineered a computer-vision pipeline extracting road-user
+              trajectories from drone footage into CommonRoad scenarios.
+              Integrated TPH-YOLOv5 for detection, MobileSAM for segmentation,
+              and implemented automated drivability validation checking for
+              kinematic feasibility and collision avoidance.
+            </div>
+            <a
+              class="tl-link"
+              href="assets/commonroad.pdf"
+              target="_blank"
+              rel="noopener"
+              >Read the paper</a
+            >
           </div>
         </div>
         <div class="tl-item">
@@ -556,7 +709,12 @@
             <div class="tl-role">Driving Strategy Engineer</div>
             <div class="tl-org">TUfast Eco Team · TU Munich</div>
             <div class="tl-desc">
-              Developed a solver-agnostic optimization framework to compute energy-optimal speed profiles for the lux025 solar vehicle (Bridgestone World Solar Challenge 2025). Modeled physical constraints including battery SoC, solar irradiance, and aerodynamic drag across interchangeable solvers (IPOPT, ALPSO, Gurobi).
+              Developed a solver-agnostic optimization framework to compute
+              energy-optimal speed profiles for the lux025 solar vehicle
+              (Bridgestone World Solar Challenge 2025). Modeled physical
+              constraints including battery SoC, solar irradiance, and
+              aerodynamic drag across interchangeable solvers (IPOPT, ALPSO,
+              Gurobi).
             </div>
           </div>
         </div>
@@ -566,7 +724,8 @@
             <div class="tl-role">B.Sc. Informatics</div>
             <div class="tl-org">Technical University of Munich</div>
             <div class="tl-desc">
-              Core coursework spanning data structures, computer architecture, autonomous systems, and advanced numerical analysis.
+              Core coursework spanning data structures, computer architecture,
+              autonomous systems, and advanced numerical analysis.
             </div>
           </div>
         </div>
@@ -575,86 +734,187 @@
 
     <section class="block reveal" id="projects">
       <div class="section-header">
+        <span class="section-num">03</span>
         <h2>Selected Projects</h2>
       </div>
-      
+
       <div class="proj-slider">
         <div class="slider-header-wrap">
           <div class="slider-tabs" id="sliderTabs">
-            <button class="slider-tab active" onclick="goToSlide(0)" aria-label="Slide 1"><span class="slider-tab-fill"></span></button>
-            <button class="slider-tab" onclick="goToSlide(1)" aria-label="Slide 2"><span class="slider-tab-fill"></span></button>
-            <button class="slider-tab" onclick="goToSlide(2)" aria-label="Slide 3"><span class="slider-tab-fill"></span></button>
+            <button
+              class="slider-tab active"
+              onclick="goToSlide(0)"
+              aria-label="Slide 1"
+            >
+              <span class="slider-tab-fill"></span>
+            </button>
+            <button
+              class="slider-tab"
+              onclick="goToSlide(1)"
+              aria-label="Slide 2"
+            >
+              <span class="slider-tab-fill"></span>
+            </button>
+            <button
+              class="slider-tab"
+              onclick="goToSlide(2)"
+              aria-label="Slide 3"
+            >
+              <span class="slider-tab-fill"></span>
+            </button>
           </div>
           <div class="slider-controls">
-            <button class="slider-arrow" onclick="slideProj(-1)" aria-label="Previous">‹</button>
-            <button class="slider-arrow" onclick="slideProj(1)" aria-label="Next">›</button>
+            <button
+              class="slider-arrow"
+              onclick="slideProj(-1)"
+              aria-label="Previous"
+            >
+              ‹
+            </button>
+            <button
+              class="slider-arrow"
+              onclick="slideProj(1)"
+              aria-label="Next"
+            >
+              ›
+            </button>
           </div>
         </div>
 
         <div class="proj-slider-window">
           <div class="proj-slider-track" id="sliderTrack">
-            
-            <a class="proj-featured" href="infralens.html" data-repo="InfraLens">
+            <a
+              class="proj-featured"
+              href="infralens.html"
+              data-repo="InfraLens"
+            >
               <div class="proj-featured-screen">
-                <img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png" alt="InfraLens dashboard" onerror="this.style.display='none'">
+                <img
+                  src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
+                  alt="InfraLens dashboard"
+                  onerror="this.style.display = 'none'"
+                />
               </div>
               <div class="proj-featured-body">
                 <div class="proj-featured-top">
                   <div class="proj-featured-name">InfraLens</div>
-                  <div class="tags">Python, FastAPI, React, Proxmox API, Docker</div>
+                  <div class="tags">
+                    Python, FastAPI, React, Proxmox API, Docker
+                  </div>
                 </div>
-                <div class="proj-featured-sub">A self-hosted monitoring utility and LLM diagnostic tool for Proxmox virtualized clusters. Features graph-based network mapping.</div>
-                <div class="proj-stats" data-stats style="margin-top: 1rem;"></div>
+                <div class="proj-featured-sub">
+                  A self-hosted monitoring utility and LLM diagnostic tool for
+                  Proxmox virtualized clusters. Features graph-based network
+                  mapping.
+                </div>
+                <div
+                  class="proj-stats"
+                  data-stats
+                  style="margin-top: 1rem"
+                ></div>
               </div>
             </a>
 
-            <a class="proj-featured" href="https://mdtopdf.adamyahmadi.com" target="_blank" rel="noopener" data-repo="mdtopdf">
+            <a
+              class="proj-featured"
+              href="https://mdtopdf.adamyahmadi.com"
+              target="_blank"
+              rel="noopener"
+              data-repo="mdtopdf"
+            >
               <div class="proj-featured-screen">
-                <img src="assets/mdtopdf-preview.png" alt="mdtopdf site" onerror="this.style.display='none'">
+                <img
+                  src="assets/mdtopdf-preview.png"
+                  alt="mdtopdf site"
+                  onerror="this.style.display = 'none'"
+                />
               </div>
               <div class="proj-featured-body">
                 <div class="proj-featured-top">
                   <div class="proj-featured-name">mdtopdf</div>
                   <div class="tags">JavaScript, Python, CLI</div>
                 </div>
-                <div class="proj-featured-sub">Live web editor and CLI tool that converts Markdown to scanner-quality PDFs, complete with real-time page previews and LaTeX math rendering.</div>
-                <div class="proj-stats" data-stats style="margin-top: 1rem;"></div>
+                <div class="proj-featured-sub">
+                  Live web editor and CLI tool that converts Markdown to
+                  scanner-quality PDFs, complete with real-time page previews
+                  and LaTeX math rendering.
+                </div>
+                <div
+                  class="proj-stats"
+                  data-stats
+                  style="margin-top: 1rem"
+                ></div>
               </div>
             </a>
 
-            <a class="proj-featured" href="https://vertex.adamyahmadi.com" target="_blank" rel="noopener" data-repo="vertex">
+            <a
+              class="proj-featured"
+              href="https://vertex.adamyahmadi.com"
+              target="_blank"
+              rel="noopener"
+              data-repo="vertex"
+            >
               <div class="proj-featured-screen">
-                <img src="assets/vertex-preview.png" alt="Vertex document scanner" onerror="this.style.display='none'">
+                <img
+                  src="assets/vertex-preview.png"
+                  alt="Vertex document scanner"
+                  onerror="this.style.display = 'none'"
+                />
               </div>
               <div class="proj-featured-body">
                 <div class="proj-featured-top">
                   <div class="proj-featured-name">Vertex</div>
                   <div class="tags">Python, OpenCV, DocAligner, NumPy</div>
                 </div>
-                <div class="proj-featured-sub">Transforms raw document photos into scanner-quality PDFs using automated edge detection, perspective correction, and illumination normalization.</div>
-                <div class="proj-stats" data-stats style="margin-top: 1rem;"></div>
+                <div class="proj-featured-sub">
+                  Transforms raw document photos into scanner-quality PDFs using
+                  automated edge detection, perspective correction, and
+                  illumination normalization.
+                </div>
+                <div
+                  class="proj-stats"
+                  data-stats
+                  style="margin-top: 1rem"
+                ></div>
               </div>
             </a>
-
           </div>
         </div>
       </div>
 
       <div class="proj-mini-grid">
-        <a href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener" class="proj-mini" data-repo="cache-simulator">
+        <a
+          href="https://github.com/AdamYahmadi/cache-simulator"
+          target="_blank"
+          rel="noopener"
+          class="proj-mini"
+          data-repo="cache-simulator"
+        >
           <div class="proj-mini-top">
             <div class="proj-mini-name">Cache Simulator</div>
             <div class="tags">C++, SystemC</div>
           </div>
-          <div class="proj-mini-desc">Cycle-accurate simulator with direct-mapped and fully-associative caches, LRU eviction, and per-access gate count tracking.</div>
+          <div class="proj-mini-desc">
+            Cycle-accurate simulator with direct-mapped and fully-associative
+            caches, LRU eviction, and per-access gate count tracking.
+          </div>
           <div class="proj-stats" data-stats></div>
         </a>
-        <a href="https://github.com/AdamYahmadi/wifi-to-qr" target="_blank" rel="noopener" class="proj-mini" data-repo="wifi-to-qr">
+        <a
+          href="https://github.com/AdamYahmadi/wifi-to-qr"
+          target="_blank"
+          rel="noopener"
+          class="proj-mini"
+          data-repo="wifi-to-qr"
+        >
           <div class="proj-mini-top">
             <div class="proj-mini-name">wifi-to-qr</div>
             <div class="tags">Python, CLI</div>
           </div>
-          <div class="proj-mini-desc">Terminal utility that detects the current active Wi-Fi connection and generates a scannable QR code for instant joining.</div>
+          <div class="proj-mini-desc">
+            Terminal utility that detects the current active Wi-Fi connection
+            and generates a scannable QR code for instant joining.
+          </div>
           <div class="proj-stats" data-stats></div>
         </a>
       </div>
@@ -662,9 +922,10 @@
 
     <section class="block reveal" id="skills">
       <div class="section-header">
+        <span class="section-num">04</span>
         <h2>Toolkit</h2>
       </div>
-      <div class="about-wrap" style="gap: 2rem; grid-template-columns: 1fr 1fr;">
+      <div class="about-wrap" style="gap: 2rem; grid-template-columns: 1fr 1fr">
         <div>
           <div class="skills-group">
             <h3>Languages</h3>
@@ -678,29 +939,38 @@
         <div>
           <div class="skills-group">
             <h3>Frameworks</h3>
-            <div class="skills-list">PyTorch, TensorFlow, NumPy, OpenCV, FastAPI, Spring Boot</div>
+            <div class="skills-list">
+              PyTorch, TensorFlow, NumPy, OpenCV, FastAPI, Spring Boot
+            </div>
           </div>
           <div class="skills-group">
             <h3>Focus Areas</h3>
-            <div class="skills-list">Machine Learning, Scientific Computing, Optimization, Systems Programming</div>
+            <div class="skills-list">
+              Machine Learning, Scientific Computing, Optimization, Systems
+              Programming
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <footer>
-      Adam Yahmadi &copy; 2026. All rights reserved.
+      <span>Adam Yahmadi &copy; 2026. All rights reserved.</span>
+      <span class="status-line" id="statusLine"></span>
     </footer>
 
     <script>
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            en.target.classList.add("in");
-            io.unobserve(en.target);
-          }
-        });
-      }, { threshold: 0.1 });
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              en.target.classList.add("in");
+              io.unobserve(en.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
       (function () {
@@ -708,11 +978,28 @@
         const tabs = document.querySelectorAll(".slider-tab");
         if (!track) return;
         const slideCount = track.children.length;
+
+        const firstClone = track.children[0].cloneNode(true);
+        const lastClone = track.children[slideCount - 1].cloneNode(true);
+        [firstClone, lastClone].forEach((c) => {
+          c.removeAttribute("data-repo");
+          c.setAttribute("aria-hidden", "true");
+          c.tabIndex = -1;
+        });
+        track.appendChild(firstClone);
+        track.insertBefore(lastClone, track.firstChild);
+
         let current = 0;
+        let trackPos = 1;
         let timer;
 
-        function render() {
-          track.style.transform = `translateX(-${current * 100}%)`;
+        function render(withTransition = true) {
+          if (!withTransition) track.style.transition = "none";
+          track.style.transform = `translateX(-${trackPos * 100}%)`;
+          if (!withTransition) {
+            void track.offsetWidth;
+            track.style.transition = "";
+          }
           tabs.forEach((t, i) => {
             t.classList.toggle("active", i === current);
             t.classList.toggle("done", i < current);
@@ -726,22 +1013,35 @@
         }
         window.goToSlide = function (i) {
           current = i;
+          trackPos = i + 1;
           render();
           resetTimer();
         };
         window.slideProj = function (dir) {
           current = (current + dir + slideCount) % slideCount;
+          trackPos += dir;
           render();
           resetTimer();
         };
         function autoAdvance() {
           current = (current + 1) % slideCount;
+          trackPos += 1;
           render();
         }
         function resetTimer() {
           clearInterval(timer);
           timer = setInterval(autoAdvance, 5000);
         }
+        track.addEventListener("transitionend", (e) => {
+          if (e.propertyName !== "transform") return;
+          if (trackPos === slideCount + 1) {
+            trackPos = 1;
+            render(false);
+          } else if (trackPos === 0) {
+            trackPos = slideCount;
+            render(false);
+          }
+        });
 
         const sliderEl = document.querySelector(".proj-slider");
         sliderEl.addEventListener("mouseenter", () => {
@@ -789,6 +1089,45 @@
             });
         });
       })();
+
+      (function () {
+        const el = document.getElementById("statusLine");
+        if (!el) return;
+        let shipped = null;
+
+        function time() {
+          return new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Europe/Berlin",
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(new Date());
+        }
+        function render() {
+          el.textContent =
+            "MUC " + time() + (shipped ? " · last shipped " + shipped : "");
+        }
+        render();
+        setInterval(render, 30000);
+
+        fetch("https://api.github.com/users/AdamYahmadi/events/public")
+          .then((r) => (r.ok ? r.json() : Promise.reject()))
+          .then((events) => {
+            const push = events.find((e) => e.type === "PushEvent");
+            if (!push) return;
+            const d = Math.floor(
+              (Date.now() - new Date(push.created_at)) / 86400000,
+            );
+            shipped =
+              d < 1
+                ? "today"
+                : d < 30
+                  ? d + "d ago"
+                  : Math.floor(d / 30) + "mo ago";
+            render();
+          })
+          .catch(() => {});
+      })();
     </script>
   </body>
 </html>
+

@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,650;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -34,10 +34,12 @@
         --ff-serif: "Fraunces", "Iowan Old Style", serif;
         --ff-sans: "Inter", -apple-system, sans-serif;
         --ff-mono: "JetBrains Mono", monospace;
-        --max: 860px;
+        --max: 1180px;
       }
-      html {
-        scroll-behavior: smooth;
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
       }
       body {
         font-family: var(--ff-sans);
@@ -50,42 +52,79 @@
         color: inherit;
         text-decoration: none;
       }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
 
-      /* nav */
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 1000;
+        background: var(--text);
+        color: var(--bg);
+        font-family: var(--ff-mono);
+        font-size: 0.85rem;
+        padding: 0.75rem 1.1rem;
+      }
+      .skip-link:focus {
+        left: 1rem;
+        top: 1rem;
+      }
+
       nav {
         position: sticky;
         top: 0;
         z-index: 100;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-inner {
+        max-width: var(--max);
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1.35rem 2rem;
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
+        gap: 1.5rem;
       }
       .nav-logo {
         font-size: 0.92rem;
         font-weight: 500;
         letter-spacing: -0.01em;
         color: var(--text);
-      }
-      .nav-links {
-        display: flex;
-        gap: 2.1rem;
-        list-style: none;
-      }
-      .nav-links a {
-        font-size: 0.85rem;
-        color: var(--muted);
-        transition: color 0.15s;
-      }
-      .nav-links a:hover {
-        color: var(--text);
+        white-space: nowrap;
       }
       .nav-right {
         display: flex;
         align-items: center;
         gap: 2.25rem;
+      }
+      .nav-links {
+        display: flex;
+        gap: 1.9rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 0.82rem;
+        font-family: var(--ff-mono);
+        letter-spacing: 0.02em;
+        color: var(--muted);
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid transparent;
+        transition:
+          color 0.15s,
+          border-color 0.15s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-links a.active {
+        color: var(--text);
+        border-bottom-color: var(--accent);
       }
       .nav-cta {
         font-size: 0.85rem;
@@ -98,56 +137,191 @@
       .nav-cta:hover {
         border-color: var(--text);
       }
-
-      /* hero */
-      .hero {
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: 6.5rem 2rem 5rem;
-      }
-      .eyebrow {
-        font-size: 0.85rem;
-        color: var(--faint);
-        margin-bottom: 1.5rem;
-        display: flex;
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 0.6rem;
-      }
-      .eyebrow::before {
-        content: "";
-        width: 6px;
-        height: 6px;
-        background: var(--accent);
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        margin: -8px -8px -8px 0;
+        background: none;
+        border: none;
+        cursor: pointer;
         flex-shrink: 0;
       }
-      .hero h1 {
-        font-family: var(--ff-serif);
-        font-size: clamp(2.9rem, 6.5vw, 4.6rem);
-        font-weight: 600;
-        letter-spacing: -0.02em;
-        line-height: 1.03;
-        margin-bottom: 1.6rem;
+      .nav-toggle span {
+        display: block;
+        width: 20px;
+        height: 1px;
+        background: var(--text);
+        transition:
+          transform 0.2s ease,
+          opacity 0.2s ease;
       }
+      nav.nav-open .nav-toggle span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+      }
+      nav.nav-open .nav-toggle span:nth-child(2) {
+        opacity: 0;
+      }
+      nav.nav-open .nav-toggle span:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .nav-toggle span {
+          transition: none;
+        }
+      }
+
+      .hero {
+        position: relative;
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 3.5rem 2rem 5.5rem;
+        overflow: hidden;
+      }
+      .hero-trace {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 150px;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .hero-trace path {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 1.4;
+        opacity: 0.32;
+        stroke-dasharray: 2000;
+        stroke-dashoffset: 0;
+      }
+      .hero-trace circle {
+        fill: var(--accent);
+        opacity: 0.5;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .hero-trace path {
+          animation: draw 1.8s ease-out 0.15s both;
+        }
+      }
+      @keyframes draw {
+        from {
+          stroke-dashoffset: 2000;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      .hero-top {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+        font-family: var(--ff-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        color: var(--faint);
+      }
+      .hero-top span::before {
+        content: "+ ";
+        color: var(--accent);
+      }
+
+      .hero-main {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 2rem 3.5rem;
+        padding-bottom: 2.5rem;
+        margin-bottom: 2.25rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .hero-name {
+        font-family: var(--ff-serif);
+        font-weight: 600;
+        font-size: clamp(3.2rem, 9vw, 7.2rem);
+        line-height: 0.94;
+        letter-spacing: -0.03em;
+      }
+      .hero-name em {
+        font-style: italic;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .hero-name::after {
+        content: "";
+        display: block;
+        width: 64px;
+        height: 3px;
+        background: var(--accent);
+        margin-top: 1.4rem;
+      }
+      .hero-side {
+        display: flex;
+        flex-direction: column;
+        width: 236px;
+        border-top: 1px solid var(--border-bright);
+      }
+      .hs-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+      }
+      .hs-row .lab {
+        font-family: var(--ff-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+      .hs-row .val {
+        color: var(--text);
+        text-align: right;
+      }
+
       .hero-tag {
-        font-size: 1.15rem;
+        position: relative;
+        z-index: 1;
+        font-size: 1.1rem;
         color: var(--muted);
         max-width: 600px;
         font-weight: 400;
         line-height: 1.65;
-        margin-bottom: 2.75rem;
+        margin-bottom: 2.5rem;
+      }
+      .hero-tag p + p {
+        margin-top: 0.6rem;
       }
       .hero-tag strong {
         color: var(--text);
         font-weight: 500;
       }
       .hero-meta {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 0.5rem 1.15rem;
-        padding-top: 1.75rem;
+        padding-top: 1.6rem;
         border-top: 1px solid var(--border);
-        font-size: 0.9rem;
+        font-family: var(--ff-mono);
+        font-size: 0.82rem;
         color: var(--muted);
       }
       .hero-meta a {
@@ -167,7 +341,6 @@
         color: var(--border-bright);
       }
 
-      /* sections */
       section.block {
         max-width: var(--max);
         margin: 0 auto;
@@ -186,6 +359,10 @@
         color: var(--faint);
         letter-spacing: 0.05em;
       }
+      .section-num::before {
+        content: "+ ";
+        color: var(--accent);
+      }
       .section-header h2 {
         font-family: var(--ff-serif);
         font-style: italic;
@@ -201,61 +378,115 @@
         background: var(--border);
       }
 
-      /* about */
-      .about-wrap {
+      .about-grid {
         display: grid;
-        grid-template-columns: 3fr 2fr;
+        grid-template-columns: 1.15fr 1fr;
         gap: 3.5rem;
         align-items: start;
       }
-      .about-text {
-        color: var(--muted);
-        font-size: 1rem;
-      }
-      .about-text p + p {
-        margin-top: 1.2rem;
-      }
-      .about-text strong {
-        color: var(--text);
+      .about-lede {
+        font-family: var(--ff-serif);
+        font-size: 1.5rem;
         font-weight: 500;
-      }
-      .facts {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-      }
-      .fact {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.85rem 0;
-        border-bottom: 1px solid var(--border);
-        font-size: 0.88rem;
-      }
-      .fact:first-child {
-        padding-top: 0;
-      }
-      .fact .lab {
-        color: var(--faint);
-      }
-      .fact .val {
+        line-height: 1.4;
+        letter-spacing: -0.01em;
         color: var(--text);
-        text-align: right;
+        margin-bottom: 1.4rem;
+      }
+      .about-sub {
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.75;
+        max-width: 56ch;
+        margin-bottom: 2rem;
+      }
+      .about-map-label {
+        font-family: var(--ff-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--faint);
+        margin-bottom: 1.4rem;
+      }
+      .ix-rail {
+        position: relative;
+        padding-left: 1.6rem;
+      }
+      .ix-rail::before {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 6px;
+        bottom: 6px;
+        width: 1px;
+        background: var(--border-bright);
+      }
+      .ix-item {
+        position: relative;
+        padding-bottom: 1.9rem;
+      }
+      .ix-item:last-child {
+        padding-bottom: 0;
+      }
+      .ix-item::before {
+        content: "";
+        position: absolute;
+        left: -1.6rem;
+        top: 4px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 1.5px solid var(--border-bright);
+        transition:
+          border-color 0.15s,
+          background-color 0.15s;
+      }
+      .ix-item.ix-dest::before {
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+      .ix-label {
+        font-family: var(--ff-mono);
+        font-size: 0.85rem;
+        letter-spacing: 0.03em;
+        color: var(--muted);
+        transition: color 0.15s;
+      }
+      .ix-item.ix-dest .ix-label {
+        color: var(--text);
+      }
+      @media (hover: hover) {
+        .ix-item:hover::before {
+          border-color: var(--accent);
+          background: var(--accent);
+        }
+        .ix-item:hover .ix-label {
+          color: var(--text);
+        }
       }
 
-      /* timeline */
+      @media (max-width: 768px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+      }
       .timeline {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 2.75rem;
       }
       .tl-item {
+        position: relative;
         display: grid;
-        grid-template-columns: 110px 1fr;
+        grid-template-columns: 130px 1fr;
         gap: 2rem;
       }
       .tl-meta {
         font-family: var(--ff-mono);
-        font-size: 0.8rem;
+        font-size: 0.95rem;
         color: var(--faint);
         padding-top: 0.3rem;
       }
@@ -291,111 +522,341 @@
         text-decoration-color: var(--text);
       }
 
-      /* projects — featured, editorial case-study rows */
-      .proj-featured-list {
-        display: flex;
-        flex-direction: column;
-      }
-      .proj-featured {
-        display: block;
-        padding: 2.75rem 0;
-        border-top: 1px solid var(--border);
-      }
-      .proj-featured:first-child {
-        border-top: none;
-        padding-top: 0;
-      }
-      .proj-featured-screen {
-        background: var(--surface);
+      .proj-carousel {
+        position: relative;
         border: 1px solid var(--border);
-        margin-bottom: 1.5rem;
+        background: var(--surface);
+        margin-bottom: 3rem;
+      }
+      .pc-slides {
+        position: relative;
+        width: 100%;
+        height: 460px;
         overflow: hidden;
       }
-      .proj-featured-screen img {
-        width: 100%;
+      .pc-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease;
+      }
+      .pc-slide.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pc-slide {
+          transition: none;
+        }
+      }
+      .pc-slide img {
         display: block;
-        max-height: 380px;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        object-position: top;
-        transition: opacity 0.15s;
+        object-position: center;
       }
-      .proj-featured:hover .proj-featured-screen img {
-        opacity: 0.92;
+      .pc-slide figcaption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 2.25rem 1.75rem 1.35rem;
+        background: linear-gradient(
+          to top,
+          rgba(10, 9, 8, 0.96) 0%,
+          rgba(10, 9, 8, 0.78) 50%,
+          transparent 100%
+        );
       }
-      .proj-featured-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 1rem;
-        margin-bottom: 0.6rem;
-      }
-      .proj-featured-name {
-        font-family: var(--ff-serif);
-        font-size: 1.35rem;
-        font-weight: 500;
-        color: var(--text);
+      .pc-cap-top {
         display: flex;
         align-items: baseline;
-        gap: 0.5rem;
+        gap: 0.85rem;
+        margin-bottom: 0.55rem;
       }
-      .proj-featured-name .arrow {
-        font-size: 1rem;
-        color: var(--faint);
-        transition:
-          transform 0.15s,
-          color 0.15s;
-      }
-      .proj-featured:hover .proj-featured-name .arrow {
-        transform: translate(2px, -2px);
+      .pc-cap-top .proj-num {
+        font-family: var(--ff-mono);
+        font-size: 0.76rem;
         color: var(--accent);
       }
-      .proj-featured-sub {
-        font-size: 0.95rem;
-        color: var(--muted);
-        max-width: 62ch;
-        line-height: 1.65;
-        margin-bottom: 0.9rem;
-      }
-      .tags {
-        font-family: var(--ff-mono);
-        font-size: 0.75rem;
-        color: var(--faint);
-      }
-      .proj-stats {
-        font-family: var(--ff-mono);
-        font-size: 0.75rem;
-        color: var(--faint);
-      }
-
-      /* projects — secondary list */
-      .proj-mini-list {
-        margin-top: 2.5rem;
-      }
-      .proj-mini {
-        display: grid;
-        grid-template-columns: 1fr 2fr auto;
-        gap: 1.5rem;
-        align-items: baseline;
-        padding: 1.25rem 0;
-        border-top: 1px solid var(--border);
-        transition: opacity 0.15s;
-      }
-      .proj-mini:hover {
-        opacity: 0.78;
-      }
-      .proj-mini-name {
+      .pc-cap-top .proj-title {
         font-family: var(--ff-serif);
-        font-size: 1.02rem;
-        font-weight: 500;
+        font-size: 1.85rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
         color: var(--text);
       }
-      .proj-mini-desc {
-        font-size: 0.88rem;
+      .pc-desc {
+        font-size: 0.92rem;
         color: var(--muted);
-        line-height: 1.55;
+        line-height: 1.7;
+        max-width: 52ch;
+        margin-bottom: 0.85rem;
+      }
+      .pc-foot {
+        display: flex;
+        align-items: baseline;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        font-family: var(--ff-mono);
+        font-size: 0.74rem;
+        color: var(--faint);
+      }
+      .pc-foot .proj-detail-link {
+        display: inline-block;
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-color: var(--border-bright);
+        transition:
+          text-decoration-color 0.15s,
+          transform 0.15s;
+      }
+      .pc-foot .proj-detail-link:hover {
+        text-decoration-color: var(--text);
+        transform: translateX(3px);
+      }
+      .pc-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 9, 8, 0.55);
+        border: 1px solid var(--border-bright);
+        color: var(--muted);
+        font-family: var(--ff-mono);
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          color 0.15s,
+          background-color 0.15s;
+      }
+      .pc-nav:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(10, 9, 8, 0.8);
+      }
+      .pc-prev {
+        left: 0.85rem;
+      }
+      .pc-next {
+        right: 0.85rem;
+      }
+      .pc-progress {
+        display: flex;
+        gap: 0.4rem;
+        padding: 0.9rem 1.75rem;
+        border-top: 1px solid var(--border);
+      }
+      .pc-bar {
+        flex: 1;
+        padding: 11px 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+      }
+      .pc-bar-track {
+        display: block;
+        height: 2px;
+        background: rgba(236, 231, 220, 0.14);
+        position: relative;
+        overflow: hidden;
+        transition: height 0.15s;
+      }
+      .pc-bar-fill {
+        position: absolute;
+        inset: 0;
+        width: 0%;
+        background: var(--accent);
+      }
+      .pc-bar.active .pc-bar-track {
+        height: 3px;
+        background: rgba(236, 231, 220, 0.28);
+      }
+      .pc-bar.active .pc-bar-fill {
+        width: 0%;
+        animation: pcFill 5000ms linear forwards;
+      }
+      .pc-bar.active .pc-bar-fill.filled {
+        width: 100%;
+      }
+      .pc-progress.paused .pc-bar-fill {
+        animation-play-state: paused;
+      }
+      @keyframes pcFill {
+        from {
+          width: 0%;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pc-bar.active .pc-bar-fill {
+          animation: none;
+          width: 100%;
+        }
+      }
+      @media (max-width: 640px) {
+        .pc-progress {
+          padding: 0.85rem 1.15rem;
+        }
+      }
+      @media (max-width: 1024px) {
+        .pc-slides {
+          height: 400px;
+        }
+      }
+      @media (max-width: 640px) {
+        .pc-slides {
+          height: auto;
+          overflow: visible;
+        }
+        .pc-slide {
+          position: static;
+          opacity: 1;
+          visibility: visible;
+          display: none;
+          transition: none;
+        }
+        .pc-slide.active {
+          display: block;
+        }
+        .pc-slide img {
+          height: 280px;
+        }
+        .pc-slide figcaption {
+          position: static;
+          padding: 1.5rem 1.15rem 1.75rem;
+          background: none;
+        }
+        .pc-cap-top .proj-title {
+          font-size: 1.4rem;
+        }
+        .pc-desc {
+          max-width: none;
+        }
+        .pc-nav {
+          top: 140px;
+          width: 30px;
+          height: 30px;
+        }
       }
 
-      /* skills */
+      .proj-more-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .proj-more-row {
+        display: flex;
+        flex-direction: column;
+        padding: 2.25rem 2.25rem 2.25rem 0;
+      }
+      .proj-more-row:last-child {
+        padding-left: 2.25rem;
+        padding-right: 0;
+        border-left: 1px solid var(--border);
+      }
+      @media (max-width: 640px) {
+        .proj-more-grid {
+          grid-template-columns: 1fr;
+        }
+        .proj-more-row {
+          padding: 2rem 0;
+        }
+        .proj-more-row:last-child {
+          border-left: none;
+          border-top: 1px solid var(--border);
+          padding-left: 0;
+        }
+      }
+      .pmr-head {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        row-gap: 0.3rem;
+        column-gap: 1rem;
+        margin-bottom: 0.65rem;
+      }
+      .pmr-num {
+        font-family: var(--ff-mono);
+        font-size: 0.8rem;
+        color: var(--faint);
+        flex-shrink: 0;
+        transition: color 0.15s;
+      }
+      .pmr-title {
+        font-family: var(--ff-serif);
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: var(--text);
+        transition: transform 0.15s;
+      }
+      .pmr-tags {
+        font-family: var(--ff-mono);
+        font-size: 0.72rem;
+        color: var(--faint);
+        margin-left: auto;
+        white-space: nowrap;
+        display: none;
+      }
+      @media (min-width: 640px) {
+        .pmr-tags {
+          display: block;
+        }
+      }
+      .pmr-desc {
+        font-size: 0.92rem;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 48ch;
+        margin-bottom: 0.9rem;
+        flex: 1;
+      }
+      .pmr-foot {
+        display: flex;
+        align-items: baseline;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        font-family: var(--ff-mono);
+        font-size: 0.74rem;
+        color: var(--faint);
+      }
+      .proj-detail-link {
+        display: inline-block;
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-color: var(--border-bright);
+        transition:
+          text-decoration-color 0.15s,
+          transform 0.15s;
+      }
+      .proj-detail-link:hover {
+        text-decoration-color: var(--text);
+        transform: translateX(3px);
+      }
+      @media (hover: hover) {
+        .proj-more-row:hover .pmr-num {
+          color: var(--accent);
+        }
+        .proj-more-row:hover .pmr-title {
+          transform: translateX(4px);
+        }
+        .proj-more-row:hover .proj-detail-link {
+          text-decoration-color: var(--text);
+        }
+      }
+
       .skills-wrap {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -420,7 +881,6 @@
         line-height: 1.7;
       }
 
-      /* footer */
       footer {
         padding: 2rem;
         display: flex;
@@ -443,12 +903,30 @@
       }
       .footer-links {
         display: flex;
+        align-items: baseline;
         gap: 1.25rem;
+      }
+      .footer-clock {
+        font-family: var(--ff-mono);
+        font-size: 0.78rem;
+        color: var(--faint);
       }
 
       @media (max-width: 768px) {
         .hero {
-          padding: 5rem 1.5rem 3.5rem;
+          padding: 2.5rem 1.5rem 4rem;
+        }
+        .hero-main {
+          grid-template-columns: 1fr;
+        }
+        .hero-side {
+          width: 100%;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .hs-row {
+          width: 50%;
+          padding-right: 1rem;
         }
         section.block {
           padding: 3.5rem 1.5rem;
@@ -463,42 +941,135 @@
         .tl-meta {
           padding-top: 0;
         }
-        .about-wrap,
         .skills-wrap {
           grid-template-columns: 1fr;
         }
-        .proj-mini {
-          grid-template-columns: 1fr;
-          gap: 0.4rem;
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-cta {
+          padding: 0.5rem 0;
         }
         .nav-links {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0;
+          background: var(--bg);
+          border-bottom: 1px solid var(--border);
+          padding: 0.5rem 1.5rem 1rem;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-8px);
+          transition:
+            opacity 0.2s ease,
+            transform 0.2s ease,
+            visibility 0.2s;
+        }
+        nav.nav-open .nav-links {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+        .nav-links li {
+          width: 100%;
+        }
+        .nav-links a {
+          display: block;
+          padding: 0.95rem 0;
+          border-bottom: 1px solid var(--border);
+          font-size: 0.95rem;
+        }
+        .nav-links li:last-child a {
+          border-bottom: none;
+        }
+      }
+      @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+        .nav-links {
+          transition: none;
+        }
+      }
+      @media (max-width: 420px) {
+        .hero-top .hero-coord {
           display: none;
         }
       }
     </style>
   </head>
   <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <nav>
-      <a href="#home" class="nav-logo">Adam Yahmadi</a>
-      <div class="nav-right">
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#about">About</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#skills">Toolkit</a></li>
-        </ul>
-        <a class="nav-cta" href="resume.html">Resume</a>
+      <div class="nav-inner">
+        <a href="#home" class="nav-logo">Adam Yahmadi</a>
+        <div class="nav-right">
+          <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Toolkit</a></li>
+          </ul>
+          <a class="nav-cta" href="resume.html">Resume</a>
+          <button
+            class="nav-toggle"
+            id="navToggle"
+            aria-expanded="false"
+            aria-controls="navLinks"
+            aria-label="Toggle menu"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </div>
     </nav>
 
     <header class="hero" id="home">
-      <div class="eyebrow">Munich, DE — B.Sc. Informatics, TU Munich</div>
-      <h1>Adam Yahmadi</h1>
-      <p class="hero-tag">
-        Computer Science student at <strong>TU Munich</strong>, working across
-        scientific computing, machine learning, and systems.<br />
-        Interested in problems where rigorous methods meet real implementation.
-      </p>
+      <svg
+        class="hero-trace"
+        viewBox="0 0 1200 200"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0,160 C140,160 170,50 310,70 C450,90 470,175 610,155 C750,135 790,35 930,55 C1050,73 1090,150 1200,130"
+        />
+        <circle cx="310" cy="70" r="3.5" />
+        <circle cx="610" cy="155" r="3.5" />
+        <circle cx="930" cy="55" r="3.5" />
+        <circle cx="1200" cy="130" r="3.5" />
+      </svg>
+      <div class="hero-top">
+        <span class="hero-index">PORTFOLIO</span>
+        <span class="hero-coord">48.1351° N, 11.5820° E — MUNICH</span>
+      </div>
+      <div class="hero-main">
+        <h1 class="hero-name">Adam<br /><em>Yahmadi</em></h1>
+        <div class="hero-side">
+          <div class="hs-row">
+            <span class="lab">Based</span><span class="val">Munich · TUM</span>
+          </div>
+          <div class="hs-row">
+            <span class="lab">Focus</span
+            ><span class="val">ML · Optimization · Systems</span>
+          </div>
+          <div class="hs-row">
+            <span class="lab">Degree</span
+            ><span class="val">B.Sc. Informatics</span>
+          </div>
+          <div class="hs-row">
+            <span class="lab">Languages</span
+            ><span class="val">DE, EN, AR, FR</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-tag">
+        <p>
+          Computer Science student at <strong>TUM</strong>, working across
+          machine learning, scientific computing, and systems.
+        </p>
+      </div>
       <div class="hero-meta">
         <a href="mailto:adam.yahmadi@tum.de">adam.yahmadi@tum.de</a>
         <span class="sep">·</span>
@@ -517,286 +1088,347 @@
       </div>
     </header>
 
-    <section class="block" id="about">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <h2>About</h2>
-      </div>
-      <div class="about-wrap">
-        <div class="about-text">
-          <p>
-            I'm a Computer Science student at the Technical University of
-            Munich, with experience drawn from both academic research and
-            self-directed engineering. I'm drawn to problems where rigorous
-            mathematical concepts meet practical implementation.
-          </p>
-          <p>
-            My interests revolve around machine learning, scientific computing,
-            and low-level system design. I am most engaged when turning theory
-            into functional systems that perform reliably in the real world.
-          </p>
-          <p>
-            Outside of university coursework, I actively maintain a Proxmox
-            homelab, build local LLM infrastructure, and continually refine my
-            understanding of robust software architecture. I learn fastest by
-            shipping code.
-          </p>
+    <main id="main">
+      <section class="block" id="about">
+        <div class="section-header">
+          <span class="section-num">01</span>
+          <h2>About</h2>
         </div>
-        <div class="facts">
-          <div class="fact">
-            <span class="lab">Location</span><span class="val">Munich, DE</span>
+        <div class="about-grid">
+          <div class="about-main">
+            <p class="about-lede">
+              I enjoy the gap between understanding how something should work
+              and actually making it work.
+            </p>
+            <p class="about-sub">
+              Most of my work sits somewhere between math, software, and
+              engineering. I've worked on vehicle optimization at TUfast, built
+              simulation and motion-planning tools, and spent a lot of time
+              figuring things out on my own. I enjoy taking an idea, turning it
+              into something that actually runs, and seeing what happens when it
+              meets real-world constraints.
+            </p>
           </div>
-          <div class="fact">
-            <span class="lab">Degree</span
-            ><span class="val">B.Sc. Informatics</span>
-          </div>
-          <div class="fact">
-            <span class="lab">Focus</span
-            ><span class="val">ML &amp; SciComp</span>
-          </div>
-          <div class="fact">
-            <span class="lab">Languages</span
-            ><span class="val">DE, EN, AR, FR</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" id="experience">
-      <div class="section-header">
-        <span class="section-num">02</span>
-        <h2>Experience &amp; Education</h2>
-      </div>
-      <div class="timeline">
-        <div class="tl-item">
-          <div class="tl-meta">SS 2026</div>
-          <div>
-            <div class="tl-role">Software: Python and Data Analytics</div>
-            <div class="tl-org">Data Mining Seminar · TU Munich</div>
-            <div class="tl-desc">
-              A comprehensive survey of Python's scientific ecosystem (pandas,
-              NumPy, SciPy, scikit-learn). Examined how these libraries compose
-              into a single iterative workflow spanning data preparation,
-              modeling, and evaluation. Included a runnable Dash dashboard
-              demonstrating an end-to-end analytical pipeline.
+          <div class="about-map">
+            <div class="about-map-label">Where it connects</div>
+            <div class="ix-rail">
+              <div class="ix-item">
+                <span class="ix-label">Mathematics</span>
+              </div>
+              <div class="ix-item">
+                <span class="ix-label">Computation</span>
+              </div>
+              <div class="ix-item">
+                <span class="ix-label">ML · Optimization</span>
+              </div>
+              <div class="ix-item ix-dest">
+                <span class="ix-label">Real systems</span>
+              </div>
             </div>
-            <a
-              class="tl-link"
-              href="assets/data-mining-paper.pdf"
-              target="_blank"
-              rel="noopener"
-              >Read the paper</a
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="experience">
+        <div class="section-header">
+          <span class="section-num">02</span>
+          <h2>Experience &amp; Education</h2>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-meta">SS 2026</div>
+            <div>
+              <div class="tl-role">Software: Python and Data Analytics</div>
+              <div class="tl-org">Data Mining Seminar · TU Munich</div>
+              <div class="tl-desc">
+                A comprehensive survey of Python's scientific ecosystem (pandas,
+                NumPy, SciPy, scikit-learn). Examined how these libraries
+                compose into a single iterative workflow spanning data
+                preparation, modeling, and evaluation. Included a runnable Dash
+                dashboard demonstrating an end-to-end analytical pipeline.
+              </div>
+              <a
+                class="tl-link"
+                href="assets/data-mining-paper.pdf"
+                target="_blank"
+                rel="noopener"
+                >Read the paper</a
+              >
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-meta">WS 25/26</div>
+            <div>
+              <div class="tl-role">Motion Planning for Autonomous Vehicles</div>
+              <div class="tl-org">
+                Chair of Robotics &amp; Real-Time Systems · TU Munich
+              </div>
+              <div class="tl-desc">
+                Engineered a computer-vision pipeline extracting road-user
+                trajectories from drone footage into CommonRoad scenarios.
+                Integrated TPH-YOLOv5 for detection, MobileSAM for segmentation,
+                and implemented automated drivability validation checking for
+                kinematic feasibility and collision avoidance.
+              </div>
+              <a
+                class="tl-link"
+                href="assets/commonroad.pdf"
+                target="_blank"
+                rel="noopener"
+                >Read the paper</a
+              >
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-meta">2024–2025</div>
+            <div>
+              <div class="tl-role">Driving Strategy Engineer</div>
+              <div class="tl-org">TUfast Eco Team · TU Munich</div>
+              <div class="tl-desc">
+                Developed a solver-agnostic optimization framework to compute
+                energy-optimal speed profiles for the lux025 solar vehicle
+                (Bridgestone World Solar Challenge 2025). Modeled physical
+                constraints including battery SoC, solar irradiance, and
+                aerodynamic drag across interchangeable solvers (IPOPT, ALPSO,
+                Gurobi).
+              </div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-meta">2023–Present</div>
+            <div>
+              <div class="tl-role">B.Sc. Informatics</div>
+              <div class="tl-org">Technical University of Munich</div>
+              <div class="tl-desc">
+                Core coursework spanning data structures, computer architecture,
+                autonomous systems, and advanced numerical analysis.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="projects">
+        <div class="section-header">
+          <span class="section-num">03</span>
+          <h2>Selected Projects</h2>
+        </div>
+
+        <div class="proj-carousel" id="projCarousel">
+          <div class="pc-slides">
+            <figure class="pc-slide active" data-repo="InfraLens">
+              <img
+                src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
+                alt="InfraLens dashboard"
+                loading="lazy"
+                onerror="this.style.display = 'none'"
+              />
+              <figcaption>
+                <div class="pc-cap-top">
+                  <span class="proj-num">01</span>
+                  <span class="proj-title">InfraLens</span>
+                </div>
+                <p class="pc-desc">
+                  A self-hosted monitoring utility and LLM diagnostic tool for
+                  Proxmox virtualized clusters. Auto-discovers nodes, VMs, and
+                  LXC containers, renders them as a live interactive topology
+                  graph, and feeds streamed telemetry to a local LLM for
+                  infrastructure diagnostics.
+                </p>
+                <div class="pc-foot">
+                  <span>Python · FastAPI · React · Proxmox API · Docker</span>
+                  <span class="proj-stats" data-stats></span>
+                  <a class="proj-detail-link" href="infralens.html"
+                    >View project ↗</a
+                  >
+                </div>
+              </figcaption>
+            </figure>
+
+            <figure class="pc-slide" data-repo="mdtopdf">
+              <img
+                src="assets/mdtopdf-preview.png"
+                alt="mdtopdf editor"
+                loading="lazy"
+                onerror="this.style.display = 'none'"
+              />
+              <figcaption>
+                <div class="pc-cap-top">
+                  <span class="proj-num">02</span>
+                  <span class="proj-title">mdtopdf</span>
+                </div>
+                <p class="pc-desc">
+                  Live web editor and CLI tool that converts Markdown to
+                  scanner-quality PDFs, complete with real-time page previews
+                  and LaTeX math rendering.
+                </p>
+                <div class="pc-foot">
+                  <span>JavaScript · Python · CLI</span>
+                  <span class="proj-stats" data-stats></span>
+                  <a
+                    class="proj-detail-link"
+                    href="https://mdtopdf.adamyahmadi.com"
+                    target="_blank"
+                    rel="noopener"
+                    >View project ↗</a
+                  >
+                </div>
+              </figcaption>
+            </figure>
+
+            <figure class="pc-slide" data-repo="vertex">
+              <img
+                src="assets/vertex-preview.png"
+                alt="Vertex document scanner"
+                loading="lazy"
+                onerror="this.style.display = 'none'"
+              />
+              <figcaption>
+                <div class="pc-cap-top">
+                  <span class="proj-num">03</span>
+                  <span class="proj-title">Vertex</span>
+                </div>
+                <p class="pc-desc">
+                  Transforms raw document photos into scanner-quality PDFs using
+                  automated edge detection, perspective correction, and
+                  illumination normalization.
+                </p>
+                <div class="pc-foot">
+                  <span>Python · OpenCV · DocAligner · NumPy</span>
+                  <span class="proj-stats" data-stats></span>
+                  <a
+                    class="proj-detail-link"
+                    href="https://vertex.adamyahmadi.com"
+                    target="_blank"
+                    rel="noopener"
+                    >View project ↗</a
+                  >
+                </div>
+              </figcaption>
+            </figure>
+          </div>
+
+          <button class="pc-nav pc-prev" aria-label="Previous project">
+            ←
+          </button>
+          <button class="pc-nav pc-next" aria-label="Next project">→</button>
+
+          <div class="pc-progress" role="tablist" aria-label="Project slides">
+            <button
+              class="pc-bar active"
+              role="tab"
+              aria-selected="true"
+              aria-label="InfraLens"
             >
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-meta">WS 25/26</div>
-          <div>
-            <div class="tl-role">Motion Planning for Autonomous Vehicles</div>
-            <div class="tl-org">
-              Chair of Robotics &amp; Real-Time Systems · TU Munich
-            </div>
-            <div class="tl-desc">
-              Engineered a computer-vision pipeline extracting road-user
-              trajectories from drone footage into CommonRoad scenarios.
-              Integrated TPH-YOLOv5 for detection, MobileSAM for segmentation,
-              and implemented automated drivability validation checking for
-              kinematic feasibility and collision avoidance.
-            </div>
-            <a
-              class="tl-link"
-              href="assets/commonroad.pdf"
-              target="_blank"
-              rel="noopener"
-              >Read the paper</a
+              <span class="pc-bar-track"
+                ><span class="pc-bar-fill"></span
+              ></span>
+            </button>
+            <button
+              class="pc-bar"
+              role="tab"
+              aria-selected="false"
+              aria-label="mdtopdf"
             >
+              <span class="pc-bar-track"
+                ><span class="pc-bar-fill"></span
+              ></span>
+            </button>
+            <button
+              class="pc-bar"
+              role="tab"
+              aria-selected="false"
+              aria-label="Vertex"
+            >
+              <span class="pc-bar-track"
+                ><span class="pc-bar-fill"></span
+              ></span>
+            </button>
           </div>
         </div>
-        <div class="tl-item">
-          <div class="tl-meta">2024–2025</div>
-          <div>
-            <div class="tl-role">Driving Strategy Engineer</div>
-            <div class="tl-org">TUfast Eco Team · TU Munich</div>
-            <div class="tl-desc">
-              Developed a solver-agnostic optimization framework to compute
-              energy-optimal speed profiles for the lux025 solar vehicle
-              (Bridgestone World Solar Challenge 2025). Modeled physical
-              constraints including battery SoC, solar irradiance, and
-              aerodynamic drag across interchangeable solvers (IPOPT, ALPSO,
-              Gurobi).
+
+        <div class="proj-more-grid">
+          <div class="proj-more-row" data-repo="cache-simulator">
+            <div class="pmr-head">
+              <span class="pmr-num">04</span>
+              <span class="pmr-title">Cache Simulator</span>
+              <span class="pmr-tags">C++ · SystemC</span>
+            </div>
+            <p class="pmr-desc">
+              Cycle-accurate simulator with direct-mapped and fully-associative
+              caches, LRU eviction, and per-access gate count tracking.
+            </p>
+            <div class="pmr-foot">
+              <span class="proj-stats" data-stats></span>
+              <a
+                class="proj-detail-link"
+                href="https://github.com/AdamYahmadi/cache-simulator"
+                target="_blank"
+                rel="noopener"
+                >View on GitHub ↗</a
+              >
+            </div>
+          </div>
+
+          <div class="proj-more-row" data-repo="wifi-to-qr">
+            <div class="pmr-head">
+              <span class="pmr-num">05</span>
+              <span class="pmr-title">wifi-to-qr</span>
+              <span class="pmr-tags">Python · CLI</span>
+            </div>
+            <p class="pmr-desc">
+              Terminal utility that detects the current active Wi-Fi connection
+              and generates a scannable QR code for instant joining.
+            </p>
+            <div class="pmr-foot">
+              <span class="proj-stats" data-stats></span>
+              <a
+                class="proj-detail-link"
+                href="https://github.com/AdamYahmadi/wifi-to-qr"
+                target="_blank"
+                rel="noopener"
+                >View on GitHub ↗</a
+              >
             </div>
           </div>
         </div>
-        <div class="tl-item">
-          <div class="tl-meta">2023–Present</div>
-          <div>
-            <div class="tl-role">B.Sc. Informatics</div>
-            <div class="tl-org">Technical University of Munich</div>
-            <div class="tl-desc">
-              Core coursework spanning data structures, computer architecture,
-              autonomous systems, and advanced numerical analysis.
+      </section>
+
+      <section class="block" id="skills">
+        <div class="section-header">
+          <span class="section-num">04</span>
+          <h2>Toolkit</h2>
+        </div>
+        <div class="skills-wrap">
+          <div class="skills-group">
+            <h3>Languages</h3>
+            <div class="skills-list">Python, C, C++, Java, JavaScript</div>
+          </div>
+          <div class="skills-group">
+            <h3>Frameworks</h3>
+            <div class="skills-list">
+              PyTorch, TensorFlow, NumPy, OpenCV, FastAPI, Spring Boot
+            </div>
+          </div>
+          <div class="skills-group">
+            <h3>Infrastructure &amp; Tools</h3>
+            <div class="skills-list">Linux, Docker, Git, Proxmox</div>
+          </div>
+          <div class="skills-group">
+            <h3>Focus Areas</h3>
+            <div class="skills-list">
+              Machine Learning, Scientific Computing, Optimization, Systems
+              Programming
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="block" id="projects">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <h2>Selected Projects</h2>
-      </div>
-
-      <div class="proj-featured-list">
-        <a class="proj-featured" href="infralens.html" data-repo="InfraLens">
-          <div class="proj-featured-screen">
-            <img
-              src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
-              alt="InfraLens dashboard"
-              loading="lazy"
-              onerror="this.parentElement.style.display = 'none'"
-            />
-          </div>
-          <div class="proj-featured-top">
-            <div class="proj-featured-name">
-              InfraLens <span class="arrow">↗</span>
-            </div>
-            <div class="tags">
-              Python · FastAPI · React · Proxmox API · Docker
-            </div>
-          </div>
-          <div class="proj-featured-sub">
-            A self-hosted monitoring utility and LLM diagnostic tool for Proxmox
-            virtualized clusters. Auto-discovers nodes, VMs, and LXC containers,
-            renders them as a live interactive topology graph, and feeds
-            streamed telemetry to a local LLM for infrastructure diagnostics.
-          </div>
-          <div class="proj-stats" data-stats></div>
-        </a>
-
-        <a
-          class="proj-featured"
-          href="https://mdtopdf.adamyahmadi.com"
-          target="_blank"
-          rel="noopener"
-          data-repo="mdtopdf"
-        >
-          <div class="proj-featured-screen">
-            <img
-              src="assets/mdtopdf-preview.png"
-              alt="mdtopdf site"
-              loading="lazy"
-              onerror="this.parentElement.style.display = 'none'"
-            />
-          </div>
-          <div class="proj-featured-top">
-            <div class="proj-featured-name">
-              mdtopdf <span class="arrow">↗</span>
-            </div>
-            <div class="tags">JavaScript · Python · CLI</div>
-          </div>
-          <div class="proj-featured-sub">
-            Live web editor and CLI tool that converts Markdown to
-            scanner-quality PDFs, complete with real-time page previews and
-            LaTeX math rendering.
-          </div>
-          <div class="proj-stats" data-stats></div>
-        </a>
-
-        <a
-          class="proj-featured"
-          href="https://vertex.adamyahmadi.com"
-          target="_blank"
-          rel="noopener"
-          data-repo="vertex"
-        >
-          <div class="proj-featured-screen">
-            <img
-              src="assets/vertex-preview.png"
-              alt="Vertex document scanner"
-              loading="lazy"
-              onerror="this.parentElement.style.display = 'none'"
-            />
-          </div>
-          <div class="proj-featured-top">
-            <div class="proj-featured-name">
-              Vertex <span class="arrow">↗</span>
-            </div>
-            <div class="tags">Python · OpenCV · DocAligner · NumPy</div>
-          </div>
-          <div class="proj-featured-sub">
-            Transforms raw document photos into scanner-quality PDFs using
-            automated edge detection, perspective correction, and illumination
-            normalization.
-          </div>
-          <div class="proj-stats" data-stats></div>
-        </a>
-      </div>
-
-      <div class="proj-mini-list">
-        <a
-          href="https://github.com/AdamYahmadi/cache-simulator"
-          target="_blank"
-          rel="noopener"
-          class="proj-mini"
-          data-repo="cache-simulator"
-        >
-          <div class="proj-mini-name">Cache Simulator</div>
-          <div class="proj-mini-desc">
-            Cycle-accurate simulator with direct-mapped and fully-associative
-            caches, LRU eviction, and per-access gate count tracking.
-          </div>
-          <div class="tags">C++ · SystemC</div>
-        </a>
-        <a
-          href="https://github.com/AdamYahmadi/wifi-to-qr"
-          target="_blank"
-          rel="noopener"
-          class="proj-mini"
-          data-repo="wifi-to-qr"
-        >
-          <div class="proj-mini-name">wifi-to-qr</div>
-          <div class="proj-mini-desc">
-            Terminal utility that detects the current active Wi-Fi connection
-            and generates a scannable QR code for instant joining.
-          </div>
-          <div class="tags">Python · CLI</div>
-        </a>
-      </div>
-    </section>
-
-    <section class="block" id="skills">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <h2>Toolkit</h2>
-      </div>
-      <div class="skills-wrap">
-        <div class="skills-group">
-          <h3>Languages</h3>
-          <div class="skills-list">Python, C, C++, Java, R, JavaScript</div>
-        </div>
-        <div class="skills-group">
-          <h3>Frameworks</h3>
-          <div class="skills-list">
-            PyTorch, TensorFlow, NumPy, OpenCV, FastAPI, Spring Boot
-          </div>
-        </div>
-        <div class="skills-group">
-          <h3>Infrastructure &amp; Tools</h3>
-          <div class="skills-list">Linux, Docker, Git, Proxmox, Ollama</div>
-        </div>
-        <div class="skills-group">
-          <h3>Focus Areas</h3>
-          <div class="skills-list">
-            Machine Learning, Scientific Computing, Optimization, Systems
-            Programming
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
     <footer>
-      <span>Adam Yahmadi © 2026</span>
+      <span
+        >Adam Yahmadi © 2026 <span class="footer-clock" id="mucTime"></span
+      ></span>
       <div class="footer-links">
         <a href="https://github.com/AdamYahmadi" target="_blank" rel="noopener"
           >GitHub</a
@@ -837,6 +1469,189 @@
               if (slot) slot.remove();
             });
         });
+      })();
+
+      (function () {
+        const navEl = document.querySelector("nav");
+        const toggle = document.getElementById("navToggle");
+        if (!navEl || !toggle) return;
+        function closeMenu() {
+          navEl.classList.remove("nav-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+        toggle.addEventListener("click", () => {
+          const isOpen = navEl.classList.toggle("nav-open");
+          toggle.setAttribute("aria-expanded", String(isOpen));
+        });
+        document.querySelectorAll(".nav-links a").forEach((a) => {
+          a.addEventListener("click", closeMenu);
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && navEl.classList.contains("nav-open")) {
+            closeMenu();
+            toggle.focus();
+          }
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            navEl.classList.contains("nav-open") &&
+            !navEl.contains(e.target)
+          ) {
+            closeMenu();
+          }
+        });
+      })();
+
+      (function () {
+        const navLinks = document.querySelectorAll(".nav-links a");
+        const targets = Array.from(navLinks)
+          .map((a) => document.querySelector(a.getAttribute("href")))
+          .filter(Boolean);
+        if (!targets.length) return;
+        const spy = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach((a) =>
+                  a.classList.toggle(
+                    "active",
+                    a.getAttribute("href") === "#" + id,
+                  ),
+                );
+              }
+            });
+          },
+          { rootMargin: "-45% 0px -50% 0px" },
+        );
+        targets.forEach((t) => spy.observe(t));
+      })();
+
+      (function () {
+        const car = document.getElementById("projCarousel");
+        if (!car) return;
+        const slides = car.querySelectorAll(".pc-slide");
+        const bars = car.querySelectorAll(".pc-bar");
+        const progress = car.querySelector(".pc-progress");
+        const DURATION = 5000;
+        const reducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        let idx = 0; // single source of truth
+        let remaining = DURATION;
+        let timerId = null;
+        let timerStart = 0;
+        let hovering = false;
+
+        function render() {
+          slides.forEach((s, n) => s.classList.toggle("active", n === idx));
+          bars.forEach((b, n) => {
+            const isActive = n === idx;
+            b.classList.toggle("active", isActive);
+            b.setAttribute("aria-selected", String(isActive));
+            const fill = b.querySelector(".pc-bar-fill");
+            fill.classList.remove("filled");
+          });
+        }
+
+        function clearTimer() {
+          if (timerId) {
+            clearTimeout(timerId);
+            timerId = null;
+          }
+        }
+
+        function armIfActive() {
+          clearTimer();
+          if (reducedMotion || hovering) {
+            progress.classList.add("paused");
+            return;
+          }
+          progress.classList.remove("paused");
+          const activeFill = car.querySelector(".pc-bar.active .pc-bar-fill");
+          if (activeFill) {
+            activeFill.style.animation = "none";
+            void activeFill.offsetWidth; // reflow
+            activeFill.style.animation = "";
+          }
+          timerStart = Date.now();
+          timerId = setTimeout(() => go(idx + 1), remaining);
+        }
+
+        function go(i) {
+          idx = ((i % slides.length) + slides.length) % slides.length;
+          remaining = DURATION;
+          render();
+          armIfActive();
+        }
+
+        function pauseForHover() {
+          hovering = true;
+          if (reducedMotion) return;
+          if (timerId) {
+            remaining = Math.max(0, remaining - (Date.now() - timerStart));
+            clearTimer();
+          }
+          progress.classList.add("paused");
+        }
+
+        function resumeFromHover() {
+          hovering = false;
+          armIfActive();
+        }
+
+        car
+          .querySelector(".pc-prev")
+          .addEventListener("click", () => go(idx - 1));
+        car
+          .querySelector(".pc-next")
+          .addEventListener("click", () => go(idx + 1));
+        bars.forEach((b, n) => b.addEventListener("click", () => go(n)));
+        car.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft") go(idx - 1);
+          if (e.key === "ArrowRight") go(idx + 1);
+        });
+        car.addEventListener("mouseenter", pauseForHover);
+        car.addEventListener("mouseleave", resumeFromHover);
+
+        let touchX = null;
+        car.addEventListener(
+          "touchstart",
+          (e) => {
+            touchX = e.touches[0].clientX;
+          },
+          { passive: true },
+        );
+        car.addEventListener(
+          "touchend",
+          (e) => {
+            if (touchX === null) return;
+            const dx = e.changedTouches[0].clientX - touchX;
+            touchX = null;
+            if (Math.abs(dx) < 40) return;
+            go(dx < 0 ? idx + 1 : idx - 1);
+          },
+          { passive: true },
+        );
+
+        render();
+        armIfActive();
+      })();
+
+      (function () {
+        const el = document.getElementById("mucTime");
+        if (!el) return;
+        function update() {
+          const fmt = new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Europe/Berlin",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          el.textContent = "— " + fmt.format(new Date()) + " local";
+        }
+        update();
+        setInterval(update, 30000);
       })();
     </script>
   </body>

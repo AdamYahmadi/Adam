@@ -302,6 +302,21 @@
         font-size: 0.9rem;
       }
 
+      .entry-links {
+        display: flex;
+        gap: 0.9rem;
+      }
+      .entry-links a {
+        color: var(--muted);
+        text-decoration: underline;
+        text-decoration-color: var(--border-bright);
+        text-underline-offset: 4px;
+        transition: color 0.2s;
+      }
+      .entry-links a:hover {
+        color: var(--text);
+      }
+
       .skill-line {
         margin-bottom: 1.25rem;
       }
@@ -467,43 +482,11 @@
       <section class="r-section">
         <h2>Profile</h2>
         <p class="r-summary">
-          Computer Science student at the Technical University of Munich with
-          experience from academic and personal projects. Interested in
-          mathematics, machine learning, and scientific computing, with a focus
-          on turning concepts into practical implementations and usable
-          software. Enjoys working on real-world technical problems and building
-          reliable, functional systems across different domains.
+          Computer Science student at TUM interested in building software for
+          real-world systems. Experience in backend development, numerical
+          optimization, and applied AI, with projects spanning autonomous
+          mobility, infrastructure monitoring, and computer vision.
         </p>
-      </section>
-
-      <section class="r-section">
-        <h2>Experience</h2>
-        <div class="entry">
-          <div class="entry-top">
-            <div class="entry-title">Driving Strategy Engineer</div>
-            <div class="entry-meta">2024 — 2025</div>
-          </div>
-          <div class="entry-sub">
-            TUfast Eco Team · Technical University of Munich
-          </div>
-          <ul>
-            <li>
-              Developed a solver-agnostic optimization framework to compute
-              energy-optimal speed profiles for the lux025 solar race car,
-              competing in the Bridgestone World Solar Challenge 2025.
-            </li>
-            <li>
-              Modeled vehicle energy dynamics including battery state-of-charge,
-              solar irradiance, terrain slope, aerodynamic drag, overtaking, and
-              control stops.
-            </li>
-            <li>
-              Implemented interchangeable optimization solvers (IPOPT, ALPSO,
-              ParOpt, Gurobi) over a shared vehicle physics model, with GPX
-              route processing and evaluation tooling.
-            </li>
-          </ul>
-        </div>
       </section>
 
       <section class="r-section">
@@ -532,101 +515,178 @@
       </section>
 
       <section class="r-section">
-        <h2>Personal Projects</h2>
+        <h2>Experience</h2>
         <div class="entry">
           <div class="entry-top">
-            <div class="entry-title">
-              InfraLens — Proxmox Topology Visualizer &amp; LLM Diagnostics
-            </div>
+            <div class="entry-title">Driving Strategy Engineer</div>
+            <div class="entry-meta">2024 — 2025</div>
           </div>
-          <div class="entry-stack">
-            Python · FastAPI · React · Proxmox API · Ollama · SSH · Docker
+          <div class="entry-sub">
+            TUfast Eco Team · Technical University of Munich
           </div>
           <ul>
             <li>
-              Built a full-stack Proxmox homelab monitor that auto-discovers
-              nodes, VMs, and LXC containers, renders them as a real-time
-              interactive topology graph, and streams live CPU, RAM, disk, and
-              network RX/TX telemetry.
+              Developed the race strategy optimizer for the lux025 solar car
+              (Bridgestone World Solar Challenge 2025), planning speed profiles
+              over 3,000 km under energy and race constraints.
             </li>
             <li>
-              Detects running services per container via SSH and Docker probing,
-              and feeds live telemetry as structured context to a local LLM chat
-              interface for infrastructure diagnostics.
+              Extended the PyTorch vehicle model to optimize speed profiles with
+              gradient descent and integrated multiple optimization solvers
+              (IPOPT, ParOpt, ALPSO).
             </li>
-          </ul>
-        </div>
-        <div class="entry">
-          <div class="entry-top">
-            <div class="entry-title">Vertex — CLI Document Scanner</div>
-          </div>
-          <div class="entry-stack">Python · OpenCV · scikit-image · NumPy</div>
-          <ul>
             <li>
-              CLI tool that converts document photos into scanner-quality PDFs
-              via a computer-vision pipeline: GrabCut-based boundary detection,
-              homographic perspective correction, morphological illumination
-              normalization, and batch PDF export.
+              Built a PySide6 GUI for running optimizations and wrote unit tests
+              for the control-stop simulation (pytest, GitLab CI).
             </li>
           </ul>
         </div>
       </section>
 
       <section class="r-section">
-        <h2>Academic Projects</h2>
+        <h2>Projects</h2>
         <div class="entry">
           <div class="entry-top">
             <div class="entry-title">
-              Motion Planning for Autonomous Vehicles (CommonRoad)
+              InfraLens — Proxmox Cluster Visualizer &amp; AI Assistant
             </div>
-            <div class="entry-meta">2025 — 2026</div>
+            <div class="entry-meta entry-links">
+              <a href="infralens.html">Live</a>
+              <a
+                href="https://github.com/AdamYahmadi/InfraLens"
+                target="_blank"
+                rel="noopener"
+                >Code</a
+              >
+            </div>
           </div>
-          <div class="entry-stack">Python · C++ · CommonRoad Framework</div>
+          <div class="entry-stack">
+            Python · FastAPI · React · Tauri · Proxmox API · Ollama · SSH
+          </div>
           <ul>
             <li>
-              Built a conversion pipeline for drone-recorded bus-station
-              scenarios: parsed parquet trajectory files, generated typed
-              dynamic obstacles with full state sequences, and produced planning
-              problems from recorded ego trajectories.
+              Built a Tauri/React desktop app that connects to Proxmox clusters,
+              visualizes nodes, VMs, and containers as an interactive topology
+              graph, and monitors resources in real time.
             </li>
             <li>
-              Developed a visualization toolbox (scenario rendering, curvilinear
-              trajectory analysis, state time profiles) and a drivability
-              checker for collision freedom, road compliance, and kinematic
-              feasibility.
+              Developed a FastAPI backend for VM and container controls and
+              SSH-based service discovery.
+            </li>
+            <li>
+              Integrated a local Ollama LLM that uses live cluster state for
+              natural-language infrastructure diagnostics.
             </li>
           </ul>
         </div>
         <div class="entry">
           <div class="entry-top">
-            <div class="entry-title">Computer Architecture</div>
-            <div class="entry-meta">2024</div>
+            <div class="entry-title">Vertex — Intelligent Document Scanner</div>
+            <div class="entry-meta entry-links">
+              <a
+                href="https://vertex.adamyahmadi.com"
+                target="_blank"
+                rel="noopener"
+                >Live</a
+              >
+              <a
+                href="https://github.com/AdamYahmadi/vertex"
+                target="_blank"
+                rel="noopener"
+                >Code</a
+              >
+            </div>
           </div>
-          <div class="entry-stack">C · C++ · SystemC</div>
+          <div class="entry-stack">
+            Python · FastAPI · OpenCV · React · Docker
+          </div>
           <ul>
             <li>
-              Built a cycle-accurate cache simulator supporting direct-mapped
-              and fully-associative caches with LRU eviction and configurable
-              line count, line size, and cache/memory latency.
+              Built a scanning pipeline using deep learning (DocAligner) and
+              OpenCV for edge detection, perspective correction, and shadow
+              removal.
             </li>
             <li>
-              Tracked per-access primitive gate counts to estimate hardware
-              complexity alongside cycle counts and hit/miss rates.
+              Developed a CLI and React web app that converts photos into
+              full-resolution PDFs; deployed with Docker on Render.
             </li>
           </ul>
         </div>
         <div class="entry">
           <div class="entry-top">
-            <div class="entry-title">Fundamentals of Programming</div>
-            <div class="entry-meta">2024 — 2025</div>
+            <div class="entry-title">mdtopdf — Markdown to PDF Converter</div>
+            <div class="entry-meta entry-links">
+              <a
+                href="https://mdtopdf.adamyahmadi.com"
+                target="_blank"
+                rel="noopener"
+                >Live</a
+              >
+              <a
+                href="https://github.com/AdamYahmadi/mdtopdf"
+                target="_blank"
+                rel="noopener"
+                >Code</a
+              >
+            </div>
           </div>
-          <div class="entry-stack">Java · Git</div>
+          <div class="entry-stack">
+            Node.js · Express · KaTeX · Mermaid · Supabase · Docker
+          </div>
           <ul>
             <li>
-              Implemented core data structures and algorithms in Java (linked
-              lists, binary trees, recursive sorting, stacks, queues, generics)
-              applying OOP principles including inheritance, polymorphism, and
-              encapsulation, with full JUnit test coverage.
+              Built a CLI and web app that converts Markdown to print-ready
+              PDFs, with LaTeX math (KaTeX), Mermaid diagrams, and themed syntax
+              highlighting for 200+ languages.
+            </li>
+            <li>
+              Developed a live-preview editor with PDF export, Supabase auth and
+              cloud storage; deployed with Docker on Render.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="r-section">
+        <h2>University Projects</h2>
+        <div class="entry">
+          <div class="entry-top">
+            <div class="entry-title">
+              Motion Planning for Autonomous Vehicles
+            </div>
+            <div class="entry-meta">WS 2025/26</div>
+          </div>
+          <div class="entry-stack">
+            Python · CommonRoad · Shapely · Matplotlib
+          </div>
+          <ul>
+            <li>
+              Converted drone-recorded traffic data into CommonRoad simulation
+              scenarios for benchmarking autonomous vehicle motion planners.
+            </li>
+            <li>
+              Built a validation tool with spatial indexing to detect
+              collisions, off-road driving, and physically infeasible motion,
+              with visualizations for debugging.
+            </li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div class="entry-top">
+            <div class="entry-title">
+              Computer Architecture &amp; Fundamentals of Programming
+            </div>
+            <div class="entry-meta">WS 2023/24 — SS 2024</div>
+          </div>
+          <div class="entry-stack">C · C++ · SystemC · Java</div>
+          <ul>
+            <li>
+              Built a cycle-accurate SystemC cache simulator comparing
+              direct-mapped and associative caches.
+            </li>
+            <li>
+              Solved 35+ Java assignments on OOP, recursion, data structures,
+              algorithms, testing, and concurrency.
             </li>
           </ul>
         </div>
@@ -635,26 +695,32 @@
       <section class="r-section">
         <h2>Skills</h2>
         <div class="skill-line">
-          <div class="skill-label">Spoken Languages</div>
+          <div class="skill-label">Programming</div>
           <div class="skill-chips">
-            <span>German — Native</span><span>English — Fluent</span
-            ><span>Arabic — Native</span><span>French — Fluent</span>
+            <span>Python</span><span>Java</span><span>C++</span><span>C</span
+            ><span>JavaScript</span>
           </div>
         </div>
         <div class="skill-line">
-          <div class="skill-label">Technologies</div>
+          <div class="skill-label">Frameworks &amp; Libraries</div>
           <div class="skill-chips">
-            <span>Python</span><span>Java</span><span>C</span
-            ><span>PyTorch</span><span>NumPy</span><span>OpenCV</span
-            ><span>FastAPI</span><span>Spring Boot</span><span>Docker</span
-            ><span>Git</span><span>Linux</span><span>Proxmox</span>
+            <span>FastAPI</span><span>React</span><span>Node.js</span
+            ><span>PyTorch</span><span>NumPy</span><span>OpenCV</span>
           </div>
         </div>
         <div class="skill-line">
-          <div class="skill-label">Mathematics</div>
+          <div class="skill-label">Tools &amp; Infrastructure</div>
           <div class="skill-chips">
-            <span>Probability</span><span>Statistics</span
-            ><span>Optimization</span><span>Algorithms</span>
+            <span>Linux</span><span>Docker</span><span>Git</span
+            ><span>GitLab CI</span><span>pytest</span><span>SSH</span
+            ><span>Proxmox</span><span>Ollama</span>
+          </div>
+        </div>
+        <div class="skill-line">
+          <div class="skill-label">Languages</div>
+          <div class="skill-chips">
+            <span>German — Native</span><span>English — C1</span
+            ><span>Arabic — Native</span><span>French — C1</span>
           </div>
         </div>
       </section>

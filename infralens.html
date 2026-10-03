@@ -3,16 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InfraLens — Proxmox Topology Monitor</title>
+    <title>InfraLens — See your Proxmox homelab. Ask it anything.</title>
     <meta
       name="description"
-      content="Real-time Proxmox topology visualization, streaming telemetry, and local-LLM diagnostics. Built by Adam Yahmadi."
+      content="InfraLens is a desktop app that maps every node, VM and container in your Proxmox homelab and answers questions about them with a local model. Open source, by Adam Yahmadi."
     />
     <meta name="theme-color" content="#0a0a0b" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="InfraLens" />
+    <meta property="og:title" content="InfraLens — See your Proxmox homelab. Ask it anything." />
+    <meta property="og:description" content="A live map of every node, VM and container, and a local model that answers questions about them." />
+    <meta property="og:url" content="https://adamyahmadi.com/infralens.html" />
+    <meta property="og:image" content="https://adamyahmadi.com/assets/infralens/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The InfraLens topology: the ADAMLAB host connected to nextcloud, homepage, tailscale and pihole." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -24,1439 +35,2056 @@
         padding: 0;
       }
       :root {
-        --bg: #0a0a0b;
-        --surface: #131316;
-        --surface2: #0e0e10;
-        --border: rgba(255, 255, 255, 0.09);
-        --border2: rgba(255, 255, 255, 0.16);
-        --text: #f0f0ee;
-        --muted: #9c9ca3;
-        --faint: #67676d;
-        --accent: #43c98a;
-        --accent-dark: #359f6d;
-        --accent-dim: rgba(67, 201, 138, 0.12);
-        --ff: "Inter", -apple-system, sans-serif;
-        --ffm: "JetBrains Mono", monospace;
-        --max: 1040px;
-        --r: 6px;
+        --ink: #17181a;
+        --ink-2: #4c4e53;
+        --rule: #dcddd8;
+        --signal: #10b981;
+        --signal-ink: #077a55;
+        --e-storage: #0ea5e9;
+
+        --g0: #0a0a0b;
+        --g1: #0d0d0f;
+        --g-ink: #e4e4e7;
+        --g-ink-2: #a1a1aa;
+        --g-ink-3: #8b8b94;
+        --g-rule: #1f1f23;
+        --g-rule-2: #27272a;
+        --g-dot: #242429;
+        --wide: 1440px;
+
+        --ff: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+        --ffm: "IBM Plex Mono", ui-monospace, monospace;
+        --ffc: "JetBrains Mono", ui-monospace, monospace;
+        --wrap: 1200px;
+        --gut: clamp(16px, 4vw, 40px);
       }
       html {
         scroll-behavior: smooth;
+        scroll-padding-top: 56px;
+        color-scheme: light;
       }
       body {
         font-family: var(--ff);
-        background: var(--bg);
-        color: var(--text);
+        font-size: 1.0625rem;
         line-height: 1.6;
+        background: var(--g0);
+        color: var(--g-ink);
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
       }
       a {
         color: inherit;
-        text-decoration: none;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+      picture {
+        display: contents;
+      }
+      code,
+      pre {
+        font-family: var(--ffm);
+      }
+      :focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 3px;
+        border-radius: 3px;
+      }
+      .wrap {
+        max-width: var(--wrap);
+        margin: 0 auto;
+        padding: 0 var(--gut);
+      }
+      .dark {
+        background: var(--g0);
+        color: var(--g-ink);
       }
 
-      nav {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 2rem;
-        height: 58px;
-        background: rgba(10, 10, 11, 0.9);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border);
+      h1,
+      h2,
+      h3 {
+        font-weight: 500;
+        letter-spacing: -0.025em;
+        text-wrap: balance;
       }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-        font-size: 0.92rem;
+      h2 {
+        font-size: clamp(2.1rem, 1.1rem + 2.6vw, 3.6rem);
+        line-height: 1.04;
+        letter-spacing: -0.035em;
+      }
+      h3 {
+        font-size: 1.0625rem;
         font-weight: 600;
         letter-spacing: -0.01em;
+        line-height: 1.35;
       }
-      .nav-logo img {
-        width: 24px;
-        height: 24px;
-        border-radius: 5px;
-        object-fit: cover;
-        border: 1px solid var(--border2);
+      .lede {
+        font-size: clamp(1.1rem, 1rem + 0.35vw, 1.3rem);
+        line-height: 1.5;
+        color: var(--ink-2);
+        max-width: 36rem;
+        text-wrap: pretty;
       }
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 1.75rem;
+
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--signal);
+        flex-shrink: 0;
       }
-      .nav-links a {
-        font-size: 0.82rem;
-        color: var(--muted);
-        transition: color 0.15s;
-      }
-      .nav-links a:hover {
-        color: var(--text);
-      }
-      .nav-r {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-      .nav-cta {
+
+      .btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        height: 36px;
-        font-family: var(--ff);
-        font-size: 0.85rem;
-        font-weight: 600;
-        padding: 0 0.9rem;
+        gap: 0.55rem;
+        height: 44px;
+        padding: 0 1.15rem;
         border-radius: 8px;
-        background: #ffffff;
-        border: none;
-        color: #0b0b0b;
+        font: 500 0.95rem/1 var(--ff);
+        text-decoration: none;
         white-space: nowrap;
         transition:
           background-color 0.15s ease,
           transform 0.1s ease;
       }
-      .nav-cta svg {
-        width: 14px;
-        height: 14px;
-      }
-      .nav-cta:hover {
-        background: rgba(255, 255, 255, 0.9);
-      }
-      .nav-cta:active {
-        transform: scale(0.98);
+      .btn:active {
+        transform: translateY(1px);
       }
 
-      .hero {
-        position: relative;
-        padding: 4.5rem 2rem 3.5rem;
-        border-bottom: 1px solid var(--border);
-        overflow: hidden;
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--g0);
+        color: var(--g-ink);
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
       }
-      .hero-graph {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        -webkit-mask-image: radial-gradient(
-          ellipse 55% 55% at 50% 40%,
-          transparent 0%,
-          black 75%
-        );
-        mask-image: radial-gradient(
-          ellipse 55% 55% at 50% 40%,
-          transparent 0%,
-          black 75%
-        );
+      .nav.scrolled {
+        border-bottom-color: var(--g-rule);
       }
-      .hero-graph line {
-        stroke: var(--border2);
-        stroke-width: 1;
-      }
-      .hero-graph circle {
-        fill: var(--accent);
-        opacity: 0.55;
-      }
-      .hero-inner {
-        position: relative;
-        z-index: 1;
-        max-width: var(--max);
-        margin: 0 auto;
-        text-align: center;
-      }
-      .hero-tag {
-        font-family: var(--ffm);
-        font-size: 0.75rem;
-        color: var(--muted);
-        margin-bottom: 1.75rem;
-      }
-      .hero-tag b {
-        color: var(--accent);
-        font-weight: 500;
-      }
-      .hero-icon {
-        width: 96px;
-        height: 96px;
-        border-radius: 18px;
-        object-fit: cover;
-        margin: 0 auto 1.75rem;
-        display: block;
-        border: 1px solid var(--border2);
-      }
-      .hero h1 {
-        font-size: clamp(2.1rem, 4.8vw, 3.1rem);
-        font-weight: 700;
-        letter-spacing: -0.03em;
-        line-height: 1.15;
-        margin-bottom: 1.15rem;
-        color: var(--text);
-      }
-      .hero-sub {
-        font-size: 1.05rem;
-        color: var(--muted);
-        font-weight: 400;
-        max-width: 540px;
-        margin: 0 auto 2.5rem;
-        line-height: 1.7;
-      }
-      .hero-sub b {
-        color: var(--text);
-        font-weight: 500;
-      }
-
-      .hero-dl {
+      .nav .wrap {
         display: flex;
-        justify-content: center;
         align-items: center;
-        gap: 0.6rem;
-        flex-wrap: wrap;
-        margin-bottom: 3.25rem;
+        gap: 2rem;
+        height: 56px;
+        max-width: var(--wide);
       }
-      .os-tab-wrap {
+      .brand {
         display: flex;
-        border: 1px solid var(--border2);
-        border-radius: var(--r);
-        overflow: hidden;
-      }
-      .os-tab {
-        font-family: var(--ffm);
-        font-size: 0.78rem;
-        font-weight: 500;
-        padding: 0.5rem 0.9rem;
-        border: none;
-        background: var(--surface);
-        color: var(--muted);
-        cursor: pointer;
-        transition: all 0.15s;
-        border-right: 1px solid var(--border2);
-        display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-      }
-      .os-tab:last-child {
-        border-right: none;
-      }
-      .os-tab.active {
-        background: var(--text);
-        color: var(--bg);
-      }
-      .dl-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.88rem;
+        gap: 0.65rem;
         font-weight: 600;
-        padding: 0.55rem 1.15rem;
-        border-radius: var(--r);
-        background: var(--text);
-        color: var(--bg);
-        border: 1px solid var(--text);
-        cursor: pointer;
-        transition: opacity 0.15s;
+        font-size: 0.98rem;
+        letter-spacing: -0.01em;
         text-decoration: none;
       }
-      .dl-btn:hover {
-        opacity: 0.85;
+      .brand-tile {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: #27272a;
+        border: 1px solid #3f3f46;
       }
-      .dl-sub {
-        font-family: var(--ffm);
-        font-size: 0.74rem;
-        color: var(--faint);
-        margin-top: 0.5rem;
+      .brand-tile svg {
+        width: 16px;
+        height: 16px;
       }
-      .btn-ghost-sm {
+      .nav nav {
+        margin-left: auto;
+      }
+      .nav-links {
+        display: flex;
+        gap: 1.75rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 0.9rem;
+        color: var(--g-ink-2);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .nav-links a:hover,
+      .nav-links a[aria-current="true"] {
+        color: var(--g-ink);
+      }
+      .nav-end {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+      }
+      .nav-gh {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        color: var(--g-ink-2);
+        border-radius: 6px;
+        transition: color 0.15s;
+      }
+      .nav-gh:hover {
+        color: var(--g-ink);
+      }
+      .nav-gh svg {
+        width: 18px;
+        height: 18px;
+      }
+      .nav .btn {
+        height: 32px;
+        padding: 0 0.8rem;
         font-size: 0.85rem;
-        font-weight: 500;
-        padding: 0.5rem 1.05rem;
-        border-radius: var(--r);
-        background: transparent;
-        border: 1px solid var(--border2);
-        color: var(--text);
-        transition: border-color 0.15s;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-      }
-      .btn-ghost-sm:hover {
-        border-color: var(--faint);
+        border-radius: 6px;
       }
 
-      .hero-screen {
-        max-width: 860px;
-        margin: 0 auto;
-        border-radius: var(--r);
-        overflow: hidden;
-        border: 1px solid var(--border2);
+      .canvas {
+        background-color: var(--g0);
+        background-image: radial-gradient(circle, var(--g-dot) 1px, transparent 1.4px);
+        background-size: 28px 28px;
+        color: var(--g-ink);
       }
-      .hero-bar {
-        background: var(--surface2);
-        border-bottom: 1px solid var(--border2);
-        padding: 0.55rem 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
+      .hero {
+        position: relative;
+        border-bottom: 1px solid var(--g-rule);
       }
-      .hd {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-      }
-      .hd-r {
-        background: #ff5f57;
-      }
-      .hd-y {
-        background: #ffbd2e;
-      }
-      .hd-g {
-        background: #28ca42;
-      }
-      .hero-screen img {
-        width: 100%;
-        display: block;
-      }
-
-      .stats-band {
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
-      }
-      .stats {
-        max-width: var(--max);
-        margin: 0 auto;
+      .hero-top {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .stat {
-        position: relative;
-        padding: 1.5rem;
-        text-align: center;
-        border-right: 1px solid var(--border);
-      }
-      .stat:last-child {
-        border-right: none;
-      }
-      .stat::before {
-        content: "";
-        position: absolute;
-        top: -4px;
-        left: 50%;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        border: 2px solid var(--bg);
-        transform: translateX(-50%);
-      }
-      .stat-n {
-        font-family: var(--ffm);
-        font-size: 1.55rem;
-        font-weight: 500;
-        color: var(--accent);
-        margin-bottom: 0.3rem;
-      }
-      .stat-l {
-        font-size: 0.78rem;
-        color: var(--muted);
-      }
-
-      .block {
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: 4.5rem 2rem;
-      }
-      h2.s-title {
-        font-size: clamp(2.1rem, 4.6vw, 3.1rem);
-        font-weight: 700;
-        letter-spacing: -0.035em;
-        line-height: 1.12;
-        margin-bottom: 1rem;
-        color: var(--text);
-      }
-      h2.s-title em {
-        font-style: normal;
-        color: var(--accent);
-      }
-      .s-sub {
-        font-size: 0.95rem;
-        color: var(--muted);
-        max-width: 520px;
-        line-height: 1.72;
-        margin-bottom: 3rem;
-      }
-
-      .node-rail-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0 3rem;
-      }
-      .node-rail {
-        position: relative;
-      }
-      .node-rail::before {
-        content: "";
-        position: absolute;
-        left: 11px;
-        top: 10px;
-        bottom: 10px;
-        width: 1px;
-        background: var(--border2);
-      }
-      .nr-item {
-        position: relative;
-        display: flex;
-        align-items: flex-start;
-        gap: 1.4rem;
-        padding-bottom: 2.5rem;
-      }
-      .nr-item:last-child {
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: 1.5rem clamp(2rem, 4vw, 4rem);
+        align-items: end;
+        max-width: var(--wide);
+        padding-top: clamp(2.5rem, 7vh, 5rem);
         padding-bottom: 0;
       }
-      .nr-node {
+      .hero h1 {
+        font-size: clamp(2.5rem, 1rem + 3.2vw, 4.1rem);
+        font-weight: 500;
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+      }
+      .hero h1 span {
+        display: block;
+        color: var(--g-ink-3);
+      }
+      .hero h1 .px {
+        font-weight: inherit;
+        color: #e57000;
+      }
+      .hero .lede {
+        color: var(--g-ink-2);
+        max-width: 31rem;
+        margin-bottom: 1.4rem;
+      }
+      .get {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.9rem 1.4rem;
+      }
+      .get-link {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--g-ink-2);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .get-link span {
+        display: inline-block;
+        transition: transform 0.15s;
+      }
+      .get-link:hover {
+        color: var(--g-ink);
+      }
+      .get-link:hover span {
+        transform: translateX(3px);
+      }
+      .btn-light {
+        background: var(--g-ink);
+        color: var(--g0);
+      }
+      .btn-light:hover {
+        background: #ffffff;
+      }
+
+      .hero-canvas {
+        border-bottom: 1px solid var(--g-rule);
+      }
+      .graph {
         position: relative;
-        z-index: 1;
-        flex-shrink: 0;
-        width: 22px;
-        height: 22px;
-        margin-top: 0.1rem;
-        border-radius: 50%;
-        background: var(--bg);
-        border: 2px solid var(--accent);
+        max-width: var(--wide);
+        padding-top: clamp(2rem, 5vh, 3.5rem);
+        padding-bottom: clamp(2.5rem, 5vh, 3.5rem);
+      }
+      .graph-pan {
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .graph-pan::-webkit-scrollbar {
+        display: none;
+      }
+      .graph svg {
+        display: block;
+        width: min(100%, 940px);
+        min-width: 640px;
+        height: auto;
+        margin: 0 auto;
+        font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      }
+      .strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        max-width: var(--wide);
+        margin: 0 auto;
+        padding: 0 var(--gut);
+        list-style: none;
+        font: 400 0.92rem/1.4 var(--ffm);
+        color: var(--g-ink-2);
+      }
+      .strip li {
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 0.6rem;
+        min-height: 4.75rem;
+        padding: 0 1.25rem;
+        text-align: center;
       }
-      .nr-node::after {
-        content: "";
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: var(--accent);
+      .strip li + li {
+        border-left: 1px solid var(--g-rule-2);
       }
-      .nr-item::before {
+
+      .window {
+        background: #fafafa;
+        color: #18181b;
+        padding: clamp(6rem, 10vw, 9rem) 0 clamp(6rem, 11vw, 10rem);
+      }
+      .win-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 1rem 3rem;
+        max-width: var(--wide);
+        margin: 0 auto clamp(2.5rem, 5vw, 3.5rem);
+        padding: 0 var(--gut);
+      }
+      .win-head h2 {
+        max-width: 20ch;
+      }
+      .win-pan {
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #d4d4d8 transparent;
+        padding: 0 var(--gut) 0.5rem;
+      }
+      .win-inner {
+        width: clamp(1180px, 100%, 1402px);
+        margin: 0 auto;
+      }
+      .win-notes {
+        display: grid;
+        grid-template-columns: 391fr 857fr 552fr;
+        list-style: none;
+      }
+      .win-notes li {
+        position: relative;
+        padding: 0 2rem 2.25rem 1.5rem;
+      }
+      .win-notes li::after {
         content: "";
         position: absolute;
-        left: 22px;
-        top: 10px;
-        width: 1.15rem;
-        height: 1px;
-        background: var(--border2);
+        left: 0;
+        top: 0.4rem;
+        bottom: 0;
+        width: 1px;
+        background: #e4e4e7;
       }
-      .nr-body h3 {
+      .win-notes li::before {
+        content: "";
+        position: absolute;
+        left: -3px;
+        bottom: -4px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #fafafa;
+        border: 1px solid #a1a1aa;
+        z-index: 1;
+      }
+      .win-notes .num {
+        display: block;
+        font: 500 0.72rem var(--ffm);
+        letter-spacing: 0.06em;
+        color: var(--signal-ink);
+        margin-bottom: 0.5rem;
+      }
+      .win-notes h3 {
+        font-size: 1.2rem;
+        font-weight: 500;
+        letter-spacing: -0.015em;
+        margin-bottom: 0.35rem;
+      }
+      .win-notes p {
         font-size: 1rem;
-        font-weight: 600;
-        color: var(--text);
-        margin-bottom: 0.45rem;
+        line-height: 1.55;
+        color: #52525b;
+        max-width: 30rem;
       }
-      .nr-body p {
-        font-size: 0.88rem;
-        color: var(--muted);
-        line-height: 1.7;
-        max-width: 52ch;
-      }
-
-      .shot-single {
-        border-radius: var(--r);
-        overflow: hidden;
-        border: 1px solid var(--border2);
-        max-width: 680px;
-      }
-      .shot-single img {
+      .win-frame {
+        display: block;
         width: 100%;
-        display: block;
+        padding: 0;
+        border: 1px solid var(--g-rule-2);
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--g1);
+        cursor: zoom-in;
       }
-      .shot-cap {
-        padding: 1rem 1.25rem;
-        background: var(--surface);
-        border-top: 1px solid var(--border);
-      }
-      .shot-cap h4 {
-        font-size: 0.92rem;
-        font-weight: 600;
-        margin-bottom: 0.2rem;
-        color: var(--text);
-      }
-      .shot-cap p {
-        font-size: 0.82rem;
-        color: var(--muted);
+      .win-frame img {
+        width: 100%;
+        height: auto;
       }
 
-      .steps {
+      .sec-head {
+        max-width: 48rem;
+        margin-bottom: clamp(3.5rem, 7vw, 6rem);
+      }
+      .sec-head h2 + .lede {
+        margin-top: 1.25rem;
+      }
+
+      .topo {
+        border-top: 1px solid var(--g-rule);
+        padding: clamp(6rem, 11vw, 10rem) 0;
+      }
+      .topo-wrap {
+        max-width: var(--wide);
+      }
+      .topo .lede {
+        color: var(--g-ink-2);
+      }
+      .legend {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        border: 1px solid var(--border);
-        border-radius: var(--r);
-        overflow: hidden;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(2.5rem, 5vw, 4rem) 2rem;
+        list-style: none;
       }
-      .step {
-        padding: 1.75rem 1.5rem;
-        background: var(--surface);
-        border-right: 1px solid var(--border);
+      .legend svg {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        height: auto;
       }
-      .step:last-child {
-        border-right: none;
-      }
-      .step-n {
-        font-family: var(--ffm);
-        font-size: 0.78rem;
-        color: var(--accent);
-        margin-bottom: 0.9rem;
-      }
-      .step h3 {
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin-bottom: 0.45rem;
-        color: var(--text);
-      }
-      .step p {
-        font-size: 0.85rem;
-        color: var(--muted);
-        line-height: 1.7;
+      .legend span {
+        display: block;
+        margin-top: 1rem;
+        font-size: 1.05rem;
+        font-weight: 500;
       }
 
-      .install-wrap {
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: var(--r);
-        overflow: hidden;
+      .tsvg {
+        font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        overflow: visible;
       }
-      .install-tabs {
+      .tsvg .edge-path {
+        fill: none;
+        stroke-width: 1.5;
+        stroke-dasharray: 6 4;
+        opacity: 0.85;
+        animation: dashflow 0.6s linear infinite;
+      }
+      @keyframes dashflow {
+        to {
+          stroke-dashoffset: -10;
+        }
+      }
+      .tsvg .stub {
+        fill: var(--g0);
+        stroke: #52525b;
+        stroke-width: 1.5;
+      }
+      .tsvg .n-box {
+        fill: #161618;
+        stroke: #27272a;
+      }
+      .tsvg .n-host .n-box {
+        stroke: #3f3f46;
+      }
+      .tsvg .n-sel .n-box {
+        stroke: #f4f4f5;
+      }
+      .tsvg .n-label {
+        font-size: 13px;
+        font-weight: 600;
+        fill: #f4f4f5;
+      }
+      .tsvg .n-host .n-label {
+        font-weight: 700;
+      }
+      .tsvg .n-status {
+        font-size: 10px;
+        font-weight: 500;
+        fill: #a1a1aa;
+      }
+      .tsvg .n-kind {
+        font: 500 9px var(--ffm);
+        letter-spacing: 0.08em;
+        fill: #71717a;
+      }
+      .tsvg .n-div {
+        stroke: #27272a;
+      }
+      .tsvg .e-label rect {
+        fill: #18181b;
+        stroke: #27272a;
+      }
+      .tsvg .e-label text {
+        font-size: 9px;
+        font-weight: 600;
+        fill: #a1a1aa;
+      }
+
+      .install h3 {
+        font-size: 1.35rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+      }
+
+      .paper {
+        --p-bg: #fafafa;
+        --p-ink: #18181b;
+        --p-ink-2: #52525b;
+        --p-ink-3: #6b6b74;
+        --p-rule: #e4e4e7;
+        background: var(--p-bg);
+        color: var(--p-ink);
+      }
+      .paper .lede {
+        color: var(--p-ink-2);
+      }
+
+      .vitals {
+        padding: clamp(6rem, 11vw, 10rem) 0;
+      }
+      .vitals .wrap {
+        max-width: var(--wide);
+      }
+      .trio {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: clamp(2.5rem, 5vw, 3.5rem);
+        gap: clamp(1.25rem, 2.5vw, 2rem);
+      }
+      .vital-shot {
         display: flex;
-        border-bottom: 1px solid var(--border);
-        background: #08080a;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        padding: clamp(1.25rem, 4vw, 3.5rem);
+        border: 1px solid #1f1f23;
+        border-radius: 12px;
+        background: #0d0d0f;
       }
-      .itab {
-        font-family: var(--ffm);
-        font-size: 0.78rem;
-        padding: 0.7rem 1.2rem;
-        color: var(--faint);
-        cursor: pointer;
-        background: none;
-        border: none;
-        border-bottom: 2px solid transparent;
-        transition: all 0.15s;
+      .vital-shot img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        min-height: 0;
       }
-      .itab.active {
-        color: var(--text);
-        border-bottom-color: var(--accent);
+      .vital figcaption {
+        margin-top: 1.25rem;
       }
-      .install-pane {
-        display: none;
-        padding: 1.75rem 2rem;
+      .vital h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+        margin-bottom: 0.3rem;
       }
-      .install-pane.active {
-        display: block;
-      }
-      pre {
-        font-family: var(--ffm);
-        font-size: 0.82rem;
-        line-height: 1.9;
-        color: #b0b0b6;
-        overflow-x: auto;
-      }
-      pre .c {
-        color: var(--faint);
-      }
-      pre .k {
-        color: #7dc4ff;
-      }
-      pre .s {
-        color: var(--accent);
+      .vital p {
+        font-size: 0.98rem;
+        color: var(--p-ink-2);
+        max-width: 22rem;
       }
 
-      .dl-section {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--r);
-        padding: 2rem;
+      .assist {
+        padding: clamp(6rem, 11vw, 10rem) 0;
       }
-      .dl-grid {
+      .assist .wrap {
+        max-width: var(--wide);
+      }
+      .chat {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1px;
-        background: var(--border);
-        margin-top: 2rem;
-        border: 1px solid var(--border);
-        border-radius: var(--r);
-        overflow: hidden;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+        gap: 3rem clamp(3rem, 7vw, 7rem);
+        align-items: start;
       }
-      .dl-card {
-        position: relative;
-        background: var(--surface);
-        padding: 1.5rem;
+      .who {
+        font: 500 0.85rem var(--ffm);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--g-ink-2);
+        margin-bottom: 0.75rem;
+      }
+      .convo {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.75rem;
       }
-      .dl-card::before {
-        content: "";
-        position: absolute;
-        top: -4px;
-        left: 1.85rem;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        border: 2px solid var(--bg);
+      .msg {
+        max-width: 36rem;
       }
-      .dl-card-top {
+      .msg-you {
+        align-self: flex-end;
+        text-align: right;
+      }
+      .ask {
+        display: inline-block;
+        padding: 0.7rem 1.1rem;
+        border-radius: 12px 3px 12px 12px;
+        background: #f4f4f5;
+        color: #18181b;
+        font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+        text-align: left;
+      }
+      .answer {
+        padding: 1.25rem 1.5rem;
+        border: 1px solid var(--g-rule-2);
+        border-radius: 3px 12px 12px 12px;
+        background: #121214;
+        font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+        line-height: 1.5;
+        letter-spacing: -0.01em;
+        color: var(--g-ink);
+      }
+      .answer mark,
+      .nodes .hot b {
+        background: none;
+        color: var(--g-ink);
+        text-decoration: underline;
+        text-decoration-color: var(--e-storage);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+      }
+      .context {
+        padding-left: clamp(1.5rem, 3vw, 2.5rem);
+        border-left: 1px solid var(--g-rule-2);
+      }
+      .nodes {
+        list-style: none;
+        font: 400 0.92rem var(--ffm);
+      }
+      .nodes li {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border);
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--g-rule);
+        color: var(--g-ink-3);
       }
-      .dl-os-icon {
-        font-size: 1.4rem;
-        line-height: 1;
+      .nodes .dot {
+        width: 7px;
+        height: 7px;
       }
-      .dl-os-name {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: var(--text);
+      .nodes b {
+        font-weight: 500;
+        color: var(--g-ink-2);
       }
-      .dl-os-sub {
-        font-family: var(--ffm);
-        font-size: 0.74rem;
-        color: var(--muted);
-        margin-top: 0.15rem;
+      .nodes span:last-child {
+        margin-left: auto;
       }
-      .dl-links {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
+      .nodes .hot span:last-child {
+        color: var(--g-ink);
       }
-      .dl-link {
+      .ctx-note {
+        margin-top: 1.25rem;
+        font-size: 1rem;
+        color: var(--g-ink-2);
+      }
+      .net-note {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 0.6rem 0.85rem;
-        border-radius: 4px;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        font-size: 0.8rem;
-        color: var(--text);
-        transition: border-color 0.15s;
-        font-family: var(--ffm);
+        gap: 0.65rem;
+        margin-top: clamp(4rem, 7vw, 5.5rem);
+        font: 400 0.95rem var(--ffm);
+        color: var(--g-ink-2);
       }
-      .dl-link:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-      .dl-link span {
-        color: var(--faint);
-        font-size: 0.72rem;
-      }
-      .dl-note {
-        font-size: 0.78rem;
-        color: var(--faint);
-        line-height: 1.6;
+      .net-note .dot {
+        width: 8px;
+        height: 8px;
       }
 
-      .cta-wrap {
-        border: 1px solid var(--border);
-        background: var(--surface);
-        border-radius: var(--r);
-        padding: 3rem 2rem;
-        text-align: center;
-        max-width: var(--max);
-        margin: 0 auto 5rem;
+      .install {
+        padding: clamp(6rem, 11vw, 10rem) 0 clamp(5rem, 9vw, 8rem);
       }
-      .cta-wrap h2 {
-        font-size: clamp(1.5rem, 3vw, 1.9rem);
-        font-weight: 700;
-        letter-spacing: -0.025em;
-        color: var(--text);
-        margin-bottom: 0.65rem;
+      .install .wrap {
+        max-width: var(--wide);
       }
-      .cta-wrap h2 em {
-        font-style: normal;
-        color: var(--accent);
+      .sym {
+        position: absolute;
+        width: 0;
+        height: 0;
       }
-      .cta-wrap p {
-        color: var(--muted);
-        max-width: 380px;
-        margin: 0 auto 1.75rem;
-        font-size: 0.92rem;
-      }
-      .resource-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1px;
-        background: var(--border);
-        border: 1px solid var(--border);
-        border-radius: var(--r);
-        overflow: hidden;
-        margin-top: 2rem;
-        text-align: left;
-      }
-      .resource-link {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.85rem;
-        padding: 1.5rem;
-        background: var(--surface);
-        color: var(--text);
-        transition: background-color 0.15s ease;
-      }
-      .resource-link:hover {
-        background: var(--surface2);
-      }
-      .resource-link svg {
-        width: 19px;
-        height: 19px;
+      .ico {
+        width: 20px;
+        height: 20px;
         flex-shrink: 0;
-        margin-top: 0.15rem;
-        color: var(--muted);
-        transition: color 0.15s ease;
       }
-      .resource-link:hover svg {
-        color: var(--accent);
+      .inst-head {
+        margin-bottom: 2.5rem;
       }
-      .rl-title {
-        font-size: 0.92rem;
+      .inst-head h2 {
+        font-size: clamp(2rem, 1.3rem + 1.6vw, 2.75rem);
+      }
+      .inst-head .lede {
+        margin-top: 0.75rem;
+      }
+      .inst-req {
+        margin-top: 0.6rem;
+        font: 400 0.85rem var(--ffm);
+        color: var(--p-ink-3);
+      }
+      .inst-h {
+        font-size: 1.1rem;
         font-weight: 600;
+        letter-spacing: -0.01em;
       }
-      .rl-title::after {
-        content: "→";
-        display: inline-block;
-        margin-left: 0.3rem;
-        opacity: 0;
+      .p-note {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        color: var(--p-ink-2);
+      }
+      .stages {
+        position: relative;
+        padding-left: clamp(1.75rem, 4vw, 3.5rem);
+      }
+      .stage {
+        position: relative;
+      }
+      .stage + .stage {
+        margin-top: clamp(4.5rem, 8vw, 6rem);
+      }
+      .stage:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: calc(-1 * clamp(1.75rem, 4vw, 3.5rem) + 5px);
+        top: 1.1rem;
+        bottom: calc(-1 * clamp(4.5rem, 8vw, 6rem) - 0.4rem);
+        border-left: 1.5px dashed #c4c4c8;
+      }
+      .install .stage-h {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+      .stage-h::before {
+        content: "";
+        position: absolute;
+        left: calc(-1 * clamp(1.75rem, 4vw, 3.5rem));
+        top: 0.45em;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--p-bg);
+        border: 1.5px solid var(--p-ink);
+      }
+      .stage-lede {
+        margin: -0.75rem 0 1.5rem;
+        font-size: 1rem;
+        color: var(--p-ink-2);
+      }
+      .builds {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border: 1px solid var(--p-rule);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+      .build {
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem 1.5rem 1.25rem;
+        color: var(--p-ink);
+      }
+      .build + .build {
+        border-left: 1px solid var(--p-rule);
+      }
+      .build .ico {
+        width: 24px;
+        height: 24px;
+        color: var(--p-ink-2);
+        margin-bottom: 1.1rem;
+      }
+      .b-os {
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+      }
+      .b-sub {
+        font-size: 0.92rem;
+        color: var(--p-ink-2);
+      }
+      .b-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px dashed var(--p-rule);
+      }
+      .b-file {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+        font: 400 0.75rem var(--ffm);
+        color: var(--p-ink-3);
+      }
+      .b-file code {
+        color: var(--p-ink-2);
+        overflow-wrap: anywhere;
+      }
+      .b-get {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex-shrink: 0;
+        height: 34px;
+        padding: 0 0.85rem;
+        border: 1px solid var(--p-rule);
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--p-ink);
+        font: 500 0.85rem/1 var(--ff);
+        text-decoration: none;
         transition:
-          opacity 0.15s ease,
-          margin-left 0.15s ease;
+          background-color 0.15s,
+          border-color 0.15s,
+          color 0.15s;
       }
-      .resource-link:hover .rl-title::after {
-        opacity: 1;
-        margin-left: 0.45rem;
+      .b-get .ico-dl {
+        width: 14px;
+        height: 14px;
+        transition: transform 0.15s;
       }
-      .rl-sub {
-        font-size: 0.8rem;
-        color: var(--muted);
-        margin-top: 0.3rem;
-        line-height: 1.5;
+      .b-get:hover {
+        background: var(--p-ink);
+        border-color: var(--p-ink);
+        color: #ffffff;
       }
-
-      footer {
-        border-top: 1px solid var(--border);
-        padding: 2rem;
-        text-align: center;
-        color: var(--faint);
-        font-size: 0.8rem;
+      .b-get:hover .ico-dl {
+        transform: translateY(1px);
       }
-      footer a {
-        color: var(--muted);
+      .b-get:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 2px;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+      .p-note {
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+        color: var(--p-ink-2);
+      }
+      .docs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2.5rem clamp(2.5rem, 5vw, 5rem);
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--p-rule);
+      }
+      .doc .inst-h {
+        margin-bottom: 0.75rem;
+      }
+      .doc p,
+      .doc li {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--p-ink-2);
+      }
+      .doc p + .cmd-wrap,
+      .doc .cmd-wrap + p,
+      .doc p + ol {
+        margin-top: 0.75rem;
+      }
+      .doc .cmd-wrap + p {
+        margin-top: 1.25rem;
+      }
+      .doc ol {
+        list-style: none;
+        counter-reset: d;
+      }
+      .doc ol li {
+        position: relative;
+        counter-increment: d;
+        padding-left: 2rem;
+      }
+      .doc ol li + li {
+        margin-top: 0.75rem;
+      }
+      .doc ol li::before {
+        content: counter(d, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.2rem;
+        font: 500 0.75rem var(--ffm);
+        color: var(--p-ink-3);
+      }
+      .doc li .cmd-wrap {
+        margin-top: 0.6rem;
+      }
+      .release {
+        margin-top: 2rem;
+        font: 400 0.8rem var(--ffm);
+      }
+      .release a {
+        color: var(--p-ink-3);
+        text-decoration: none;
         transition: color 0.15s;
       }
-      footer a:hover {
-        color: var(--accent);
+      .release a:hover {
+        color: var(--p-ink);
       }
-      footer .sep {
-        margin: 0 0.6rem;
+      .cmd-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--g0);
+        border-radius: 8px;
       }
-
-      .band {
-        background: var(--surface);
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
+      .cmd {
+        flex: 1;
+        min-width: 0;
+        font-family: var(--ffc);
+        padding: 0.8rem 0 0.8rem 1rem;
+        color: var(--g-ink);
+        font-size: 0.82rem;
+        line-height: 1.7;
+        overflow-x: auto;
+        white-space: pre;
       }
-
-      .reveal {
-        opacity: 0;
-        transform: translateY(12px);
+      .copy {
+        flex-shrink: 0;
+        align-self: flex-start;
+        margin: 0.55rem 0.55rem 0 0;
+        padding: 0.3rem 0.55rem;
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: transparent;
+        color: var(--g-ink-2);
+        font: 500 0.72rem var(--ff);
+        cursor: pointer;
         transition:
-          opacity 0.4s ease,
-          transform 0.4s ease;
+          color 0.15s,
+          border-color 0.15s;
       }
-      .reveal.in {
-        opacity: 1;
-        transform: none;
+      .copy:hover {
+        color: var(--g-ink);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      .copy:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 2px;
+      }
+      .copy.done {
+        color: var(--signal);
+        border-color: var(--signal);
       }
 
-      @media (max-width: 760px) {
-        .node-rail-grid {
-          grid-template-columns: 1fr;
-          gap: 0;
+      .setup {
+        display: grid;
+        gap: 2rem;
+      }
+      .setup ol {
+        list-style: none;
+        counter-reset: s;
+        position: relative;
+      }
+      .setup ol {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem 3rem;
+        margin-top: 0;
+      }
+      .setup li {
+        position: relative;
+        counter-increment: s;
+        padding-left: 2.25rem;
+      }
+      .setup li::before {
+        content: counter(s, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.2rem;
+        font: 500 0.75rem var(--ffm);
+        color: var(--p-ink-3);
+      }
+      .setup li h4 {
+        font-size: 0.98rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+      .optional {
+        font: 400 0.72rem var(--ffm);
+        color: var(--p-ink-3);
+        margin-left: 0.35rem;
+      }
+      .onboard-pan {
+        min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .onboard-pan::-webkit-scrollbar {
+        display: none;
+      }
+      .onboard-shot {
+        display: block;
+        width: 100%;
+        max-width: 1270px;
+        padding: 0;
+        border: 1px solid var(--p-rule);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #ffffff;
+        cursor: zoom-in;
+      }
+      .onboard-shot img {
+        width: 100%;
+        height: auto;
+      }
+
+      .source {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+        align-items: stretch;
+      }
+      .term {
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--g0);
+      }
+      .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid var(--g-rule-2);
+        font: 500 0.9rem var(--ffc);
+        color: var(--g-ink);
+      }
+      .term-dots {
+        width: 32px;
+        height: 8px;
+        background:
+          radial-gradient(circle at 4px 50%, #f43f5e 3.5px, transparent 4px),
+          radial-gradient(circle at 16px 50%, #f59e0b 3.5px, transparent 4px),
+          radial-gradient(circle at 28px 50%, #10b981 3.5px, transparent 4px);
+        opacity: 0.8;
+      }
+      .term .cmd-wrap {
+        background: none;
+        border-radius: 0;
+      }
+      .term .cmd {
+        padding: 1rem 0 1.1rem 1rem;
+        font-size: 0.82rem;
+        line-height: 1.75;
+      }
+      .cmd .c {
+        color: #6e6e75;
+      }
+      .cmd .k {
+        color: #34d399;
+      }
+      .cmd .f {
+        color: #a78bfa;
+      }
+      .cmd .u {
+        color: #7dd3fc;
+      }
+      .cmd .s {
+        color: #fbbf24;
+      }
+
+      .foot {
+        padding: 4rem 0 2.25rem;
+        border-top: 1px solid var(--g-rule);
+      }
+      .foot .wrap {
+        max-width: var(--wide);
+      }
+      .foot-top {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding-bottom: 2.5rem;
+        border-bottom: 1px solid var(--g-rule);
+      }
+      .foot-author p {
+        font: 400 0.8rem var(--ffm);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--g-ink-3);
+        margin-bottom: 0.5rem;
+      }
+      .foot-author a {
+        font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+        font-weight: 500;
+        letter-spacing: -0.03em;
+        color: var(--g-ink);
+        text-decoration: none;
+      }
+      .foot-author a span {
+        display: inline-block;
+        font-size: 0.6em;
+        color: var(--g-ink-3);
+        transition:
+          transform 0.15s,
+          color 0.15s;
+      }
+      .foot-author a:hover span {
+        color: var(--signal);
+        transform: translate(2px, -2px);
+      }
+      .foot-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem 2rem;
+        list-style: none;
+      }
+      .foot-links a {
+        font-size: 0.95rem;
+        color: var(--g-ink-2);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .foot-links a:hover {
+        color: var(--g-ink);
+      }
+      .foot-bottom {
+        padding-top: 1.5rem;
+        font: 400 0.8rem var(--ffm);
+        color: var(--g-ink-3);
+      }
+
+      .lightbox {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        max-height: none;
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: #ececea;
+      }
+      .lightbox[open] {
+        display: flex;
+        flex-direction: column;
+      }
+      .lightbox::backdrop {
+        background: rgba(8, 8, 8, 0.94);
+      }
+      .lb-bar {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 0.75rem var(--gut);
+      }
+      .lb-bar button {
+        height: 34px;
+        padding: 0 0.85rem;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: transparent;
+        color: inherit;
+        font: 500 0.85rem var(--ff);
+        cursor: pointer;
+      }
+      .lb-bar button:hover {
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+      .lb-stage {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        display: grid;
+        place-items: center;
+        padding: 0 var(--gut) var(--gut);
+        cursor: zoom-in;
+      }
+      .lb-stage img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 8px;
+        object-fit: contain;
+      }
+      .lb-stage.actual {
+        place-items: start center;
+        cursor: zoom-out;
+      }
+      .lb-stage.actual img {
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
         }
-        .resource-grid {
-          grid-template-columns: 1fr;
+        .graph .edge-path {
+          animation: none;
         }
-        .steps {
-          grid-template-columns: 1fr;
+      }
+
+      @media (max-width: 1479px) {
+        .win-pan {
+          padding: 0 16px 0.5rem;
         }
-        .step {
-          border-right: none;
-          border-bottom: 1px solid var(--border);
+      }
+      @media (max-width: 1100px) {
+        .legend {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        .step:last-child {
-          border-bottom: none;
+        .trio {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        .stats {
-          grid-template-columns: repeat(2, 1fr);
+        .setup {
+          grid-template-columns: minmax(0, 1fr);
         }
-        .stat:nth-child(2) {
-          border-right: none;
+        .setup ol {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1.5rem;
         }
-        .dl-grid {
-          grid-template-columns: 1fr;
-        }
-        .nav-links {
+        .setup ol::before {
           display: none;
         }
-        .block {
-          padding: 3.5rem 1.4rem;
+        .setup li {
+          padding-bottom: 0;
+        }
+      }
+      @media (max-width: 980px) {
+        .nav .wrap {
+          flex-wrap: wrap;
+          height: auto;
+          gap: 0 1rem;
+          padding-top: 0.6rem;
+        }
+        .nav-end {
+          margin-left: auto;
+        }
+        .nav nav {
+          order: 3;
+          width: 100%;
+          margin-left: 0;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+        .nav nav::-webkit-scrollbar {
+          display: none;
+        }
+        .nav-links {
+          gap: 1.25rem;
+          padding: 0.15rem 0 0.2rem;
+          white-space: nowrap;
+        }
+        .nav-links a,
+        .foot-links a,
+        .release a {
+          display: inline-block;
+          padding: 0.6rem 0;
+        }
+        .nav-gh {
+          width: 40px;
+          height: 40px;
+        }
+        .win-notes .num,
+        .copy,
+        .optional {
+          font-size: 0.8rem;
+        }
+        .b-foot {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .b-get {
+          height: 42px;
+          justify-content: center;
+        }
+        html {
+          scroll-padding-top: 104px;
+        }
+        .hero-top {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .win-head {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .chat {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .context {
+          padding-left: 0;
+          border-left: 0;
+        }
+      }
+      @media (max-width: 760px) {
+        .trio {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .docs,
+        .terms {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .legend {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 2rem;
+        }
+        .foot-bottom {
+          text-wrap: balance;
+        }
+        .builds {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .build + .build {
+          border-left: 0;
+          border-top: 1px solid var(--p-rule);
+        }
+        .build {
+          padding: 1.1rem 1.25rem 1rem;
+        }
+        .build .ico {
+          margin-bottom: 0.6rem;
+        }
+        .b-foot {
+          margin-top: 0.9rem;
+          padding-top: 0.75rem;
+        }
+        .setup ol {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .onboard-shot {
+          width: 760px;
+          max-width: none;
+        }
+      }
+      @media (max-width: 720px) {
+        body {
+          font-size: 1rem;
+        }
+        .strip {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .strip li {
+          min-height: 3.25rem;
+        }
+        .strip li + li {
+          border-left: 0;
+          border-top: 1px solid var(--g-rule);
+        }
+        .win-inner {
+          width: 1100px;
+          margin: 0;
+        }
+        .win-notes {
+          position: sticky;
+          left: 0;
+          width: calc(100vw - 32px);
+          grid-template-columns: minmax(0, 1fr);
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+        .win-notes li {
+          padding: 0;
+        }
+        .win-notes li::before,
+        .win-notes li::after {
+          display: none;
+        }
+      }
+      @media (max-width: 420px) {
+        .nav-gh {
+          display: none;
         }
       }
     </style>
   </head>
   <body>
-    <nav>
-      <a href="#" class="nav-logo">
-        <img
-          src="assets/appicon.png"
-          alt="InfraLens"
-          onerror="
-            this.src =
-              'https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/src-tauri/icons/icon.png';
-            this.onerror = null;
-          "
-        />
-        InfraLens
-      </a>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#screenshots">Screenshots</a>
-        <a href="#install">Install</a>
-      </div>
-      <div class="nav-r">
-        <a
-          href="https://github.com/AdamYahmadi/InfraLens/releases/tag/v0.2.0"
-          target="_blank"
-          rel="noopener"
-          class="nav-cta"
-        >
-          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path
-              d="M8 2v7.5M4.8 6.7 8 9.9l3.2-3.2M3 13h10"
-              stroke="currentColor"
-              stroke-width="1.4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          Install
+    <header class="nav" id="nav">
+      <div class="wrap">
+        <a href="#top" class="brand" aria-label="InfraLens home">
+          <span class="brand-tile">
+            <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M16 4.5 26 10.5v11L16 27.5 6 21.5v-11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" opacity="0.85" />
+              <path d="M16 16V7.5M16 16l7 4M16 16l-7 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity="0.5" />
+              <circle cx="16" cy="7.5" r="1.7" fill="currentColor" />
+              <circle cx="23" cy="20" r="1.7" fill="currentColor" />
+              <circle cx="9" cy="20" r="1.7" fill="currentColor" />
+              <circle cx="16" cy="16" r="2.6" fill="currentColor" />
+            </svg>
+          </span>
+          InfraLens
         </a>
-      </div>
-    </nav>
-
-    <section class="hero">
-      <svg
-        class="hero-graph"
-        viewBox="0 0 1200 360"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-      >
-        <line x1="80" y1="60" x2="240" y2="140" />
-        <line x1="240" y1="140" x2="160" y2="260" />
-        <line x1="240" y1="140" x2="380" y2="90" />
-        <line x1="380" y1="90" x2="420" y2="300" />
-        <line x1="380" y1="90" x2="620" y2="50" />
-        <line x1="620" y1="50" x2="700" y2="180" />
-        <line x1="700" y1="180" x2="560" y2="320" />
-        <line x1="700" y1="180" x2="840" y2="110" />
-        <line x1="840" y1="110" x2="960" y2="240" />
-        <line x1="960" y1="240" x2="1040" y2="60" />
-        <line x1="960" y1="240" x2="1120" y2="300" />
-        <line x1="840" y1="110" x2="900" y2="320" />
-        <circle cx="80" cy="60" r="3" />
-        <circle cx="240" cy="140" r="3" />
-        <circle cx="160" cy="260" r="3" />
-        <circle cx="380" cy="90" r="3" />
-        <circle cx="420" cy="300" r="3" />
-        <circle cx="620" cy="50" r="3" />
-        <circle cx="700" cy="180" r="3" />
-        <circle cx="560" cy="320" r="3" />
-        <circle cx="840" cy="110" r="3" />
-        <circle cx="960" cy="240" r="3" />
-        <circle cx="1040" cy="60" r="3" />
-        <circle cx="1120" cy="300" r="3" />
-        <circle cx="900" cy="320" r="3" />
-      </svg>
-      <div class="hero-inner">
-        <div class="hero-tag"><b>v0.2.0</b> — macOS &amp; Linux</div>
-        <img
-          src="assets/appicon.png"
-          alt="InfraLens"
-          class="hero-icon"
-          onerror="
-            this.src =
-              'https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/src-tauri/icons/icon.png';
-            this.onerror = null;
-          "
-        />
-        <h1>Your Proxmox lab,<br />mapped in real time.</h1>
-        <p class="hero-sub">
-          InfraLens auto-discovers your <b>nodes, VMs, and containers</b>,
-          renders them as a live topology graph, and lets you query your
-          infrastructure in plain language — entirely on your own hardware.
-        </p>
-
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.55rem;
-            margin-bottom: 3.25rem;
-          "
-        >
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              gap: 0.6rem;
-              flex-wrap: wrap;
-              justify-content: center;
-            "
-          >
-            <div class="os-tab-wrap">
-              <button class="os-tab active" onclick="setOS('mac', this)">
-                🍎 macOS
-              </button>
-              <button class="os-tab" onclick="setOS('linux', this)">
-                🐧 Linux
-              </button>
-            </div>
-            <a
-              id="dl-main-btn"
-              class="dl-btn"
-              href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg"
-            >
-              Download
-            </a>
-            <a
-              href="https://github.com/AdamYahmadi/InfraLens"
-              target="_blank"
-              rel="noopener"
-              class="btn-ghost-sm"
-              >Source →</a
-            >
-          </div>
-          <div id="dl-sub-text" class="dl-sub">
-            macOS · Apple Silicon (.dmg)
-          </div>
-          <div
-            id="linux-opts"
-            style="
-              display: none;
-              gap: 0.5rem;
-              flex-wrap: wrap;
-              justify-content: center;
-            "
-          >
-            <a
-              href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.AppImage"
-              class="btn-ghost-sm"
-              >.AppImage (any distro)</a
-            >
-            <a
-              href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.deb"
-              class="btn-ghost-sm"
-              >.deb (Debian / Ubuntu)</a
-            >
-          </div>
-        </div>
-
-        <div class="hero-screen">
-          <div class="hero-bar">
-            <span class="hd hd-r"></span><span class="hd hd-y"></span
-            ><span class="hd hd-g"></span>
-          </div>
-          <img
-            src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/hero-banner.png"
-            alt="InfraLens dashboard"
-            onerror="this.style.display = 'none'"
-          />
-        </div>
-      </div>
-    </section>
-
-    <div class="stats-band">
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-n">v0.2</div>
-          <div class="stat-l">Desktop release</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">100%</div>
-          <div class="stat-l">Local — no cloud</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">4</div>
-          <div class="stat-l">Live metric streams</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">MIT</div>
-          <div class="stat-l">Open source</div>
-        </div>
-      </div>
-    </div>
-
-    <section class="block reveal" id="features">
-      <h2 class="s-title">
-        Every node, every container, <em>every metric.</em>
-      </h2>
-      <p class="s-sub">
-        Built for self-hosters who want to understand what's actually running —
-        without shipping data anywhere.
-      </p>
-      <div class="node-rail-grid">
-        <div class="node-rail">
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Automatic topology mapping</h3>
-              <p>
-                Auto-discovers Proxmox hosts, LXC containers, and VMs via the
-                API and renders them as a live, interactive connected graph —
-                updated in real time. No manual configuration.
-              </p>
-            </div>
-          </div>
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Live telemetry &amp; history</h3>
-              <p>
-                Per-node CPU, RAM, disk, and network throughput streamed
-                continuously — with hour / day / week trend charts from Proxmox
-                RRD data.
-              </p>
-            </div>
-          </div>
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Local LLM diagnostics</h3>
-              <p>
-                Feeds live cluster state to an Ollama-powered chat. Ask about
-                bottlenecks or service status in plain language.
-              </p>
-            </div>
-          </div>
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Service detection</h3>
-              <p>
-                Probes containers via SSH to identify running services — Docker,
-                databases, web servers — without any agents installed.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="node-rail">
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Native desktop app</h3>
-              <p>
-                Built with Tauri 2 — ships as a native app for macOS and Linux.
-                No browser tab to lose, no port to remember.
-              </p>
-            </div>
-          </div>
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Power controls</h3>
-              <p>
-                Start, stop, reboot, and shut down any VM or container straight
-                from the app — with inline confirmation before anything
-                destructive.
-              </p>
-            </div>
-          </div>
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Cluster overview</h3>
-              <p>
-                Totals, aggregate CPU and memory meters, an attention list that
-                surfaces offline or high-load nodes, and a live activity feed.
-              </p>
-            </div>
-          </div>
-          <div class="nr-item">
-            <div class="nr-node"></div>
-            <div class="nr-body">
-              <h3>Stays on your network</h3>
-              <p>
-                No telemetry, no SaaS, no cloud APIs. Everything runs on your
-                own hardware and never leaves your homelab.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="band">
-      <section class="block reveal" id="screenshots">
-        <h2 class="s-title">What it <em>actually</em> looks like.</h2>
-        <p class="s-sub">
-          Real views from a live Proxmox homelab.
-          <span style="color: var(--faint); font-size: 0.88em"
-            >Click image to zoom.</span
-          >
-        </p>
-        <div
-          class="shot-single"
-          style="max-width: 100%; cursor: zoom-in"
-          onclick="openLightbox(this.querySelector('img').src)"
-        >
-          <img
-            src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/chat-interface.png"
-            alt="LLM diagnostics chat"
-            onerror="this.style.display = 'none'"
-          />
-          <div class="shot-cap">
-            <h4>LLM diagnostics</h4>
-            <p>
-              Ask about service status, bottlenecks, or resource usage in
-              natural language — powered by a local Ollama model.
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div
-      id="lightbox"
-      onclick="closeLightbox()"
-      style="
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 999;
-        background: rgba(0, 0, 0, 0.9);
-        backdrop-filter: blur(8px);
-        cursor: zoom-out;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-      "
-    >
-      <img
-        id="lightbox-img"
-        src=""
-        alt=""
-        style="
-          max-width: 95vw;
-          max-height: 92vh;
-          border-radius: 6px;
-          box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
-          object-fit: contain;
-        "
-      />
-    </div>
-
-    <section class="block reveal">
-      <h2 class="s-title">Connected in minutes, <em>not hours.</em></h2>
-      <p class="s-sub">
-        Connects to your existing Proxmox API — no agents, no changes to your
-        setup.
-      </p>
-      <div class="steps">
-        <div class="step">
-          <div class="step-n">01</div>
-          <h3>Connect Proxmox</h3>
-          <p>
-            Provide your Proxmox API token and host in the
-            <code
-              style="
-                font-family: var(--ffm);
-                font-size: 0.85em;
-                color: var(--accent);
-              "
-              >.env</code
-            >
-            config. InfraLens discovers everything automatically.
-          </p>
-        </div>
-        <div class="step">
-          <div class="step-n">02</div>
-          <h3>Start Ollama</h3>
-          <p>
-            Pull any supported model locally. InfraLens feeds it live cluster
-            state as context — no internet required.
-          </p>
-        </div>
-        <div class="step">
-          <div class="step-n">03</div>
-          <h3>Launch the app</h3>
-          <p>
-            Start the backend, open the desktop app, and see your full
-            infrastructure mapped live.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <div class="band">
-      <section class="block reveal" id="install">
-        <h2 class="s-title">Pick a platform, <em>ship it.</em></h2>
-        <p class="s-sub" style="margin-bottom: 0">
-          Native desktop app built with Tauri 2. Available for macOS and Linux.
-        </p>
-        <div class="dl-section" style="margin-top: 2rem">
-          <div class="dl-grid">
-            <div class="dl-card">
-              <div class="dl-card-top">
-                <div class="dl-os-icon">🍎</div>
-                <div>
-                  <div class="dl-os-name">macOS</div>
-                  <div class="dl-os-sub">Apple Silicon (M1 and later)</div>
-                </div>
-              </div>
-              <div class="dl-links">
-                <a
-                  class="dl-link"
-                  href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg"
-                >
-                  InfraLens_0.2.0_aarch64.dmg <span>.dmg</span>
-                </a>
-              </div>
-              <div class="dl-note">
-                After installing, run this once in Terminal:<br />
-                <code
-                  style="
-                    font-family: var(--ffm);
-                    font-size: 0.78em;
-                    color: var(--text);
-                  "
-                  >xattr -cr /Applications/InfraLens.app</code
-                ><br /><br />
-                Then open InfraLens and enable it under
-                <b>System Settings → Privacy &amp; Security → Local Network</b>.
-                The app is ad-hoc signed — Apple notarization coming in a future
-                release.
-              </div>
-            </div>
-            <div class="dl-card">
-              <div class="dl-card-top">
-                <div class="dl-os-icon">🐧</div>
-                <div>
-                  <div class="dl-os-name">Linux</div>
-                  <div class="dl-os-sub">x86_64 — any modern distro</div>
-                </div>
-              </div>
-              <div class="dl-links">
-                <a
-                  class="dl-link"
-                  href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.AppImage"
-                >
-                  InfraLens_0.2.0_amd64.AppImage <span>.AppImage</span>
-                </a>
-                <a
-                  class="dl-link"
-                  href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.deb"
-                >
-                  InfraLens_0.2.0_amd64.deb <span>.deb</span>
-                </a>
-              </div>
-              <div class="dl-note">
-                No additional steps required. Use the <b>.AppImage</b> for any
-                distro, or the <b>.deb</b> for Debian / Ubuntu.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <section class="block reveal">
-      <h2 class="s-title" style="margin-bottom: 1.5rem">
-        Or build it <em>yourself.</em>
-      </h2>
-      <div class="install-wrap">
-        <div class="install-tabs">
-          <button class="itab active" onclick="tab(this, 'tb')">Backend</button>
-          <button class="itab" onclick="tab(this, 'tf')">Frontend</button>
-        </div>
-        <div id="tb" class="install-pane active">
-          <pre><span class="c"># Clone the repo</span>
-<span class="k">git</span> clone https://github.com/AdamYahmadi/InfraLens.git
-<span class="k">cd</span> InfraLens/backend
-
-<span class="c"># Set up environment</span>
-<span class="k">python</span> -m venv venv && <span class="k">source</span> venv/bin/activate
-<span class="k">pip</span> install -r requirements.txt
-
-<span class="c"># Configure — fill in your Proxmox API token + SSH creds</span>
-<span class="k">cp</span> .env.example .env
-
-<span class="c"># Run</span>
-<span class="k">python</span> main.py</pre>
-        </div>
-        <div id="tf" class="install-pane">
-          <pre><span class="k">cd</span> InfraLens/frontend
-<span class="k">npm</span> install
-
-<span class="c"># Create .env and point to your backend</span>
-VITE_API_URL=<span class="s">"http://127.0.0.1:8000"</span>
-
-<span class="k">npm</span> run dev</pre>
-        </div>
-      </div>
-    </section>
-
-    <div style="padding: 0 2rem">
-      <div class="cta-wrap reveal">
-        <h2>InfraLens is <em>open source.</em></h2>
-        <p>Browse the code, file a bug, or read the setup docs.</p>
-        <div class="resource-grid">
+        <nav aria-label="Sections">
+          <ul class="nav-links">
+            <li><a href="#tour">Overview</a></li>
+            <li><a href="#topology">Topology</a></li>
+            <li><a href="#telemetry">Vitals</a></li>
+            <li><a href="#assistant">Assistant</a></li>
+            <li><a href="#install">Install</a></li>
+          </ul>
+        </nav>
+        <div class="nav-end">
           <a
-            class="resource-link"
+            class="nav-gh"
             href="https://github.com/AdamYahmadi/InfraLens"
             target="_blank"
             rel="noopener"
+            aria-label="InfraLens on GitHub"
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
                 d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
               />
             </svg>
-            <div>
-              <div class="rl-title">GitHub</div>
-              <div class="rl-sub">Source code &amp; releases</div>
-            </div>
           </a>
-          <a
-            class="resource-link"
-            href="https://github.com/AdamYahmadi/InfraLens/issues"
-            target="_blank"
-            rel="noopener"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7.5v6" stroke-linecap="round" />
-              <circle
-                cx="12"
-                cy="16.3"
-                r="1"
-                fill="currentColor"
-                stroke="none"
-              />
-            </svg>
-            <div>
-              <div class="rl-title">Report an issue</div>
-              <div class="rl-sub">Bugs &amp; feature requests</div>
-            </div>
-          </a>
-          <a
-            class="resource-link"
-            href="https://github.com/AdamYahmadi/InfraLens#readme"
-            target="_blank"
-            rel="noopener"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-              <path
-                d="M4 5.5c2-1 5-1 8 .5 3-1.5 6-1.5 8-.5v13c-2-1-5-1-8 .5-3-1.5-6-1.5-8-.5z"
-                stroke-linejoin="round"
-              />
-              <path d="M12 6v13" />
-            </svg>
-            <div>
-              <div class="rl-title">Docs</div>
-              <div class="rl-sub">Setup &amp; configuration</div>
-            </div>
-          </a>
+          <a class="btn btn-light" href="#install">Get InfraLens</a>
         </div>
       </div>
-    </div>
+    </header>
 
-    <footer>
-      Built by <a href="https://adamyahmadi.com">Adam Yahmadi</a>
-      <span class="sep">·</span>
-      2026
+    <main id="top">
+      <section class="hero canvas">
+        <div class="wrap hero-top">
+            <h1>
+              See your Pro<b class="px">x</b>mo<b class="px">x</b> homelab.
+              <span>Ask it anything.</span>
+            </h1>
+          <div class="hero-side">
+            <p class="lede">
+              A live map of every node, VM and container, and a local model
+              that answers questions about them.
+            </p>
+            <div class="get">
+              <a class="btn btn-light" href="#tour">See it in action</a>
+              <a
+                class="get-link"
+                href="https://github.com/AdamYahmadi/InfraLens"
+                target="_blank"
+                rel="noopener"
+                >View on GitHub <span aria-hidden="true">→</span></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-canvas">
+            <figure class="graph wrap">
+            <div class="graph-pan">
+              <svg class="tsvg" viewBox="-4 45 788 260" role="img" aria-label="Topology of ADAMLAB, a Proxmox host, connected to its containers nextcloud, homepage, tailscale and pihole. Every container also has a DNS edge to pihole, the network's resolver.">
+                <defs>
+                  <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" /><rect width="20" height="8" x="2" y="14" rx="2" /><path d="M6 6h.01M6 18h.01" /></symbol>
+                  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20" /></symbol>
+                  <symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol>
+                  <symbol id="i-harddrive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12H2M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11zM6 16h.01M10 16h.01" /></symbol>
+                  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
+                  <symbol id="i-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0" /></symbol>
+                  <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="7" x="3" y="3" rx="1" /><rect width="9" height="7" x="3" y="14" rx="1" /><rect width="5" height="7" x="16" y="14" rx="1" /></symbol>
+                </defs>
+                <g aria-hidden="true">
+                  <path class="edge-path" stroke="#0ea5e9" d="M184,127.5 C242,127.5 242,80 300,80" />
+                  <path class="edge-path" stroke="#f43f5e" d="M184,127.5 C242,127.5 242,175 300,175" />
+                  <path class="edge-path" stroke="#8b5cf6" d="M184,127.5 C242,127.5 242,270 300,270" />
+                  <path class="edge-path" stroke="#10b981" d="M184,127.5 L596,127.5" />
+                  <path class="edge-path" stroke="#10b981" d="M484,80 C540,80 540,127.5 596,127.5" />
+                  <path class="edge-path" stroke="#10b981" d="M484,175 C540,175 540,127.5 596,127.5" />
+                  <path class="edge-path" stroke="#10b981" d="M484,270 C540,270 540,127.5 596,127.5" />
+                  <g class="e-label"><rect x="527" y="96.75" width="26" height="14" rx="2" /><text x="540" y="106.75" text-anchor="middle">DNS</text></g>
+                  <g class="e-label"><rect x="527" y="144.25" width="26" height="14" rx="2" /><text x="540" y="154.25" text-anchor="middle">DNS</text></g>
+                  <g class="e-label"><rect x="527" y="191.75" width="26" height="14" rx="2" /><text x="540" y="201.75" text-anchor="middle">DNS</text></g>
+                  <g class="n n-host">
+                  <rect class="n-box" x="0.5" y="103" width="183" height="49" rx="8" />
+                  <rect x="1" y="103.5" width="3" height="48" fill="#f4f4f5" />
+                  <rect x="16" y="113.5" width="28" height="28" rx="6" fill="#f4f4f5" />
+                  <use href="#i-server" x="23" y="120.5" width="14" height="14" style="color:#18181b" />
+                  <text class="n-label" x="54" y="125.5">ADAMLAB</text>
+                  <circle cx="57" cy="136" r="3" fill="#10b981" />
+                  <text class="n-status" x="64" y="139.5">Online</text>
+                  <line class="n-div" x1="136.5" y1="115.5" x2="136.5" y2="139.5" />
+                  <text class="n-kind" x="172" y="130.5" text-anchor="end">HOST</text>
+                  </g>
+                  <g class="n n-sel">
+                  <rect class="n-box" x="300.5" y="55.5" width="183" height="49" rx="8" />
+                  <rect x="312" y="66" width="28" height="28" rx="6" fill="#f4f4f5" />
+                  <use href="#i-harddrive" x="319" y="73" width="14" height="14" style="color:#18181b" />
+                  <text class="n-label" x="350" y="78">nextcloud</text>
+                  <circle cx="353" cy="88.5" r="3" fill="#10b981" />
+                  <text class="n-status" x="360" y="92">Running</text>
+                  <line class="n-div" x1="449.5" y1="68" x2="449.5" y2="92" />
+                  <text class="n-kind" x="472" y="83" text-anchor="end">CT</text>
+                  </g>
+                  <g class="n">
+                  <rect class="n-box" x="300.5" y="150.5" width="183" height="49" rx="8" />
+                  <rect x="312.5" y="161.5" width="27" height="27" rx="6" fill="#f43f5e" fill-opacity="0.1" stroke="#f43f5e" stroke-opacity="0.2" />
+                  <use href="#i-activity" x="319" y="168" width="14" height="14" style="color:#f43f5e" />
+                  <text class="n-label" x="350" y="173">homepage</text>
+                  <circle cx="353" cy="183.5" r="3" fill="#10b981" />
+                  <text class="n-status" x="360" y="187">Running</text>
+                  <line class="n-div" x1="449.5" y1="163" x2="449.5" y2="187" />
+                  <text class="n-kind" x="472" y="178" text-anchor="end">CT</text>
+                  </g>
+                  <g class="n">
+                  <rect class="n-box" x="300.5" y="245.5" width="183" height="49" rx="8" />
+                  <rect x="312.5" y="256.5" width="27" height="27" rx="6" fill="#8b5cf6" fill-opacity="0.1" stroke="#8b5cf6" stroke-opacity="0.2" />
+                  <use href="#i-globe" x="319" y="263" width="14" height="14" style="color:#8b5cf6" />
+                  <text class="n-label" x="350" y="268">tailscale</text>
+                  <circle cx="353" cy="278.5" r="3" fill="#10b981" />
+                  <text class="n-status" x="360" y="282">Running</text>
+                  <line class="n-div" x1="449.5" y1="258" x2="449.5" y2="282" />
+                  <text class="n-kind" x="472" y="273" text-anchor="end">CT</text>
+                  </g>
+                  <g class="n">
+                  <rect class="n-box" x="596.5" y="103" width="183" height="49" rx="8" />
+                  <rect x="608.5" y="114" width="27" height="27" rx="6" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-opacity="0.2" />
+                  <use href="#i-shield" x="615" y="120.5" width="14" height="14" style="color:#10b981" />
+                  <text class="n-label" x="646" y="125.5">pihole</text>
+                  <circle cx="649" cy="136" r="3" fill="#10b981" />
+                  <text class="n-status" x="656" y="139.5">Running</text>
+                  <line class="n-div" x1="745.5" y1="115.5" x2="745.5" y2="139.5" />
+                  <text class="n-kind" x="768" y="130.5" text-anchor="end">CT</text>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </figure>
+        </div>
+
+        <ul class="strip" aria-label="At a glance">
+          <li>Built for Proxmox VE</li>
+          <li>Local AI with Ollama</li>
+          <li>Free and open source</li>
+        </ul>
+      </section>
+
+      <section class="window" id="tour" aria-labelledby="win-title">
+        <div class="win-head">
+          <h2 id="win-title">The whole lab in one window.</h2>
+        </div>
+        <div class="win-pan">
+          <div class="win-inner">
+            <ol class="win-notes">
+              <li>
+                <span class="num">01</span>
+                <h3>Every number, per node</h3>
+                <p>CPU, memory, disk and network at a glance.</p>
+              </li>
+              <li>
+                <span class="num">02</span>
+                <h3>The live topology</h3>
+                <p>See how your services connect.</p>
+              </li>
+              <li>
+                <span class="num">03</span>
+                <h3>Ask what needs attention</h3>
+                <p>A local model reads the whole lab.</p>
+              </li>
+            </ol>
+            <button
+              class="win-frame"
+              type="button"
+              data-zoom
+              data-dpr="2"
+              aria-label="Open the InfraLens screenshot"
+            >
+              <picture><source srcset="assets/infralens/chat-interface.webp" type="image/webp" /><img
+                src="assets/infralens/chat-interface.png"
+                alt="The InfraLens app in dark mode. Left: details for the nextcloud container, running, CPU 0.1%, memory 284.0 MB of 2 GB, disk 2.8 of 97.9 GB, download 143.4 B/s, upload 12.0 B/s, power controls, an hour of CPU and memory history, IP 192.168.178.4, uptime 55 minutes and its services. Middle: the live topology of the ADAMLAB host and its containers pihole, tailscale, nextcloud and homepage. Right: the assistant answering “Anything need attention?” by pointing out that tailscale has only been up for 4 minutes."
+                width="1800"
+                height="1126"
+                fetchpriority="high"
+              /></picture>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="topo canvas" id="topology">
+        <div class="wrap topo-wrap">
+          <div class="sec-head">
+            <h2>Edges that mean something.</h2>
+            <p class="lede">Each edge takes the color of what runs inside the guest.</p>
+          </div>
+          <ul class="legend" aria-label="Edge colors">
+            <li>
+              <svg class="tsvg" viewBox="0 0 300 54" aria-hidden="true">
+              <circle class="stub" cx="6" cy="27" r="3.5" />
+              <path class="edge-path" stroke="#10b981" d="M10,27 C62,27 62,27 114,27" />
+              <g class="n">
+              <rect class="n-box" x="114.5" y="2.5" width="183" height="49" rx="8" />
+              <rect x="126.5" y="13.5" width="27" height="27" rx="6" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-opacity="0.2" />
+              <use href="#i-shield" x="133" y="20" width="14" height="14" style="color:#10b981" />
+              <text class="n-label" x="164" y="25">pihole</text>
+              <circle cx="167" cy="35.5" r="3" fill="#10b981" />
+              <text class="n-status" x="174" y="39">Running</text>
+              <line class="n-div" x1="263.5" y1="15" x2="263.5" y2="39" />
+              <text class="n-kind" x="286" y="30" text-anchor="end">CT</text>
+              </g>
+              </svg>
+              <span>DNS / Security</span>
+            </li>
+            <li>
+              <svg class="tsvg" viewBox="0 0 300 54" aria-hidden="true">
+              <circle class="stub" cx="6" cy="27" r="3.5" />
+              <path class="edge-path" stroke="#0ea5e9" d="M10,27 C62,27 62,27 114,27" />
+              <g class="n">
+              <rect class="n-box" x="114.5" y="2.5" width="183" height="49" rx="8" />
+              <rect x="126.5" y="13.5" width="27" height="27" rx="6" fill="#0ea5e9" fill-opacity="0.1" stroke="#0ea5e9" stroke-opacity="0.2" />
+              <use href="#i-harddrive" x="133" y="20" width="14" height="14" style="color:#0ea5e9" />
+              <text class="n-label" x="164" y="25">nextcloud</text>
+              <circle cx="167" cy="35.5" r="3" fill="#10b981" />
+              <text class="n-status" x="174" y="39">Running</text>
+              <line class="n-div" x1="263.5" y1="15" x2="263.5" y2="39" />
+              <text class="n-kind" x="286" y="30" text-anchor="end">CT</text>
+              </g>
+              </svg>
+              <span>Storage</span>
+            </li>
+            <li>
+              <svg class="tsvg" viewBox="0 0 300 54" aria-hidden="true">
+              <circle class="stub" cx="6" cy="27" r="3.5" />
+              <path class="edge-path" stroke="#8b5cf6" d="M10,27 C62,27 62,27 114,27" />
+              <g class="n">
+              <rect class="n-box" x="114.5" y="2.5" width="183" height="49" rx="8" />
+              <rect x="126.5" y="13.5" width="27" height="27" rx="6" fill="#8b5cf6" fill-opacity="0.1" stroke="#8b5cf6" stroke-opacity="0.2" />
+              <use href="#i-globe" x="133" y="20" width="14" height="14" style="color:#8b5cf6" />
+              <text class="n-label" x="164" y="25">tailscale</text>
+              <circle cx="167" cy="35.5" r="3" fill="#10b981" />
+              <text class="n-status" x="174" y="39">Running</text>
+              <line class="n-div" x1="263.5" y1="15" x2="263.5" y2="39" />
+              <text class="n-kind" x="286" y="30" text-anchor="end">CT</text>
+              </g>
+              </svg>
+              <span>Network</span>
+            </li>
+            <li>
+              <svg class="tsvg" viewBox="0 0 300 54" aria-hidden="true">
+              <circle class="stub" cx="6" cy="27" r="3.5" />
+              <path class="edge-path" stroke="#f43f5e" d="M10,27 C62,27 62,27 114,27" />
+              <g class="n">
+              <rect class="n-box" x="114.5" y="2.5" width="183" height="49" rx="8" />
+              <rect x="126.5" y="13.5" width="27" height="27" rx="6" fill="#f43f5e" fill-opacity="0.1" stroke="#f43f5e" stroke-opacity="0.2" />
+              <use href="#i-activity" x="133" y="20" width="14" height="14" style="color:#f43f5e" />
+              <text class="n-label" x="164" y="25">homepage</text>
+              <circle cx="167" cy="35.5" r="3" fill="#10b981" />
+              <text class="n-status" x="174" y="39">Running</text>
+              <line class="n-div" x1="263.5" y1="15" x2="263.5" y2="39" />
+              <text class="n-kind" x="286" y="30" text-anchor="end">CT</text>
+              </g>
+              </svg>
+              <span>Dashboard</span>
+            </li>
+            <li>
+              <svg class="tsvg" viewBox="0 0 300 54" aria-hidden="true">
+              <circle class="stub" cx="6" cy="27" r="3.5" />
+              <path class="edge-path" stroke="#f59e0b" d="M10,27 C62,27 62,27 114,27" />
+              <g class="n">
+              <rect class="n-box" x="114.5" y="2.5" width="183" height="49" rx="8" />
+              <rect x="126.5" y="13.5" width="27" height="27" rx="6" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-opacity="0.2" />
+              <use href="#i-database" x="133" y="20" width="14" height="14" style="color:#f59e0b" />
+              <text class="n-label" x="164" y="25">mariadb</text>
+              <circle cx="167" cy="35.5" r="3" fill="#10b981" />
+              <text class="n-status" x="174" y="39">Running</text>
+              <line class="n-div" x1="263.5" y1="15" x2="263.5" y2="39" />
+              <text class="n-kind" x="286" y="30" text-anchor="end">CT</text>
+              </g>
+              </svg>
+              <span>Database</span>
+            </li>
+            <li>
+              <svg class="tsvg" viewBox="0 0 300 54" aria-hidden="true">
+              <circle class="stub" cx="6" cy="27" r="3.5" />
+              <path class="edge-path" stroke="#06b6d4" d="M10,27 C62,27 62,27 114,27" />
+              <g class="n">
+              <rect class="n-box" x="114.5" y="2.5" width="183" height="49" rx="8" />
+              <rect x="126.5" y="13.5" width="27" height="27" rx="6" fill="#06b6d4" fill-opacity="0.1" stroke="#06b6d4" stroke-opacity="0.2" />
+              <use href="#i-layout" x="133" y="20" width="14" height="14" style="color:#06b6d4" />
+              <text class="n-label" x="164" y="25">docker-host</text>
+              <circle cx="167" cy="35.5" r="3" fill="#10b981" />
+              <text class="n-status" x="174" y="39">Running</text>
+              <line class="n-div" x1="263.5" y1="15" x2="263.5" y2="39" />
+              <text class="n-kind" x="286" y="30" text-anchor="end">CT</text>
+              </g>
+              </svg>
+              <span>Container</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="vitals paper" id="telemetry">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>Click a node, read its vitals.</h2>
+            <p class="lede">Usage, history, cluster health and power, live from Proxmox.</p>
+          </div>
+          <div class="trio">
+            <figure class="vital">
+              <div class="vital-shot">
+                <picture><source srcset="assets/infralens/vitals-usage.webp?v=2" type="image/webp" /><img src="assets/infralens/vitals-usage.png?v=2" alt="Resource usage for nextcloud: CPU 0.1%, memory 284.0 MB of 2.0 GB at 14%, disk 2.8 of 97.9 GB at 3%." width="1695" height="1020" loading="lazy" /></picture>
+              </div>
+              <figcaption>
+                <h3>Resource usage</h3>
+                <p>CPU, memory and disk against what each guest was given.</p>
+              </figcaption>
+            </figure>
+            <figure class="vital">
+              <div class="vital-shot">
+                <picture><source srcset="assets/infralens/vitals-history.webp?v=2" type="image/webp" /><img src="assets/infralens/vitals-history.png?v=2" alt="An hour of history for nextcloud: CPU averaging 1% and now at 0%, memory steady at 14%, each with a short spike when it started." width="1695" height="1080" loading="lazy" /></picture>
+              </div>
+              <figcaption>
+                <h3>History</h3>
+                <p>An hour, a day or a week, per node.</p>
+              </figcaption>
+            </figure>
+            <figure class="vital">
+              <div class="vital-shot">
+                <picture><source srcset="assets/infralens/attention.webp" type="image/webp" /><img src="assets/infralens/attention.png" alt="Cluster overview: 5 nodes, 4 of 5 online, 3 guests running, 7 services, 1 host, 0 VMs, 4 containers, 1 down." width="1695" height="1010" loading="lazy" /></picture>
+              </div>
+              <figcaption>
+                <h3>Cluster health</h3>
+                <p>Offline and overloaded nodes surface on their own.</p>
+              </figcaption>
+            </figure>
+            <figure class="vital">
+              <div class="vital-shot">
+                <picture><source srcset="assets/infralens/vitals-power.webp?v=2" type="image/webp" /><img src="assets/infralens/vitals-power.png?v=2" alt="Power controls after one click on Shutdown: the button has turned red and asks Confirm shutdown?" width="1695" height="445" loading="lazy" /></picture>
+              </div>
+              <figcaption>
+                <h3>Power controls</h3>
+                <p>Start, stop, reboot or shut down, with a confirmation first.</p>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="assist dark" id="assistant">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>A model that has read your cluster before you ask.</h2>
+          </div>
+
+          <figure class="chat">
+            <div class="convo">
+              <div class="msg msg-you">
+                <p class="who">You ask</p>
+                <p class="ask">Is anything running low on memory?</p>
+              </div>
+              <div class="msg">
+                <p class="who">InfraLens answers</p>
+                <p class="answer">
+                Yes, <mark>nextcloud</mark> is using 1.8 GB of its 2 GB, about
+                  90%. Consider raising its memory limit before it starts
+                  swapping.
+                </p>
+              </div>
+            </div>
+            <div class="context">
+              <p class="who">Memory it already knew</p>
+              <ul class="nodes">
+                <li class="hot"><span class="dot"></span><b>nextcloud</b><span>1.8 / 2.0 GB</span></li>
+                <li><span class="dot"></span><b>homepage</b><span>142 MB / 1.0 GB</span></li>
+                <li><span class="dot"></span><b>pihole</b><span>98 MB / 512 MB</span></li>
+              </ul>
+              <p class="ctx-note">The live state of every node goes with each question.</p>
+            </div>
+          </figure>
+          <p class="net-note"><span class="dot"></span>Answered by Ollama on your machine. No cloud, no account, no telemetry.</p>
+
+        </div>
+      </section>
+
+      <section class="install paper" id="install">
+        <div class="wrap inst">
+          <svg class="sym" aria-hidden="true">
+            <symbol id="i-apple" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" d="M16.37 12.7c-.02-2.36 1.93-3.5 2.02-3.55-1.1-1.61-2.81-1.83-3.42-1.85-1.45-.15-2.84.86-3.58.86-.74 0-1.88-.84-3.09-.82-1.59.02-3.06.93-3.88 2.35-1.66 2.87-.42 7.12 1.19 9.45.79 1.14 1.73 2.42 2.96 2.37 1.19-.05 1.64-.77 3.08-.77 1.43 0 1.84.77 3.1.74 1.28-.02 2.09-1.16 2.87-2.31.91-1.32 1.28-2.6 1.3-2.67-.03-.01-2.5-.96-2.53-3.8ZM14.01 5.76c.65-.79 1.09-1.89.97-2.99-.94.04-2.08.63-2.75 1.42-.6.7-1.13 1.82-.99 2.89 1.05.08 2.12-.53 2.77-1.32Z" /></symbol>
+            <symbol id="i-tux" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c-2.5 0-3.9 2.1-3.9 4.9 0 1.2-.4 2.3-1.2 3.5C5.7 12.8 4.6 14.8 4.6 17c0 2.6 2.9 4.5 7.4 4.5s7.4-1.9 7.4-4.5c0-2.2-1.1-4.2-2.3-6.1-.8-1.2-1.2-2.3-1.2-3.5 0-2.8-1.4-4.9-3.9-4.9Z" /><path d="M9.6 12.6c-.8 1.3-1.2 2.7-1.2 4.1 0 1.8 1.6 2.9 3.6 2.9s3.6-1.1 3.6-2.9c0-1.4-.4-2.8-1.2-4.1" /><path d="m10.8 8.9 1.2 1 1.2-1" /><circle cx="10.6" cy="6.7" r=".5" fill="currentColor" /><circle cx="13.4" cy="6.7" r=".5" fill="currentColor" /></symbol>
+            <symbol id="i-pkg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73zM12 22V12" /><path d="m3.3 7 7.7 4.73a2 2 0 0 0 2 0L20.7 7M7.5 4.27l9 5.15" /></symbol>
+          </svg>
+
+          <div class="inst-head">
+            <h2>Install InfraLens</h2>
+            <p class="lede">One native app. Nothing else to run.</p>
+            <p class="inst-req">Needs a Proxmox VE host with an API token. Ollama is optional, for the assistant.</p>
+          </div>
+
+          <div class="stages">
+            <div class="stage">
+              <h3 class="stage-h">Download</h3>
+            <div class="builds">
+              <div class="build">
+                <svg class="ico" aria-hidden="true"><use href="#i-apple" /></svg>
+                <span class="b-os">macOS</span>
+                <span class="b-sub">Apple Silicon</span>
+                <span class="b-foot">
+                  <span class="b-file"><code>InfraLens_0.2.0_aarch64.dmg</code>26.7 MB</span>
+                  <a class="b-get" href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg">Download<svg class="ico-dl" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3.5 13.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="sr"> macOS .dmg</span></a>
+                </span>
+              </div>
+              <div class="build">
+                <svg class="ico" aria-hidden="true"><use href="#i-tux" /></svg>
+                <span class="b-os">Linux</span>
+                <span class="b-sub">Any distro, AppImage</span>
+                <span class="b-foot">
+                  <span class="b-file"><code>InfraLens_0.2.0_amd64.AppImage</code>120.7 MB</span>
+                  <a class="b-get" href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.AppImage">Download<svg class="ico-dl" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3.5 13.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="sr"> Linux AppImage</span></a>
+                </span>
+              </div>
+              <div class="build">
+                <svg class="ico" aria-hidden="true"><use href="#i-pkg" /></svg>
+                <span class="b-os">Debian / Ubuntu</span>
+                <span class="b-sub">x86_64, .deb package</span>
+                <span class="b-foot">
+                  <span class="b-file"><code>InfraLens_0.2.0_amd64.deb</code>43.3 MB</span>
+                  <a class="b-get" href="https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_amd64.deb">Download<svg class="ico-dl" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3.5 13.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="sr"> Debian / Ubuntu .deb</span></a>
+                </span>
+              </div>
+            </div>
+            <p class="p-note" id="p-note" hidden>There's no Windows build yet. InfraLens runs on macOS and Linux.</p>
+
+            <div class="docs">
+              <section class="doc" id="mac-notes" aria-labelledby="mac-notes-h">
+                <h3 class="inst-h" id="mac-notes-h">First launch on macOS</h3>
+                <p>
+                  InfraLens isn't notarized by Apple yet, so macOS may block the
+                  first launch.
+                </p>
+                <ol>
+                  <li>Move InfraLens to Applications.</li>
+                  <li>
+                    Run this command:
+                    <div class="cmd-wrap"><pre class="cmd"><span class="k">xattr</span> <span class="f">-cr</span> <span class="u">/Applications/InfraLens.app</span></pre><button class="copy" type="button">Copy</button></div>
+                  </li>
+                  <li>
+                    Open InfraLens and allow Local Network access under System
+                    Settings → Privacy &amp; Security, so it can reach your
+                    Proxmox host.
+                  </li>
+                </ol>
+              </section>
+              <section class="doc" id="linux-notes" aria-labelledby="linux-notes-h">
+                <h3 class="inst-h" id="linux-notes-h">Running on Linux</h3>
+                <p>Make the AppImage executable, then run it:</p>
+                <div class="cmd-wrap"><pre class="cmd"><span class="k">chmod</span> <span class="f">+x</span> <span class="u">InfraLens_0.2.0_amd64.AppImage</span>
+<span class="k">./InfraLens_0.2.0_amd64.AppImage</span></pre><button class="copy" type="button">Copy</button></div>
+                <p>Or install the Debian package:</p>
+                <div class="cmd-wrap"><pre class="cmd"><span class="k">sudo</span> <span class="k">dpkg</span> <span class="f">-i</span> <span class="u">InfraLens_0.2.0_amd64.deb</span></pre><button class="copy" type="button">Copy</button></div>
+              </section>
+            </div>
+
+            <p class="release">
+              <a
+                href="https://github.com/AdamYahmadi/InfraLens/releases/tag/v0.2.0"
+                target="_blank"
+                rel="noopener"
+                >Release notes · v0.2.0 <span aria-hidden="true">→</span></a
+              >
+            </p>
+            </div>
+
+            <div class="setup stage">
+              <div>
+                <h3 class="stage-h">First run</h3>
+                <ol>
+                  <li>
+                    <h4>Connect your cluster</h4>
+                  </li>
+                  <li>
+                    <h4>Detect services <span class="optional">optional</span></h4>
+                  </li>
+                  <li>
+                    <h4>Connect local AI <span class="optional">optional</span></h4>
+                  </li>
+                </ol>
+              </div>
+              <div class="onboard-pan">
+                <button
+                  class="onboard-shot"
+                  type="button"
+                  data-zoom
+                  data-dpr="2"
+                  aria-label="Enlarge screenshot of the first-run setup"
+                >
+                  <picture><source srcset="assets/infralens/onboarding.webp" type="image/webp" /><img
+                    src="assets/infralens/onboarding.png"
+                    alt="First-run setup, step 1 of 3: Connect your cluster, with host 192.168.178.50 and port 8006 filled in, fields for API user, token name and token value, and SSH probe and Neural link listed as the next steps."
+                    width="1000"
+                    height="530"
+                    loading="lazy"
+                  /></picture>
+                </button>
+              </div>
+            </div>
+
+            <div class="stage">
+              <h3 class="stage-h">Build from source</h3>
+              <p class="stage-lede">A Python backend and a React frontend. Run both locally to work on InfraLens itself.</p>
+              <div class="source terms">
+                <div class="term">
+                  <p class="term-bar"><span class="term-dots" aria-hidden="true"></span>backend</p>
+                  <div class="cmd-wrap"><pre class="cmd"><span class="c"># Clone the repo</span>
+<span class="k">git</span> clone <span class="u">https://github.com/AdamYahmadi/InfraLens.git</span>
+<span class="k">cd</span> <span class="u">InfraLens/backend</span>
+
+<span class="c"># Set up the environment</span>
+<span class="k">python</span> <span class="f">-m</span> venv venv &amp;&amp; <span class="k">source</span> <span class="u">venv/bin/activate</span>
+<span class="k">pip</span> install <span class="f">-r</span> <span class="u">requirements.txt</span>
+
+<span class="c"># Add your Proxmox API token and SSH credentials</span>
+<span class="k">cp</span> <span class="u">.env.example</span> <span class="u">.env</span>
+
+<span class="c"># Run</span>
+<span class="k">python</span> <span class="u">main.py</span></pre><button class="copy" type="button">Copy</button></div>
+                </div>
+                <div class="term">
+                  <p class="term-bar"><span class="term-dots" aria-hidden="true"></span>frontend</p>
+                  <div class="cmd-wrap"><pre class="cmd"><span class="c"># Install dependencies</span>
+<span class="k">cd</span> <span class="u">InfraLens/frontend</span>
+<span class="k">npm</span> install
+
+<span class="c"># Point it at your backend in .env</span>
+VITE_API_URL=<span class="s">"http://127.0.0.1:8756"</span>
+
+<span class="c"># Start the dev server</span>
+<span class="k">npm</span> run dev</pre><button class="copy" type="button">Copy</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot dark">
+      <div class="wrap">
+        <div class="foot-top">
+          <div class="foot-author">
+            <p>Built by</p>
+            <a href="https://adamyahmadi.com">Adam Yahmadi <span aria-hidden="true">↗</span></a>
+          </div>
+          <ul class="foot-links">
+            <li><a href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/AdamYahmadi/InfraLens/issues" target="_blank" rel="noopener">Report an issue</a></li>
+            <li><a href="https://github.com/AdamYahmadi/InfraLens#readme" target="_blank" rel="noopener">Docs</a></li>
+          </ul>
+        </div>
+        <p class="foot-bottom">InfraLens · open source under the MIT license · 2026</p>
+      </div>
     </footer>
 
+    <dialog class="lightbox" id="lightbox" aria-label="Screenshot">
+      <div class="lb-bar">
+        <button type="button" id="lb-size">Actual size</button>
+        <button type="button" id="lb-close">Close</button>
+      </div>
+      <div class="lb-stage" id="lb-stage">
+        <img id="lightbox-img" src="" alt="" />
+      </div>
+    </dialog>
+
     <script>
-      function openLightbox(src) {
-        const lb = document.getElementById("lightbox");
-        document.getElementById("lightbox-img").src = src;
-        lb.style.display = "flex";
-        document.body.style.overflow = "hidden";
-      }
-      function closeLightbox() {
-        document.getElementById("lightbox").style.display = "none";
-        document.body.style.overflow = "";
-      }
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeLightbox();
+      const nav = document.getElementById("nav");
+      const onScroll = () =>
+        nav.classList.toggle("scrolled", window.scrollY > 8);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      const lb = document.getElementById("lightbox");
+      const lbImg = document.getElementById("lightbox-img");
+      const lbStage = document.getElementById("lb-stage");
+      const lbSize = document.getElementById("lb-size");
+      const setActual = (on) => {
+        lbStage.classList.toggle("actual", on);
+        lbSize.textContent = on ? "Fit to screen" : "Actual size";
+        lbImg.style.width = on ? lbImg.naturalWidth / (+lb.dataset.dpr || 2) + "px" : "";
+      };
+      document.querySelectorAll("[data-zoom]").forEach((el) => {
+        el.addEventListener("click", () => {
+          const img = el.querySelector("img");
+          lbImg.src = el.dataset.src || img.currentSrc || img.getAttribute("src");
+          lbImg.alt = img.alt;
+          lb.dataset.dpr = el.dataset.dpr || 2;
+          setActual(false);
+          lb.showModal();
+        });
+      });
+      lbSize.addEventListener("click", () =>
+        setActual(!lbStage.classList.contains("actual")),
+      );
+      lbImg.addEventListener("click", () =>
+        setActual(!lbStage.classList.contains("actual")),
+      );
+      document.getElementById("lb-close").addEventListener("click", () => lb.close());
+      lbStage.addEventListener("click", (e) => {
+        if (e.target === lbStage) lb.close();
       });
 
-      const macUrl =
-        "https://github.com/AdamYahmadi/InfraLens/releases/download/v0.2.0/InfraLens_0.2.0_aarch64.dmg";
-      function setOS(os, btn) {
-        document
-          .querySelectorAll(".os-tab")
-          .forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const mainBtn = document.getElementById("dl-main-btn");
-        const subText = document.getElementById("dl-sub-text");
-        const linuxOpts = document.getElementById("linux-opts");
-        if (os === "mac") {
-          mainBtn.href = macUrl;
-          mainBtn.style.display = "inline-flex";
-          subText.textContent = "macOS · Apple Silicon (.dmg)";
-          linuxOpts.style.display = "none";
-        } else {
-          mainBtn.style.display = "none";
-          subText.textContent = "Linux · x86_64 — choose your format";
-          linuxOpts.style.display = "flex";
-        }
-      }
+      const navLinks = [...document.querySelectorAll(".nav-links a")];
+      const sections = navLinks.map((a) => document.querySelector(a.getAttribute("href")));
+      const markNav = () => {
+        const y = window.innerHeight * 0.35;
+        let current = -1;
+        sections.forEach((sec, i) => {
+          if (sec && sec.getBoundingClientRect().top <= y) current = i;
+        });
+        navLinks.forEach((a, i) => a.setAttribute("aria-current", i === current ? "true" : "false"));
+      };
+      markNav();
+      window.addEventListener("scroll", markNav, { passive: true });
 
-      function tab(btn, id) {
-        document
-          .querySelectorAll(".itab")
-          .forEach((t) => t.classList.remove("active"));
-        document
-          .querySelectorAll(".install-pane")
-          .forEach((p) => p.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById(id).classList.add("active");
-      }
+      const ua = navigator.userAgent;
+      const isWindows = /Windows/.test(ua);
 
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add("in");
-              io.unobserve(e.target);
-            }
-          });
-        },
-        { threshold: 0.08 },
-      );
-      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      if (isWindows) document.getElementById("p-note").hidden = false;
+
+      document
+        .querySelectorAll(".graph-pan, .win-pan")
+        .forEach((el) => {
+          el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+        });
+
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const text = btn.previousElementSibling.textContent.trim();
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = "Copied";
+            btn.classList.add("done");
+            setTimeout(() => {
+              btn.textContent = "Copy";
+              btn.classList.remove("done");
+            }, 1600);
+          } catch {}
+        });
+      });
+
     </script>
   </body>
 </html>

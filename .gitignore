@@ -1,0 +1,4 @@
+.DS_Store
+scripts/capture/node_modules/
+scripts/capture/.build/
+scripts/capture/out/

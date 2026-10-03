@@ -6,12 +6,29 @@
     <title>Adam Yahmadi | CS @ TUM</title>
     <meta
       name="description"
-      content="Adam Yahmadi — Computer Science student at TU Munich. Scientific computing, machine learning, and systems engineering."
+      content="Adam Yahmadi, Computer Science student at TU Munich building software for real-world systems: backend development, numerical optimization, and applied AI."
     />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0e1115" />
+    <link rel="canonical" href="https://adamyahmadi.com/" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://adamyahmadi.com/" />
+    <meta property="og:title" content="Adam Yahmadi | CS @ TUM" />
+    <meta
+      property="og:description"
+      content="Computer Science student at TU Munich building software for real-world systems: optimization, infrastructure tools, and computer vision."
+    />
+    <meta property="og:image" content="https://adamyahmadi.com/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://adamyahmadi.com/assets/og-image.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,650;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -22,1436 +39,1397 @@
         margin: 0;
         padding: 0;
       }
+
       :root {
-        --bg: #0a0908;
-        --surface: #121110;
-        --border: #242220;
-        --border-bright: #3a362f;
-        --accent: #b3915b;
-        --text: #ece7dc;
-        --muted: #a39c8f;
-        --faint: #726b5e;
-        --ff-serif: "Fraunces", "Iowan Old Style", serif;
-        --ff-sans: "Inter", -apple-system, sans-serif;
-        --ff-mono: "JetBrains Mono", monospace;
-        --max: 1180px;
+        --bg: #0e1115;
+        --surface: #151a20;
+        --text: #e9ecef;
+        --muted: #9aa2ad;
+        --line: #252a31;
+        --line-strong: #353c45;
+        --accent: #3dd68c;
+        --accent-soft: rgba(61, 214, 140, 0.1);
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3),
+          0 16px 40px -16px rgba(0, 0, 0, 0.6);
+        --ff-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+        --ff-body: "Hanken Grotesk", -apple-system, "Segoe UI", sans-serif;
+        --max: 1120px;
+        --gutter: clamp(16px, 5vw, 48px);
+        color-scheme: dark;
       }
+
       @media (prefers-reduced-motion: no-preference) {
         html {
           scroll-behavior: smooth;
         }
       }
+      html {
+        scroll-padding-top: 80px;
+      }
       body {
-        font-family: var(--ff-sans);
+        font-family: var(--ff-body);
+        font-size: 1.0625rem;
+        line-height: 1.6;
         background: var(--bg);
         color: var(--text);
-        line-height: 1.6;
         -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      img {
+        display: block;
+        max-width: 100%;
       }
       a {
         color: inherit;
-        text-decoration: none;
       }
-      a:focus-visible,
-      button:focus-visible,
-      summary:focus-visible {
+      :focus-visible {
         outline: 2px solid var(--accent);
         outline-offset: 3px;
+        border-radius: 4px;
+      }
+      ::selection {
+        background: var(--accent);
+        color: var(--bg);
+      }
+
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 var(--gutter);
       }
 
       .skip-link {
         position: absolute;
-        left: -9999px;
-        top: 0;
-        z-index: 1000;
+        left: 16px;
+        top: -100px;
+        z-index: 100;
+        padding: 0.6rem 1rem;
         background: var(--text);
         color: var(--bg);
-        font-family: var(--ff-mono);
-        font-size: 0.85rem;
-        padding: 0.75rem 1.1rem;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
       }
       .skip-link:focus {
-        left: 1rem;
-        top: 1rem;
+        top: 12px;
       }
 
-      nav {
+      .site-nav {
         position: sticky;
         top: 0;
-        z-index: 100;
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
+        z-index: 50;
+        background: color-mix(in srgb, var(--bg) 85%, transparent);
+        backdrop-filter: saturate(160%) blur(12px);
+        -webkit-backdrop-filter: saturate(160%) blur(12px);
+        border-bottom: 1px solid var(--line);
       }
       .nav-inner {
-        max-width: var(--max);
-        margin: 0 auto;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 1.35rem 2rem;
-        gap: 1.5rem;
+        justify-content: space-between;
+        height: 64px;
+        gap: 1rem;
       }
       .nav-logo {
-        font-size: 0.92rem;
-        font-weight: 500;
+        font-family: var(--ff-display);
+        font-weight: 600;
+        font-size: 1.05rem;
         letter-spacing: -0.01em;
-        color: var(--text);
-        white-space: nowrap;
+        text-decoration: none;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 1.75rem;
       }
       .nav-right {
         display: flex;
         align-items: center;
-        gap: 2.25rem;
+        gap: 0.25rem;
       }
       .nav-links {
         display: flex;
-        gap: 1.9rem;
         list-style: none;
+        gap: 0.1rem;
+      }
+      .nav-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        color: var(--muted);
+        transition: color 0.15s ease, background-color 0.15s ease;
+      }
+      .nav-icon:hover {
+        color: var(--text);
+        background: var(--accent-soft);
+      }
+      .nav-icon svg {
+        width: 19px;
+        height: 19px;
       }
       .nav-links a {
-        font-size: 0.82rem;
-        font-family: var(--ff-mono);
-        letter-spacing: 0.02em;
+        display: block;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
         color: var(--muted);
-        padding-bottom: 0.3rem;
-        border-bottom: 1px solid transparent;
-        transition:
-          color 0.15s,
-          border-color 0.15s;
+        text-decoration: none;
+        transition: color 0.15s ease, background-color 0.15s ease;
       }
-      .nav-links a:hover {
-        color: var(--text);
-      }
+      .nav-links a:hover,
       .nav-links a.active {
-        color: var(--text);
-        border-bottom-color: var(--accent);
+        color: var(--accent);
       }
-      .nav-cta {
-        font-size: 0.85rem;
-        font-weight: 500;
-        padding-bottom: 0.15rem;
+      .icon-btn {
+        display: inline-grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: transparent;
         color: var(--text);
-        border-bottom: 1px solid var(--border-bright);
-        transition: border-color 0.15s;
+        cursor: pointer;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
       }
-      .nav-cta:hover {
-        border-color: var(--text);
+      .icon-btn:hover {
+        border-color: var(--line-strong);
+        background: var(--surface);
+      }
+      .icon-btn svg {
+        width: 18px;
+        height: 18px;
       }
       .nav-toggle {
         display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        width: 40px;
-        height: 40px;
-        margin: -8px -8px -8px 0;
-        background: none;
-        border: none;
-        cursor: pointer;
-        flex-shrink: 0;
-      }
-      .nav-toggle span {
-        display: block;
-        width: 20px;
-        height: 1px;
-        background: var(--text);
-        transition:
-          transform 0.2s ease,
-          opacity 0.2s ease;
-      }
-      nav.nav-open .nav-toggle span:nth-child(1) {
-        transform: translateY(6px) rotate(45deg);
-      }
-      nav.nav-open .nav-toggle span:nth-child(2) {
-        opacity: 0;
-      }
-      nav.nav-open .nav-toggle span:nth-child(3) {
-        transform: translateY(-6px) rotate(-45deg);
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .nav-toggle span {
-          transition: none;
-        }
       }
 
-      .hero {
-        position: relative;
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: 3.5rem 2rem 5.5rem;
-        overflow: hidden;
-      }
-      .hero-trace {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 150px;
-        z-index: 0;
-        pointer-events: none;
-      }
-      .hero-trace path {
-        fill: none;
-        stroke: var(--accent);
-        stroke-width: 1.4;
-        opacity: 0.32;
-        stroke-dasharray: 2000;
-        stroke-dashoffset: 0;
-      }
-      .hero-trace circle {
-        fill: var(--accent);
-        opacity: 0.5;
-      }
-      @media (prefers-reduced-motion: no-preference) {
-        .hero-trace path {
-          animation: draw 1.8s ease-out 0.15s both;
-        }
-      }
-      @keyframes draw {
-        from {
-          stroke-dashoffset: 2000;
-        }
-        to {
-          stroke-dashoffset: 0;
-        }
-      }
-
-      .hero-top {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-bottom: 3rem;
-        font-family: var(--ff-mono);
-        font-size: 0.75rem;
-        letter-spacing: 0.04em;
-        color: var(--faint);
-      }
-      .hero-top span::before {
-        content: "+ ";
-        color: var(--accent);
-      }
-
-      .hero-main {
-        position: relative;
-        z-index: 1;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: end;
-        gap: 2rem 3.5rem;
-        padding-bottom: 2.5rem;
-        margin-bottom: 2.25rem;
-        border-bottom: 1px solid var(--border);
-      }
-      .hero-name {
-        font-family: var(--ff-serif);
-        font-weight: 600;
-        font-size: clamp(3.2rem, 9vw, 7.2rem);
-        line-height: 0.94;
-        letter-spacing: -0.03em;
-      }
-      .hero-name em {
-        font-style: italic;
-        font-weight: 500;
-        color: var(--muted);
-      }
-      .hero-name::after {
-        content: "";
-        display: block;
-        width: 64px;
-        height: 3px;
-        background: var(--accent);
-        margin-top: 1.4rem;
-      }
-      .hero-side {
-        display: flex;
-        flex-direction: column;
-        width: 236px;
-        border-top: 1px solid var(--border-bright);
-      }
-      .hs-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 0.65rem 0;
-        border-bottom: 1px solid var(--border);
-        font-size: 0.85rem;
-      }
-      .hs-row .lab {
-        font-family: var(--ff-mono);
-        font-size: 0.72rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--faint);
-      }
-      .hs-row .val {
-        color: var(--text);
-        text-align: right;
-      }
-
-      .hero-tag {
-        position: relative;
-        z-index: 1;
-        font-size: 1.1rem;
-        color: var(--muted);
-        max-width: 600px;
-        font-weight: 400;
-        line-height: 1.65;
-        margin-bottom: 2.5rem;
-      }
-      .hero-tag p + p {
-        margin-top: 0.6rem;
-      }
-      .hero-tag strong {
-        color: var(--text);
-        font-weight: 500;
-      }
-      .hero-meta {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.5rem 1.15rem;
-        padding-top: 1.6rem;
-        border-top: 1px solid var(--border);
-        font-family: var(--ff-mono);
-        font-size: 0.82rem;
-        color: var(--muted);
-      }
-      .hero-meta a {
-        color: var(--muted);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-color: var(--border-bright);
-        transition:
-          color 0.15s,
-          text-decoration-color 0.15s;
-      }
-      .hero-meta a:hover {
-        color: var(--text);
-        text-decoration-color: var(--text);
-      }
-      .hero-meta .sep {
-        color: var(--border-bright);
-      }
-
-      section.block {
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: 4.5rem 2rem;
-        border-top: 1px solid var(--border);
-      }
-      .section-header {
-        display: flex;
-        align-items: baseline;
-        gap: 1.25rem;
-        margin-bottom: 3rem;
-      }
-      .section-num {
-        font-family: var(--ff-mono);
-        font-size: 0.75rem;
-        color: var(--faint);
-        letter-spacing: 0.05em;
-      }
-      .section-num::before {
-        content: "+ ";
-        color: var(--accent);
-      }
-      .section-header h2 {
-        font-family: var(--ff-serif);
-        font-style: italic;
-        font-size: 1.7rem;
-        font-weight: 500;
-        letter-spacing: -0.01em;
-        white-space: nowrap;
-      }
-      .section-header::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: var(--border);
-      }
-
-      .about-grid {
-        display: grid;
-        grid-template-columns: 1.15fr 1fr;
-        gap: 3.5rem;
-        align-items: start;
-      }
-      .about-lede {
-        font-family: var(--ff-serif);
-        font-size: 1.5rem;
-        font-weight: 500;
-        line-height: 1.4;
-        letter-spacing: -0.01em;
-        color: var(--text);
-        margin-bottom: 1.4rem;
-      }
-      .about-sub {
-        color: var(--muted);
-        font-size: 0.98rem;
-        line-height: 1.75;
-        max-width: 56ch;
-        margin-bottom: 2rem;
-      }
-      .about-map-label {
-        font-family: var(--ff-mono);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--faint);
-        margin-bottom: 1.4rem;
-      }
-      .ix-rail {
-        position: relative;
-        padding-left: 1.6rem;
-      }
-      .ix-rail::before {
-        content: "";
-        position: absolute;
-        left: 4px;
-        top: 6px;
-        bottom: 6px;
-        width: 1px;
-        background: var(--border-bright);
-      }
-      .ix-item {
-        position: relative;
-        padding-bottom: 1.9rem;
-      }
-      .ix-item:last-child {
-        padding-bottom: 0;
-      }
-      .ix-item::before {
-        content: "";
-        position: absolute;
-        left: -1.6rem;
-        top: 4px;
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: var(--bg);
-        border: 1.5px solid var(--border-bright);
-        transition:
-          border-color 0.15s,
-          background-color 0.15s;
-      }
-      .ix-item.ix-dest::before {
-        border-color: var(--accent);
-        background: var(--accent);
-      }
-      .ix-label {
-        font-family: var(--ff-mono);
-        font-size: 0.85rem;
-        letter-spacing: 0.03em;
-        color: var(--muted);
-        transition: color 0.15s;
-      }
-      .ix-item.ix-dest .ix-label {
-        color: var(--text);
-      }
-      @media (hover: hover) {
-        .ix-item:hover::before {
-          border-color: var(--accent);
-          background: var(--accent);
-        }
-        .ix-item:hover .ix-label {
-          color: var(--text);
-        }
-      }
-
-      @media (max-width: 768px) {
-        .about-grid {
-          grid-template-columns: 1fr;
-          gap: 2.5rem;
-        }
-      }
-      .timeline {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 2.75rem;
-      }
-      .tl-item {
-        position: relative;
-        display: grid;
-        grid-template-columns: 130px 1fr;
-        gap: 2rem;
-      }
-      .tl-meta {
-        font-family: var(--ff-mono);
-        font-size: 0.95rem;
-        color: var(--faint);
-        padding-top: 0.3rem;
-      }
-      .tl-role {
-        font-family: var(--ff-serif);
-        font-size: 1.15rem;
-        font-weight: 500;
-        color: var(--text);
-        margin-bottom: 0.2rem;
-      }
-      .tl-org {
-        font-size: 0.88rem;
-        color: var(--faint);
-        margin-bottom: 0.9rem;
-      }
-      .tl-desc {
-        font-size: 0.94rem;
-        color: var(--muted);
-        line-height: 1.65;
-        max-width: 58ch;
-      }
-      .tl-link {
-        display: inline-block;
-        margin-top: 0.9rem;
-        font-size: 0.85rem;
-        color: var(--text);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-color: var(--border-bright);
-        transition: text-decoration-color 0.15s;
-      }
-      .tl-link:hover {
-        text-decoration-color: var(--text);
-      }
-
-      .proj-carousel {
-        position: relative;
-        border: 1px solid var(--border);
-        background: var(--surface);
-        margin-bottom: 3rem;
-      }
-      .pc-slides {
-        position: relative;
-        width: 100%;
-        height: 460px;
-        overflow: hidden;
-      }
-      .pc-slide {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.5s ease;
-      }
-      .pc-slide.active {
-        opacity: 1;
-        visibility: visible;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .pc-slide {
-          transition: none;
-        }
-      }
-      .pc-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-      }
-      .pc-slide figcaption {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 2.25rem 1.75rem 1.35rem;
-        background: linear-gradient(
-          to top,
-          rgba(10, 9, 8, 0.96) 0%,
-          rgba(10, 9, 8, 0.78) 50%,
-          transparent 100%
-        );
-      }
-      .pc-cap-top {
-        display: flex;
-        align-items: baseline;
-        gap: 0.85rem;
-        margin-bottom: 0.55rem;
-      }
-      .pc-cap-top .proj-num {
-        font-family: var(--ff-mono);
-        font-size: 0.76rem;
-        color: var(--accent);
-      }
-      .pc-cap-top .proj-title {
-        font-family: var(--ff-serif);
-        font-size: 1.85rem;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        color: var(--text);
-      }
-      .pc-desc {
-        font-size: 0.92rem;
-        color: var(--muted);
-        line-height: 1.7;
-        max-width: 52ch;
-        margin-bottom: 0.85rem;
-      }
-      .pc-foot {
-        display: flex;
-        align-items: baseline;
-        gap: 1.25rem;
-        flex-wrap: wrap;
-        font-family: var(--ff-mono);
-        font-size: 0.74rem;
-        color: var(--faint);
-      }
-      .pc-foot .proj-detail-link {
-        display: inline-block;
-        color: var(--text);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-color: var(--border-bright);
-        transition:
-          text-decoration-color 0.15s,
-          transform 0.15s;
-      }
-      .pc-foot .proj-detail-link:hover {
-        text-decoration-color: var(--text);
-        transform: translateX(3px);
-      }
-      .pc-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 2;
-        width: 34px;
-        height: 34px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(10, 9, 8, 0.55);
-        border: 1px solid var(--border-bright);
-        color: var(--muted);
-        font-family: var(--ff-mono);
-        cursor: pointer;
-        transition:
-          border-color 0.15s,
-          color 0.15s,
-          background-color 0.15s;
-      }
-      .pc-nav:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-        background: rgba(10, 9, 8, 0.8);
-      }
-      .pc-prev {
-        left: 0.85rem;
-      }
-      .pc-next {
-        right: 0.85rem;
-      }
-      .pc-progress {
-        display: flex;
-        gap: 0.4rem;
-        padding: 0.9rem 1.75rem;
-        border-top: 1px solid var(--border);
-      }
-      .pc-bar {
-        flex: 1;
-        padding: 11px 0;
-        border: none;
-        background: none;
-        cursor: pointer;
-      }
-      .pc-bar-track {
-        display: block;
-        height: 2px;
-        background: rgba(236, 231, 220, 0.14);
-        position: relative;
-        overflow: hidden;
-        transition: height 0.15s;
-      }
-      .pc-bar-fill {
-        position: absolute;
-        inset: 0;
-        width: 0%;
-        background: var(--accent);
-      }
-      .pc-bar.active .pc-bar-track {
-        height: 3px;
-        background: rgba(236, 231, 220, 0.28);
-      }
-      .pc-bar.active .pc-bar-fill {
-        width: 0%;
-        animation: pcFill 5000ms linear forwards;
-      }
-      .pc-bar.active .pc-bar-fill.filled {
-        width: 100%;
-      }
-      .pc-progress.paused .pc-bar-fill {
-        animation-play-state: paused;
-      }
-      @keyframes pcFill {
-        from {
-          width: 0%;
-        }
-        to {
-          width: 100%;
-        }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .pc-bar.active .pc-bar-fill {
-          animation: none;
-          width: 100%;
-        }
-      }
-      @media (max-width: 640px) {
-        .pc-progress {
-          padding: 0.85rem 1.15rem;
-        }
-      }
-      @media (max-width: 1024px) {
-        .pc-slides {
-          height: 400px;
-        }
-      }
-      @media (max-width: 640px) {
-        .pc-slides {
-          height: auto;
-          overflow: visible;
-        }
-        .pc-slide {
-          position: static;
-          opacity: 1;
-          visibility: visible;
-          display: none;
-          transition: none;
-        }
-        .pc-slide.active {
-          display: block;
-        }
-        .pc-slide img {
-          height: 280px;
-        }
-        .pc-slide figcaption {
-          position: static;
-          padding: 1.5rem 1.15rem 1.75rem;
-          background: none;
-        }
-        .pc-cap-top .proj-title {
-          font-size: 1.4rem;
-        }
-        .pc-desc {
-          max-width: none;
-        }
-        .pc-nav {
-          top: 140px;
-          width: 30px;
-          height: 30px;
-        }
-      }
-
-      .proj-more-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-      .proj-more-row {
-        display: flex;
-        flex-direction: column;
-        padding: 2.25rem 2.25rem 2.25rem 0;
-      }
-      .proj-more-row:last-child {
-        padding-left: 2.25rem;
-        padding-right: 0;
-        border-left: 1px solid var(--border);
-      }
-      @media (max-width: 640px) {
-        .proj-more-grid {
-          grid-template-columns: 1fr;
-        }
-        .proj-more-row {
-          padding: 2rem 0;
-        }
-        .proj-more-row:last-child {
-          border-left: none;
-          border-top: 1px solid var(--border);
-          padding-left: 0;
-        }
-      }
-      .pmr-head {
-        display: flex;
-        align-items: baseline;
-        flex-wrap: wrap;
-        row-gap: 0.3rem;
-        column-gap: 1rem;
-        margin-bottom: 0.65rem;
-      }
-      .pmr-num {
-        font-family: var(--ff-mono);
-        font-size: 0.8rem;
-        color: var(--faint);
-        flex-shrink: 0;
-        transition: color 0.15s;
-      }
-      .pmr-title {
-        font-family: var(--ff-serif);
-        font-size: 1.25rem;
-        font-weight: 500;
-        color: var(--text);
-        transition: transform 0.15s;
-      }
-      .pmr-tags {
-        font-family: var(--ff-mono);
-        font-size: 0.72rem;
-        color: var(--faint);
-        margin-left: auto;
-        white-space: nowrap;
-        display: none;
-      }
-      @media (min-width: 640px) {
-        .pmr-tags {
-          display: block;
-        }
-      }
-      .pmr-desc {
-        font-size: 0.92rem;
-        color: var(--muted);
-        line-height: 1.7;
-        max-width: 48ch;
-        margin-bottom: 0.9rem;
-        flex: 1;
-      }
-      .pmr-foot {
-        display: flex;
-        align-items: baseline;
-        gap: 1.25rem;
-        flex-wrap: wrap;
-        font-family: var(--ff-mono);
-        font-size: 0.74rem;
-        color: var(--faint);
-      }
-      .proj-detail-link {
-        display: inline-block;
-        color: var(--text);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-color: var(--border-bright);
-        transition:
-          text-decoration-color 0.15s,
-          transform 0.15s;
-      }
-      .proj-detail-link:hover {
-        text-decoration-color: var(--text);
-        transform: translateX(3px);
-      }
-      @media (hover: hover) {
-        .proj-more-row:hover .pmr-num {
-          color: var(--accent);
-        }
-        .proj-more-row:hover .pmr-title {
-          transform: translateX(4px);
-        }
-        .proj-more-row:hover .proj-detail-link {
-          text-decoration-color: var(--text);
-        }
-      }
-
-      .skills-wrap {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2.5rem 3rem;
-      }
-      .skills-group {
-        padding-bottom: 1.6rem;
-        border-bottom: 1px solid var(--border);
-      }
-      .skills-group h3 {
-        font-family: var(--ff-mono);
-        font-size: 0.72rem;
-        font-weight: 500;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--faint);
-        margin-bottom: 0.65rem;
-      }
-      .skills-list {
-        font-size: 0.98rem;
-        color: var(--text);
-        line-height: 1.7;
-      }
-
-      footer {
-        padding: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        flex-wrap: wrap;
-        gap: 0.5rem 1.5rem;
-        color: var(--faint);
-        font-size: 0.85rem;
-        border-top: 1px solid var(--border);
-        max-width: var(--max);
-        margin: 0 auto;
-      }
-      footer a {
-        color: var(--faint);
-        transition: color 0.15s;
-      }
-      footer a:hover {
-        color: var(--text);
-      }
-      .footer-links {
-        display: flex;
-        align-items: baseline;
-        gap: 1.25rem;
-      }
-      .footer-clock {
-        font-family: var(--ff-mono);
-        font-size: 0.78rem;
-        color: var(--faint);
-      }
-
-      @media (max-width: 768px) {
-        .hero {
-          padding: 2.5rem 1.5rem 4rem;
-        }
-        .hero-main {
-          grid-template-columns: 1fr;
-        }
-        .hero-side {
-          width: 100%;
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-        .hs-row {
-          width: 50%;
-          padding-right: 1rem;
-        }
-        section.block {
-          padding: 3.5rem 1.5rem;
-        }
-        .section-header h2 {
-          font-size: 1.35rem;
-        }
-        .tl-item {
-          grid-template-columns: 1fr;
-          gap: 0.4rem;
-        }
-        .tl-meta {
-          padding-top: 0;
-        }
-        .skills-wrap {
-          grid-template-columns: 1fr;
-        }
+      @media (max-width: 980px) {
         .nav-toggle {
-          display: flex;
-        }
-        .nav-cta {
-          padding: 0.5rem 0;
+          display: inline-grid;
         }
         .nav-links {
+          display: none;
           position: absolute;
-          top: 100%;
+          top: 64px;
           left: 0;
           right: 0;
           flex-direction: column;
-          align-items: stretch;
           gap: 0;
+          margin: 0;
+          padding: 0.5rem var(--gutter) 1rem;
           background: var(--bg);
-          border-bottom: 1px solid var(--border);
-          padding: 0.5rem 1.5rem 1rem;
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(-8px);
-          transition:
-            opacity 0.2s ease,
-            transform 0.2s ease,
-            visibility 0.2s;
+          border-bottom: 1px solid var(--line);
         }
-        nav.nav-open .nav-links {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
-        }
-        .nav-links li {
-          width: 100%;
+        .site-nav.nav-open .nav-links {
+          display: flex;
         }
         .nav-links a {
-          display: block;
-          padding: 0.95rem 0;
-          border-bottom: 1px solid var(--border);
-          font-size: 0.95rem;
-        }
-        .nav-links li:last-child a {
-          border-bottom: none;
+          padding: 0.75rem 0;
+          font-size: 1.05rem;
+          border-radius: 0;
         }
       }
-      @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
-        .nav-links {
+
+      .text-link {
+        color: var(--accent);
+        font-weight: 500;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        text-underline-offset: 3px;
+        transition: text-decoration-color 0.15s ease;
+      }
+      .text-link:hover {
+        text-decoration-color: currentColor;
+      }
+
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: min(60vh, 640px);
+        min-height: min(60svh, 640px);
+        padding-top: 3rem;
+        padding-bottom: 1.5rem;
+        text-align: center;
+      }
+      .hero h1 {
+        font-family: var(--ff-display);
+        font-weight: 500;
+        font-size: clamp(3rem, 9vw, 6.25rem);
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        font-variation-settings: "opsz" 96;
+        min-height: 1.05em;
+      }
+      .hero-name {
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .caret {
+        display: inline-block;
+        width: 0.06em;
+        height: 0.85em;
+        margin-left: 0.06em;
+        vertical-align: -0.05em;
+        background: var(--accent);
+        animation: blink 1s steps(1) infinite;
+      }
+      .caret.done {
+        animation: blink 1s steps(1) 3 forwards;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+      .hero-desc {
+        max-width: 52ch;
+        margin-top: 1.5rem;
+        font-size: clamp(1.05rem, 1.6vw, 1.15rem);
+        color: var(--muted);
+      }
+      .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-top: 2.5rem;
+        padding: 0.8rem 1.9rem;
+        border: 1px solid var(--accent);
+        border-radius: 8px;
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+      }
+      .hero-cta:hover {
+        background: var(--accent-soft);
+      }
+      .hero-cta svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .section {
+        padding: clamp(3.5rem, 10vw, 7.5rem) 0;
+      }
+      .section-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+        gap: 2rem clamp(2rem, 5vw, 4rem);
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-family: var(--ff-display);
+        font-weight: 600;
+        font-size: clamp(1.6rem, 3vw, 2rem);
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+      }
+      .section-title::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: 2.5rem;
+        max-width: 14rem;
+        height: 1px;
+        background: var(--line-strong);
+      }
+      .section-head .section-note {
+        margin-top: 0.6rem;
+        font-size: 0.95rem;
+        color: var(--muted);
+        max-width: 26ch;
+      }
+      @media (min-width: 900px) {
+        .section-head {
+          position: sticky;
+          top: 96px;
+          align-self: start;
+        }
+      }
+      @media (max-width: 899px) {
+        .section-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .about p {
+        max-width: 64ch;
+        color: var(--muted);
+      }
+      .about p + p {
+        margin-top: 1rem;
+      }
+      .about em {
+        font-style: normal;
+        font-weight: 500;
+        color: var(--accent);
+      }
+      .about .about-lead {
+        color: var(--text);
+        font-size: 1.3rem;
+        line-height: 1.5;
+        letter-spacing: -0.01em;
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--line);
+      }
+      .facts dt {
+        font-size: 0.875rem;
+        color: var(--muted);
+        margin-bottom: 0.25rem;
+      }
+      .facts dd {
+        font-weight: 500;
+      }
+
+      .timeline {
+        list-style: none;
+      }
+      .tl-item {
+        display: grid;
+        grid-template-columns: 9.5rem minmax(0, 1fr);
+        gap: 0.25rem 2rem;
+        padding: 1.75rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .tl-item:first-child {
+        padding-top: 0;
+      }
+      .tl-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .tl-date {
+        font-size: 0.925rem;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        padding-top: 0.2rem;
+      }
+      .tl-role {
+        font-family: var(--ff-display);
+        font-weight: 600;
+        font-size: 1.25rem;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+      }
+      .tl-org {
+        color: var(--muted);
+        margin-top: 0.15rem;
+      }
+      .tl-body ul:not(.tags) {
+        margin-top: 0.85rem;
+        padding-left: 1.1rem;
+        max-width: 66ch;
+        color: var(--muted);
+      }
+      .tl-body ul:not(.tags) li + li {
+        margin-top: 0.45rem;
+      }
+      .tl-body li::marker {
+        color: var(--line-strong);
+      }
+      .tl-body p {
+        margin-top: 0.85rem;
+        max-width: 66ch;
+        color: var(--muted);
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        list-style: none;
+        margin-top: 1rem;
+      }
+      .tags li {
+        font-size: 0.825rem;
+        font-weight: 500;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--text);
+      }
+      .tl-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1.25rem;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+      }
+      @media (max-width: 600px) {
+        .tl-item {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+      }
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease,
+          border-color 0.25s ease;
+      }
+      .card:hover,
+      .card:focus-within {
+        border-color: var(--line-strong);
+        box-shadow: var(--shadow);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .card:hover {
+          transform: translateY(-3px);
+        }
+      }
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 1.5rem;
+      }
+      .card-title {
+        font-family: var(--ff-display);
+        font-weight: 600;
+        font-size: 1.4rem;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+      .card-kicker {
+        color: var(--muted);
+        margin-top: 0.2rem;
+      }
+      .card-desc {
+        margin-top: 0.9rem;
+        color: var(--muted);
+        max-width: 68ch;
+      }
+      .card .tags {
+        margin-top: 1.1rem;
+      }
+      .card-foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1.25rem;
+        margin-top: auto;
+        padding-top: 1.25rem;
+        font-size: 0.95rem;
+      }
+      .card-stats {
+        margin-left: auto;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .card-stats:empty {
+        display: none;
+      }
+      .card-small .card-body {
+        padding: 1.35rem 1.5rem;
+      }
+      .card-small .card-title {
+        font-size: 1.2rem;
+      }
+      @media (max-width: 720px) {
+        .projects {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .projects-wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.25rem;
+        min-width: 0;
+      }
+      .section-stack {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2rem;
+      }
+      .section-stack .section-head {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem 2rem;
+      }
+      .section-stack .section-note {
+        max-width: none;
+      }
+      .icon-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .gh-icon,
+      .link-icon {
+        width: 16px;
+        height: 16px;
+      }
+      .arrow-icon {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.2s ease;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .icon-link:hover .arrow-icon {
+          transform: translateX(3px);
+        }
+      }
+      .spotlight {
+        position: relative;
+      }
+      .sl-viewport {
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #0b0d10;
+        box-shadow: var(--shadow);
+        transition: transform 0.35s ease;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .sl-viewport:hover {
+          transform: scale(1.005);
+        }
+      }
+      .sl-track {
+        display: flex;
+        transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sl-track {
           transition: none;
         }
       }
-      @media (max-width: 420px) {
-        .hero-top .hero-coord {
+      .sl-slide {
+        position: relative;
+        flex: 0 0 100%;
+        min-width: 0;
+        aspect-ratio: 2.3 / 1;
+        color: #f2f4f7;
+      }
+      .sl-media,
+      .sl-media img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .sl-media img {
+        object-fit: cover;
+        object-position: top center;
+        opacity: 0.92;
+        transition: opacity 0.4s ease;
+      }
+      .sl-slide:hover .sl-media img {
+        opacity: 1;
+      }
+      .sl-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(8, 10, 13, 0.97) 0%,
+          rgba(8, 10, 13, 0.92) 36%,
+          rgba(8, 10, 13, 0.55) 56%,
+          rgba(8, 10, 13, 0) 76%
+        );
+      }
+      .sl-caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: clamp(1.25rem, 3vw, 2.25rem);
+      }
+      .sl-caption {
+        text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+      }
+      .sl-title {
+        font-family: var(--ff-display);
+        font-weight: 600;
+        font-size: clamp(1.6rem, 3vw, 2.25rem);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+      .sl-desc {
+        margin-top: 0.5rem;
+        max-width: 56ch;
+        color: rgba(242, 244, 247, 0.85);
+      }
+      .sl-links {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .sl-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        color: #f2f4f7;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(6px);
+        transition: color 0.15s ease, border-color 0.15s ease,
+          background-color 0.15s ease;
+      }
+      .sl-icon:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .sl-icon svg {
+        width: 19px;
+        height: 19px;
+      }
+      .sl-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1rem;
+      }
+      .sl-dots {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .sl-dot {
+        position: relative;
+        width: 44px;
+        height: 32px;
+        border: 0;
+        background: none;
+        cursor: pointer;
+      }
+      .sl-dot::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 50%;
+        height: 3px;
+        margin-top: -1.5px;
+        border-radius: 3px;
+        background: var(--line-strong);
+        transition: background-color 0.2s ease;
+      }
+      .sl-dot:hover::before {
+        background: var(--muted);
+      }
+      .sl-dot[aria-selected="true"]::before {
+        background: var(--accent);
+      }
+      .sl-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      @media (max-width: 1000px) {
+        .sl-slide {
+          aspect-ratio: 16 / 9;
+        }
+      }
+      @media (max-width: 640px) {
+        .sl-viewport {
+          background: var(--surface);
+        }
+        .sl-slide {
+          aspect-ratio: auto;
+          display: flex;
+          flex-direction: column;
+          color: var(--text);
+        }
+        .sl-media {
+          position: relative;
+          aspect-ratio: 2.3 / 1;
+          border-bottom: 1px solid var(--line);
+        }
+        .sl-media img {
+          opacity: 1;
+        }
+        .sl-media::after {
           display: none;
+        }
+        .sl-caption {
+          position: static;
+          padding: 1.25rem;
+        }
+        .sl-desc {
+          color: var(--muted);
+        }
+        .sl-icon {
+          color: var(--text);
+          background: transparent;
+          border-color: var(--line-strong);
+        }
+      }
+
+      .skills {
+        display: grid;
+        gap: 0;
+      }
+      .skill-row {
+        display: grid;
+        grid-template-columns: 12rem minmax(0, 1fr);
+        gap: 0.5rem 2rem;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .skill-row:first-child {
+        padding-top: 0;
+      }
+      .skill-row:last-child {
+        border-bottom: none;
+      }
+      .skill-row dt {
+        font-weight: 600;
+      }
+      .skill-row dd {
+        color: var(--muted);
+      }
+      @media (max-width: 600px) {
+        .skill-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      footer {
+        padding: 0 0 3rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .js .reveal {
+          opacity: 0;
+          transform: translateY(12px);
+          transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .js .reveal.in {
+          opacity: 1;
+          transform: none;
+        }
+        .js .hero-desc,
+        .js .hero-cta {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .js .hero.typed .hero-desc,
+        .js .hero.typed .hero-cta {
+          opacity: 1;
+          transform: none;
+        }
+        .js .hero.typed .hero-cta {
+          transition-delay: 0.15s;
         }
       }
     </style>
   </head>
   <body>
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
     <a href="#main" class="skip-link">Skip to content</a>
-    <nav>
-      <div class="nav-inner">
-        <a href="#home" class="nav-logo">Adam Yahmadi</a>
-        <div class="nav-right">
+
+    <nav class="site-nav" aria-label="Main">
+      <div class="wrap nav-inner">
+        <div class="nav-left">
+          <a href="#top" class="nav-logo">Adam Yahmadi</a>
           <ul class="nav-links" id="navLinks">
             <li><a href="#about">About</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#projects">Projects</a></li>
-            <li><a href="#skills">Toolkit</a></li>
+            <li><a href="#university">University</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="resume.html">Résumé</a></li>
           </ul>
-          <a class="nav-cta" href="resume.html">Resume</a>
+        </div>
+        <div class="nav-right">
+          <a class="nav-icon" href="mailto:adam.yahmadi@tum.de" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-7.47 4.67a1 1 0 0 1-1.06 0L4 8.24V6l8 5 8-5v2.24z" /></svg>
+          </a>
+          <a class="nav-icon" href="https://github.com/AdamYahmadi" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+          </a>
+          <a class="nav-icon" href="https://www.linkedin.com/in/adamyahmadi/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" /></svg>
+          </a>
           <button
-            class="nav-toggle"
+            class="icon-btn nav-toggle"
             id="navToggle"
+            type="button"
             aria-expanded="false"
             aria-controls="navLinks"
-            aria-label="Toggle menu"
+            aria-label="Open menu"
           >
-            <span></span><span></span><span></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
           </button>
         </div>
       </div>
     </nav>
 
-    <header class="hero" id="home">
-      <svg
-        class="hero-trace"
-        viewBox="0 0 1200 200"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M0,160 C140,160 170,50 310,70 C450,90 470,175 610,155 C750,135 790,35 930,55 C1050,73 1090,150 1200,130"
-        />
-        <circle cx="310" cy="70" r="3.5" />
-        <circle cx="610" cy="155" r="3.5" />
-        <circle cx="930" cy="55" r="3.5" />
-        <circle cx="1200" cy="130" r="3.5" />
-      </svg>
-      <div class="hero-top">
-        <span class="hero-index">PORTFOLIO</span>
-        <span class="hero-coord">48.1351° N, 11.5820° E — MUNICH</span>
-      </div>
-      <div class="hero-main">
-        <h1 class="hero-name">Adam<br /><em>Yahmadi</em></h1>
-        <div class="hero-side">
-          <div class="hs-row">
-            <span class="lab">Based</span><span class="val">Munich · TUM</span>
-          </div>
-          <div class="hs-row">
-            <span class="lab">Focus</span
-            ><span class="val">ML · Optimization · Systems</span>
-          </div>
-          <div class="hs-row">
-            <span class="lab">Degree</span
-            ><span class="val">B.Sc. Informatics</span>
-          </div>
-          <div class="hs-row">
-            <span class="lab">Languages</span
-            ><span class="val">DE, EN, AR, FR</span>
-          </div>
-        </div>
-      </div>
-      <div class="hero-tag">
-        <p>
-          Computer Science student at <strong>TUM</strong>, working across
-          machine learning, scientific computing, and systems.
-        </p>
-      </div>
-      <div class="hero-meta">
-        <a href="mailto:adam.yahmadi@tum.de">adam.yahmadi@tum.de</a>
-        <span class="sep">·</span>
-        <a href="https://github.com/AdamYahmadi" target="_blank" rel="noopener"
-          >GitHub</a
-        >
-        <span class="sep">·</span>
-        <a
-          href="https://www.linkedin.com/in/adamyahmadi/"
-          target="_blank"
-          rel="noopener"
-          >LinkedIn</a
-        >
-        <span class="sep">·</span>
-        <a href="resume.html">Résumé</a>
-      </div>
+    <header class="wrap hero" id="top">
+      <h1 aria-label="Hi, Adam here.">
+        <span class="type" aria-hidden="true">Hi, <span class="hero-name">Adam</span> here.</span><span class="caret" aria-hidden="true"></span>
+      </h1>
+      <p class="hero-desc">
+        I'm a Computer Science student at TU Munich building software for
+        real-world systems: race-strategy optimizers for solar cars,
+        infrastructure tools, and computer vision pipelines.
+      </p>
+      <a class="hero-cta" href="mailto:adam.yahmadi@tum.de">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-7.47 4.67a1 1 0 0 1-1.06 0L4 8.24V6l8 5 8-5v2.24z" /></svg>
+        Say hi
+      </a>
     </header>
 
     <main id="main">
-      <section class="block" id="about">
-        <div class="section-header">
-          <span class="section-num">01</span>
-          <h2>About</h2>
-        </div>
-        <div class="about-grid">
-          <div class="about-main">
-            <p class="about-lede">
+      <section class="section" id="about" aria-labelledby="about-title">
+        <div class="wrap section-grid reveal">
+          <div class="section-head">
+            <h2 class="section-title" id="about-title">About</h2>
+          </div>
+          <div class="about">
+            <p class="about-lead">
               I enjoy the gap between understanding how something should work
               and actually making it work.
             </p>
-            <p class="about-sub">
-              Most of my work sits somewhere between math, software, and
-              engineering. I've worked on vehicle optimization at TUfast, built
-              simulation and motion-planning tools, and spent a lot of time
-              figuring things out on my own. I enjoy taking an idea, turning it
-              into something that actually runs, and seeing what happens when it
-              meets real-world constraints.
+            <p>
+              My work sits between <em>math</em>, <em>software</em>, and
+              <em>engineering</em>. I've worked on
+              <em>vehicle optimization</em> at TUfast and built
+              <em>simulation and motion-planning tools</em>. I like turning an
+              idea into something that runs and seeing how it holds up against
+              <em>real-world constraints</em>.
             </p>
-          </div>
-          <div class="about-map">
-            <div class="about-map-label">Where it connects</div>
-            <div class="ix-rail">
-              <div class="ix-item">
-                <span class="ix-label">Mathematics</span>
+            <dl class="facts">
+              <div>
+                <dt>Studying</dt>
+                <dd>B.Sc. Informatics, TU Munich</dd>
               </div>
-              <div class="ix-item">
-                <span class="ix-label">Computation</span>
+              <div>
+                <dt>Focus</dt>
+                <dd>Optimization, applied AI, backend</dd>
               </div>
-              <div class="ix-item">
-                <span class="ix-label">ML · Optimization</span>
+              <div>
+                <dt>Languages</dt>
+                <dd>German, English, Arabic, French</dd>
               </div>
-              <div class="ix-item ix-dest">
-                <span class="ix-label">Real systems</span>
-              </div>
-            </div>
+            </dl>
           </div>
         </div>
       </section>
 
-      <section class="block" id="experience">
-        <div class="section-header">
-          <span class="section-num">02</span>
-          <h2>Experience &amp; Education</h2>
+      <section class="section" id="experience" aria-labelledby="exp-title">
+        <div class="wrap section-grid reveal">
+          <div class="section-head">
+            <h2 class="section-title" id="exp-title">Experience &amp; education</h2>
+          </div>
+          <ol class="timeline">
+            <li class="tl-item">
+              <div class="tl-date">2024 – 2025</div>
+              <div class="tl-body">
+                <h3 class="tl-role">Driving Strategy Engineer</h3>
+                <p class="tl-org">TUfast Eco Team, Technical University of Munich</p>
+                <ul>
+                  <li>
+                    Developed the race strategy optimizer for the lux025 solar
+                    car (Bridgestone World Solar Challenge 2025), planning
+                    speed profiles over 3,000 km under energy and race
+                    constraints.
+                  </li>
+                  <li>
+                    Extended the PyTorch vehicle model to optimize speed
+                    profiles with gradient descent and integrated multiple
+                    optimization solvers (IPOPT, ParOpt, ALPSO).
+                  </li>
+                  <li>
+                    Built a PySide6 GUI for running optimizations and wrote
+                    unit tests for the control-stop simulation (pytest,
+                    GitLab CI).
+                  </li>
+                </ul>
+                <ul class="tags" aria-label="Technologies">
+                  <li>Python</li><li>PyTorch</li><li>IPOPT</li><li>PySide6</li><li>pytest</li><li>GitLab CI</li>
+                </ul>
+              </div>
+            </li>
+            <li class="tl-item">
+              <div class="tl-date">2023 – present</div>
+              <div class="tl-body">
+                <h3 class="tl-role">B.Sc. Informatics</h3>
+                <p class="tl-org">Technical University of Munich</p>
+                <p>
+                  Coursework spanning data structures, computer architecture,
+                  autonomous systems, and numerical analysis.
+                </p>
+              </div>
+            </li>
+            <li class="tl-item">
+              <div class="tl-date">2019 – 2023</div>
+              <div class="tl-body">
+                <h3 class="tl-role">Scientific Baccalaureate, Mathematics</h3>
+                <p class="tl-org">Lycée Hrairia 2, Tunis. Highest honors</p>
+              </div>
+            </li>
+          </ol>
         </div>
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-meta">SS 2026</div>
+      </section>
+
+      <section class="section" id="projects" aria-labelledby="proj-title">
+        <div class="wrap section-grid section-stack reveal">
+          <div class="section-head">
             <div>
-              <div class="tl-role">Software: Python and Data Analytics</div>
-              <div class="tl-org">Data Mining Seminar · TU Munich</div>
-              <div class="tl-desc">
-                A comprehensive survey of Python's scientific ecosystem (pandas,
-                NumPy, SciPy, scikit-learn). Examined how these libraries
-                compose into a single iterative workflow spanning data
-                preparation, modeling, and evaluation. Included a runnable Dash
-                dashboard demonstrating an end-to-end analytical pipeline.
-              </div>
-              <a
-                class="tl-link"
-                href="assets/data-mining-paper.pdf"
-                target="_blank"
-                rel="noopener"
-                >Read the paper</a
-              >
-              <a
-                class="tl-link"
-                style="margin-left: 1.2rem"
-                href="https://demo.adamyahmadi.com"
-                target="_blank"
-                rel="noopener"
-                >Dash demo</a
-              >
+              <h2 class="section-title" id="proj-title">Projects</h2>
+              <p class="section-note">Things I've built and shipped on my own.</p>
             </div>
+            <a class="text-link icon-link" href="https://github.com/AdamYahmadi" target="_blank" rel="noopener">
+              View all projects
+              <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
           </div>
-          <div class="tl-item">
-            <div class="tl-meta">WS 25/26</div>
-            <div>
-              <div class="tl-role">Motion Planning for Autonomous Vehicles</div>
-              <div class="tl-org">
-                Chair of Robotics &amp; Real-Time Systems · TU Munich
+          <div class="projects-wrap">
+            <div class="spotlight" id="spotlight" role="region" aria-roledescription="carousel" aria-label="Featured projects">
+              <div class="sl-viewport">
+                <div class="sl-track">
+                  <article class="sl-slide" role="group" aria-roledescription="slide" aria-label="1 of 3: InfraLens" data-repo="InfraLens">
+                    <div class="sl-media"><img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png" alt="InfraLens showing a Proxmox cluster as a topology graph" /></div>
+                    <div class="sl-caption">
+                      <h3 class="sl-title">InfraLens</h3>
+                      <p class="sl-desc">Desktop app that maps Proxmox clusters as a live topology graph, with local-LLM diagnostics.</p>
+                      <div class="sl-links">
+                        <a class="sl-icon" href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener" aria-label="InfraLens source code on GitHub" title="Source code">
+                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+                        </a>
+                        <a class="sl-icon" href="infralens.html" aria-label="InfraLens project page" title="Project page">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                  <article class="sl-slide" role="group" aria-roledescription="slide" aria-label="2 of 3: Vertex" data-repo="vertex">
+                    <div class="sl-media"><img src="assets/vertex-preview.png" alt="Vertex turning a document photo into a clean scan" loading="lazy" /></div>
+                    <div class="sl-caption">
+                      <h3 class="sl-title">Vertex</h3>
+                      <p class="sl-desc">Turns phone photos of documents into clean, scanner-quality PDFs.</p>
+                      <div class="sl-links">
+                        <a class="sl-icon" href="https://github.com/AdamYahmadi/vertex" target="_blank" rel="noopener" aria-label="Vertex source code on GitHub" title="Source code">
+                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+                        </a>
+                        <a class="sl-icon" href="https://vertex.adamyahmadi.com" target="_blank" rel="noopener" aria-label="Vertex live app" title="Live app">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                  <article class="sl-slide" role="group" aria-roledescription="slide" aria-label="3 of 3: mdtopdf" data-repo="mdtopdf">
+                    <div class="sl-media"><img src="assets/mdtopdf-preview.png" alt="mdtopdf live-preview editor" loading="lazy" /></div>
+                    <div class="sl-caption">
+                      <h3 class="sl-title">mdtopdf</h3>
+                      <p class="sl-desc">Converts Markdown to print-ready PDFs with LaTeX math and Mermaid diagrams.</p>
+                      <div class="sl-links">
+                        <a class="sl-icon" href="https://github.com/AdamYahmadi/mdtopdf" target="_blank" rel="noopener" aria-label="mdtopdf source code on GitHub" title="Source code">
+                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+                        </a>
+                        <a class="sl-icon" href="https://mdtopdf.adamyahmadi.com" target="_blank" rel="noopener" aria-label="mdtopdf live app" title="Live app">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                </div>
               </div>
-              <div class="tl-desc">
-                Engineered a computer-vision pipeline extracting road-user
-                trajectories from drone footage into CommonRoad scenarios.
-                Integrated TPH-YOLOv5 for detection, MobileSAM for segmentation,
-                and implemented automated drivability validation checking for
-                kinematic feasibility and collision avoidance.
+              <div class="sl-controls">
+                <div class="sl-dots" role="tablist" aria-label="Choose project">
+                  <button class="sl-dot" type="button" role="tab" aria-label="InfraLens"></button>
+                  <button class="sl-dot" type="button" role="tab" aria-label="Vertex"></button>
+                  <button class="sl-dot" type="button" role="tab" aria-label="mdtopdf"></button>
+                </div>
+                <div class="sl-buttons">
+                  <button class="icon-btn sl-prev" type="button" aria-label="Previous project">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                  </button>
+                  <button class="icon-btn sl-next" type="button" aria-label="Next project">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+                  </button>
+                </div>
               </div>
-              <a
-                class="tl-link"
-                href="assets/commonroad.pdf"
-                target="_blank"
-                rel="noopener"
-                >Read the paper</a
-              >
             </div>
+            <div class="projects">
+            <article class="card card-small" data-repo="cache-simulator">
+              <div class="card-body">
+                <h3 class="card-title">Cache Simulator</h3>
+                <p class="card-kicker">Cycle-accurate cache model</p>
+                <p class="card-desc">
+                  A SystemC simulator comparing direct-mapped and
+                  fully-associative caches, with LRU eviction and per-access
+                  gate-count tracking.
+                </p>
+                <ul class="tags" aria-label="Technologies">
+                  <li>C++</li><li>SystemC</li>
+                </ul>
+                <div class="card-foot">
+                  <a class="text-link icon-link" href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>Source code</a>
+                  <span class="card-stats" data-stats></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card card-small" data-repo="wifi-to-qr">
+              <div class="card-body">
+                <h3 class="card-title">wifi-to-qr</h3>
+                <p class="card-kicker">Command-line utility</p>
+                <p class="card-desc">
+                  Detects the active Wi-Fi connection and prints a scannable
+                  QR code in the terminal so others can join instantly.
+                </p>
+                <ul class="tags" aria-label="Technologies">
+                  <li>Python</li><li>CLI</li>
+                </ul>
+                <div class="card-foot">
+                  <a class="text-link icon-link" href="https://github.com/AdamYahmadi/wifi-to-qr" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>Source code</a>
+                  <span class="card-stats" data-stats></span>
+                </div>
+              </div>
+            </article>
           </div>
-          <div class="tl-item">
-            <div class="tl-meta">2024–2025</div>
-            <div>
-              <div class="tl-role">Driving Strategy Engineer</div>
-              <div class="tl-org">TUfast Eco Team · TU Munich</div>
-              <div class="tl-desc">
-                Developed a solver-agnostic optimization framework to compute
-                energy-optimal speed profiles for the lux025 solar vehicle
-                (Bridgestone World Solar Challenge 2025). Modeled physical
-                constraints including battery SoC, solar irradiance, and
-                aerodynamic drag across interchangeable solvers (IPOPT, ALPSO,
-                Gurobi).
-              </div>
-            </div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-meta">2023–Present</div>
-            <div>
-              <div class="tl-role">B.Sc. Informatics</div>
-              <div class="tl-org">Technical University of Munich</div>
-              <div class="tl-desc">
-                Core coursework spanning data structures, computer architecture,
-                autonomous systems, and advanced numerical analysis.
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <section class="block" id="projects">
-        <div class="section-header">
-          <span class="section-num">03</span>
-          <h2>Selected Projects</h2>
-        </div>
-
-        <div class="proj-carousel" id="projCarousel">
-          <div class="pc-slides">
-            <figure class="pc-slide active" data-repo="InfraLens">
-              <img
-                src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
-                alt="InfraLens dashboard"
-                loading="lazy"
-                onerror="this.style.display = 'none'"
-              />
-              <figcaption>
-                <div class="pc-cap-top">
-                  <span class="proj-num">01</span>
-                  <span class="proj-title">InfraLens</span>
-                </div>
-                <p class="pc-desc">
-                  A self-hosted monitoring utility and LLM diagnostic tool for
-                  Proxmox virtualized clusters. Auto-discovers nodes, VMs, and
-                  LXC containers, renders them as a live interactive topology
-                  graph, and feeds streamed telemetry to a local LLM for
-                  infrastructure diagnostics.
+      <section class="section" id="university" aria-labelledby="uni-title">
+        <div class="wrap section-grid reveal">
+          <div class="section-head">
+            <h2 class="section-title" id="uni-title">University projects</h2>
+            <p class="section-note">Research and coursework at TU Munich.</p>
+          </div>
+          <ol class="timeline">
+            <li class="tl-item">
+              <div class="tl-date">SS 2026</div>
+              <div class="tl-body">
+                <h3 class="tl-role">Python for Data Analytics</h3>
+                <p class="tl-org">Data Mining Seminar, TU Munich</p>
+                <p>
+                  A survey of Python's scientific ecosystem (pandas, NumPy,
+                  SciPy, scikit-learn) and how it composes into one workflow
+                  from data preparation to modeling and evaluation, with a
+                  runnable Dash dashboard showing the full pipeline.
                 </p>
-                <div class="pc-foot">
-                  <span>Python · FastAPI · React · Proxmox API · Docker</span>
-                  <span class="proj-stats" data-stats></span>
-                  <a class="proj-detail-link" href="infralens.html"
-                    >View project ↗</a
-                  >
+                <ul class="tags" aria-label="Technologies">
+                  <li>pandas</li><li>NumPy</li><li>scikit-learn</li><li>Dash</li>
+                </ul>
+                <div class="tl-links">
+                  <a class="text-link icon-link" href="assets/data-mining-paper.pdf" target="_blank" rel="noopener"><svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></svg>Read the paper</a>
+                  <a class="text-link icon-link" href="https://demo.adamyahmadi.com" target="_blank" rel="noopener"><svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7 16v-5M12 16V7M17 16v-8" /></svg>Dash demo</a>
                 </div>
-              </figcaption>
-            </figure>
-
-            <figure class="pc-slide" data-repo="mdtopdf">
-              <img
-                src="assets/mdtopdf-preview.png"
-                alt="mdtopdf editor"
-                loading="lazy"
-                onerror="this.style.display = 'none'"
-              />
-              <figcaption>
-                <div class="pc-cap-top">
-                  <span class="proj-num">02</span>
-                  <span class="proj-title">mdtopdf</span>
+              </div>
+            </li>
+            <li class="tl-item">
+              <div class="tl-date">WS 2025/26</div>
+              <div class="tl-body">
+                <h3 class="tl-role">Motion Planning for Autonomous Vehicles</h3>
+                <p class="tl-org">Chair of Robotics &amp; Real-Time Systems, TU Munich</p>
+                <ul>
+                  <li>
+                    Converted drone-recorded traffic data into CommonRoad
+                    simulation scenarios for benchmarking autonomous vehicle
+                    motion planners, using TPH-YOLOv5 for detection and
+                    MobileSAM for segmentation.
+                  </li>
+                  <li>
+                    Built a validation tool with spatial indexing to detect
+                    collisions, off-road driving, and physically infeasible
+                    motion, with visualizations for debugging.
+                  </li>
+                </ul>
+                <ul class="tags" aria-label="Technologies">
+                  <li>Python</li><li>CommonRoad</li><li>Shapely</li><li>Matplotlib</li>
+                </ul>
+                <div class="tl-links">
+                  <a class="text-link icon-link" href="assets/commonroad.pdf" target="_blank" rel="noopener"><svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></svg>Read the paper</a>
                 </div>
-                <p class="pc-desc">
-                  Live web editor and CLI tool that converts Markdown to
-                  scanner-quality PDFs, complete with real-time page previews
-                  and LaTeX math rendering.
-                </p>
-                <div class="pc-foot">
-                  <span>JavaScript · Python · CLI</span>
-                  <span class="proj-stats" data-stats></span>
-                  <a
-                    class="proj-detail-link"
-                    href="https://mdtopdf.adamyahmadi.com"
-                    target="_blank"
-                    rel="noopener"
-                    >View project ↗</a
-                  >
+              </div>
+            </li>
+            <li class="tl-item">
+              <div class="tl-date">WS 2023/24 – SS 2024</div>
+              <div class="tl-body">
+                <h3 class="tl-role">Computer Architecture &amp; Fundamentals of Programming</h3>
+                <p class="tl-org">TU Munich</p>
+                <ul>
+                  <li>
+                    Built a cycle-accurate SystemC cache simulator comparing
+                    direct-mapped and associative caches, with LRU eviction and
+                    per-access gate-count tracking.
+                  </li>
+                  <li>
+                    Solved 35+ Java assignments on OOP, recursion, data
+                    structures, algorithms, testing, and concurrency.
+                  </li>
+                </ul>
+                <ul class="tags" aria-label="Technologies">
+                  <li>C</li><li>C++</li><li>SystemC</li><li>Java</li>
+                </ul>
+                <div class="tl-links">
+                  <a class="text-link icon-link" href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>Cache simulator source</a>
                 </div>
-              </figcaption>
-            </figure>
-
-            <figure class="pc-slide" data-repo="vertex">
-              <img
-                src="assets/vertex-preview.png"
-                alt="Vertex document scanner"
-                loading="lazy"
-                onerror="this.style.display = 'none'"
-              />
-              <figcaption>
-                <div class="pc-cap-top">
-                  <span class="proj-num">03</span>
-                  <span class="proj-title">Vertex</span>
-                </div>
-                <p class="pc-desc">
-                  Transforms raw document photos into scanner-quality PDFs using
-                  automated edge detection, perspective correction, and
-                  illumination normalization.
-                </p>
-                <div class="pc-foot">
-                  <span>Python · OpenCV · DocAligner · NumPy</span>
-                  <span class="proj-stats" data-stats></span>
-                  <a
-                    class="proj-detail-link"
-                    href="https://vertex.adamyahmadi.com"
-                    target="_blank"
-                    rel="noopener"
-                    >View project ↗</a
-                  >
-                </div>
-              </figcaption>
-            </figure>
-          </div>
-
-          <button class="pc-nav pc-prev" aria-label="Previous project">
-            ←
-          </button>
-          <button class="pc-nav pc-next" aria-label="Next project">→</button>
-
-          <div class="pc-progress" role="tablist" aria-label="Project slides">
-            <button
-              class="pc-bar active"
-              role="tab"
-              aria-selected="true"
-              aria-label="InfraLens"
-            >
-              <span class="pc-bar-track"
-                ><span class="pc-bar-fill"></span
-              ></span>
-            </button>
-            <button
-              class="pc-bar"
-              role="tab"
-              aria-selected="false"
-              aria-label="mdtopdf"
-            >
-              <span class="pc-bar-track"
-                ><span class="pc-bar-fill"></span
-              ></span>
-            </button>
-            <button
-              class="pc-bar"
-              role="tab"
-              aria-selected="false"
-              aria-label="Vertex"
-            >
-              <span class="pc-bar-track"
-                ><span class="pc-bar-fill"></span
-              ></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="proj-more-grid">
-          <div class="proj-more-row" data-repo="cache-simulator">
-            <div class="pmr-head">
-              <span class="pmr-num">04</span>
-              <span class="pmr-title">Cache Simulator</span>
-              <span class="pmr-tags">C++ · SystemC</span>
-            </div>
-            <p class="pmr-desc">
-              Cycle-accurate simulator with direct-mapped and fully-associative
-              caches, LRU eviction, and per-access gate count tracking.
-            </p>
-            <div class="pmr-foot">
-              <span class="proj-stats" data-stats></span>
-              <a
-                class="proj-detail-link"
-                href="https://github.com/AdamYahmadi/cache-simulator"
-                target="_blank"
-                rel="noopener"
-                >View on GitHub ↗</a
-              >
-            </div>
-          </div>
-
-          <div class="proj-more-row" data-repo="wifi-to-qr">
-            <div class="pmr-head">
-              <span class="pmr-num">05</span>
-              <span class="pmr-title">wifi-to-qr</span>
-              <span class="pmr-tags">Python · CLI</span>
-            </div>
-            <p class="pmr-desc">
-              Terminal utility that detects the current active Wi-Fi connection
-              and generates a scannable QR code for instant joining.
-            </p>
-            <div class="pmr-foot">
-              <span class="proj-stats" data-stats></span>
-              <a
-                class="proj-detail-link"
-                href="https://github.com/AdamYahmadi/wifi-to-qr"
-                target="_blank"
-                rel="noopener"
-                >View on GitHub ↗</a
-              >
-            </div>
-          </div>
+              </div>
+            </li>
+          </ol>
         </div>
       </section>
 
-      <section class="block" id="skills">
-        <div class="section-header">
-          <span class="section-num">04</span>
-          <h2>Toolkit</h2>
-        </div>
-        <div class="skills-wrap">
-          <div class="skills-group">
-            <h3>Languages</h3>
-            <div class="skills-list">Python, C, C++, Java, JavaScript</div>
+      <section class="section" id="skills" aria-labelledby="skills-title">
+        <div class="wrap section-grid reveal">
+          <div class="section-head">
+            <h2 class="section-title" id="skills-title">Skills</h2>
           </div>
-          <div class="skills-group">
-            <h3>Frameworks</h3>
-            <div class="skills-list">
-              PyTorch, TensorFlow, NumPy, OpenCV, FastAPI, Spring Boot
+          <dl class="skills">
+            <div class="skill-row">
+              <dt>Programming</dt>
+              <dd>Python, Java, C++, C, JavaScript</dd>
             </div>
-          </div>
-          <div class="skills-group">
-            <h3>Infrastructure &amp; Tools</h3>
-            <div class="skills-list">Linux, Docker, Git, Proxmox</div>
-          </div>
-          <div class="skills-group">
-            <h3>Focus Areas</h3>
-            <div class="skills-list">
-              Machine Learning, Scientific Computing, Optimization, Systems
-              Programming
+            <div class="skill-row">
+              <dt>Frameworks &amp; libraries</dt>
+              <dd>FastAPI, React, Node.js, PyTorch, NumPy, OpenCV</dd>
             </div>
-          </div>
+            <div class="skill-row">
+              <dt>Tools &amp; infrastructure</dt>
+              <dd>Linux, Docker, Git, GitLab CI, pytest, SSH, Proxmox, Ollama</dd>
+            </div>
+            <div class="skill-row">
+              <dt>Languages</dt>
+              <dd>German (native), English (C1), Arabic (native), French (C1)</dd>
+            </div>
+          </dl>
         </div>
       </section>
     </main>
 
     <footer>
-      <span
-        >Adam Yahmadi © 2026 <span class="footer-clock" id="mucTime"></span
-      ></span>
-      <div class="footer-links">
-        <a href="https://github.com/AdamYahmadi" target="_blank" rel="noopener"
-          >GitHub</a
-        >
-        <a
-          href="https://www.linkedin.com/in/adamyahmadi/"
-          target="_blank"
-          rel="noopener"
-          >LinkedIn</a
-        >
-        <a href="mailto:adam.yahmadi@tum.de">Email</a>
+      <div class="wrap footer-inner">
+        <p>Built and designed by Adam Yahmadi.</p>
+        <p>All rights reserved. ©</p>
       </div>
     </footer>
 
     <script>
+      (function () {
+        const hero = document.querySelector(".hero");
+        const el = hero.querySelector(".type");
+        const caret = hero.querySelector(".caret");
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const finish = () => {
+          hero.classList.add("typed");
+          caret.classList.add("done");
+        };
+
+        if (reduced) return finish();
+        const parts = [];
+        el.childNodes.forEach((node) => {
+          const accent = node.nodeType === 1;
+          for (const ch of node.textContent) parts.push({ ch, accent });
+        });
+        el.textContent = "";
+        const name = document.createElement("span");
+        name.className = "hero-name";
+        let i = 0;
+        (function tick() {
+          if (i >= parts.length) return finish();
+          const { ch, accent } = parts[i++];
+          if (accent) {
+            if (!name.isConnected) el.appendChild(name);
+            name.textContent += ch;
+          } else {
+            el.appendChild(document.createTextNode(ch));
+          }
+          setTimeout(tick, 70 + Math.random() * 60);
+        })();
+      })();
+
+      (function () {
+        const nav = document.querySelector(".site-nav");
+        const toggle = document.getElementById("navToggle");
+        function setOpen(open) {
+          nav.classList.toggle("nav-open", open);
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+        toggle.addEventListener("click", () =>
+          setOpen(!nav.classList.contains("nav-open")),
+        );
+        document
+          .querySelectorAll(".nav-links a")
+          .forEach((a) => a.addEventListener("click", () => setOpen(false)));
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && nav.classList.contains("nav-open")) {
+            setOpen(false);
+            toggle.focus();
+          }
+        });
+        document.addEventListener("click", (e) => {
+          if (nav.classList.contains("nav-open") && !nav.contains(e.target))
+            setOpen(false);
+        });
+      })();
+
+      (function () {
+        const links = document.querySelectorAll('.nav-links a[href^="#"]');
+        const map = new Map();
+        links.forEach((a) => {
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) map.set(t, a);
+        });
+        const spy = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              links.forEach((a) => a.classList.remove("active"));
+              map.get(entry.target).classList.add("active");
+            });
+          },
+          { rootMargin: "-45% 0px -50% 0px" },
+        );
+        map.forEach((_, t) => spy.observe(t));
+      })();
+
+      (function () {
+        const els = document.querySelectorAll(".reveal");
+        if (!("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -10% 0px" },
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+
+      (function () {
+        const root = document.getElementById("spotlight");
+        if (!root) return;
+        const track = root.querySelector(".sl-track");
+        const slides = Array.from(root.querySelectorAll(".sl-slide"));
+        const dots = root.querySelectorAll(".sl-dot");
+        const n = slides.length;
+        const DELAY = 6000;
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const headClone = slides[n - 1].cloneNode(true);
+        const tailClone = slides[0].cloneNode(true);
+        [headClone, tailClone].forEach((c) => {
+          c.removeAttribute("aria-roledescription");
+          c.removeAttribute("aria-label");
+          c.setAttribute("aria-hidden", "true");
+          c.inert = true;
+        });
+        track.prepend(headClone);
+        track.append(tailClone);
+
+        let pos = 1;
+        let timer = null;
+        let hovering = false;
+        const real = () => (pos - 1 + n) % n;
+
+        function place(animate) {
+          if (!animate) track.style.transition = "none";
+          track.style.transform = "translateX(" + -pos * 100 + "%)";
+          if (!animate) {
+            void track.offsetWidth;
+            track.style.transition = "";
+          }
+          const i = real();
+          slides.forEach((s, k) => {
+            s.inert = k !== i;
+            s.setAttribute("aria-hidden", String(k !== i));
+          });
+          dots.forEach((d, k) => {
+            d.setAttribute("aria-selected", String(k === i));
+            d.tabIndex = k === i ? 0 : -1;
+          });
+        }
+        function settle() {
+          if (pos === n + 1) pos = 1;
+          else if (pos === 0) pos = n;
+          else return;
+          place(false);
+        }
+        let settleTimer = null;
+        function move(to) {
+          settle();
+          pos = typeof to === "function" ? to(pos) : to;
+          place(!reduced);
+          clearTimeout(settleTimer);
+          if (reduced) settle();
+          else settleTimer = setTimeout(settle, 700);
+          schedule();
+        }
+        const step = (d) => move((p) => p + d);
+        function schedule() {
+          clearTimeout(timer);
+          if (!reduced && !hovering) timer = setTimeout(() => step(1), DELAY);
+        }
+
+        track.addEventListener("transitionend", (e) => {
+          if (e.target === track && e.propertyName === "transform") settle();
+        });
+        root.querySelector(".sl-prev").addEventListener("click", () => step(-1));
+        root.querySelector(".sl-next").addEventListener("click", () => step(1));
+        dots.forEach((d, k) => d.addEventListener("click", () => move(k + 1)));
+        root.addEventListener("keydown", (e) => {
+          if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+          step(e.key === "ArrowRight" ? 1 : -1);
+          if (e.target.classList.contains("sl-dot")) dots[real()].focus();
+        });
+        root.addEventListener("mouseenter", () => { hovering = true; schedule(); });
+        root.addEventListener("mouseleave", () => { hovering = false; schedule(); });
+        root.addEventListener("focusin", () => { hovering = true; schedule(); });
+        root.addEventListener("focusout", (e) => {
+          if (!root.contains(e.relatedTarget)) { hovering = false; schedule(); }
+        });
+
+        let startX = null;
+        track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
+        track.addEventListener("touchend", (e) => {
+          if (startX === null) return;
+          const dx = e.changedTouches[0].clientX - startX;
+          startX = null;
+          if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+        }, { passive: true });
+
+        place(false);
+        schedule();
+      })();
+
       (function () {
         const user = "AdamYahmadi";
         function ago(iso) {
@@ -1462,204 +1440,15 @@
           return Math.floor(d / 365) + "y ago";
         }
         document.querySelectorAll("[data-repo]").forEach((card) => {
-          const repo = card.getAttribute("data-repo");
           const slot = card.querySelector("[data-stats]");
           if (!slot) return;
-          fetch("https://api.github.com/repos/" + user + "/" + repo)
+          fetch("https://api.github.com/repos/" + user + "/" + card.dataset.repo)
             .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
             .then((d) => {
-              const parts = [];
-              if (d.language) parts.push(d.language);
-              parts.push("updated " + ago(d.pushed_at));
-              slot.textContent = parts.join(" · ");
+              slot.textContent = "Updated " + ago(d.pushed_at);
             })
-            .catch(() => {
-              if (slot) slot.remove();
-            });
+            .catch(() => slot.remove());
         });
-      })();
-
-      (function () {
-        const navEl = document.querySelector("nav");
-        const toggle = document.getElementById("navToggle");
-        if (!navEl || !toggle) return;
-        function closeMenu() {
-          navEl.classList.remove("nav-open");
-          toggle.setAttribute("aria-expanded", "false");
-        }
-        toggle.addEventListener("click", () => {
-          const isOpen = navEl.classList.toggle("nav-open");
-          toggle.setAttribute("aria-expanded", String(isOpen));
-        });
-        document.querySelectorAll(".nav-links a").forEach((a) => {
-          a.addEventListener("click", closeMenu);
-        });
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && navEl.classList.contains("nav-open")) {
-            closeMenu();
-            toggle.focus();
-          }
-        });
-        document.addEventListener("click", (e) => {
-          if (
-            navEl.classList.contains("nav-open") &&
-            !navEl.contains(e.target)
-          ) {
-            closeMenu();
-          }
-        });
-      })();
-
-      (function () {
-        const navLinks = document.querySelectorAll(".nav-links a");
-        const targets = Array.from(navLinks)
-          .map((a) => document.querySelector(a.getAttribute("href")))
-          .filter(Boolean);
-        if (!targets.length) return;
-        const spy = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                const id = entry.target.id;
-                navLinks.forEach((a) =>
-                  a.classList.toggle(
-                    "active",
-                    a.getAttribute("href") === "#" + id,
-                  ),
-                );
-              }
-            });
-          },
-          { rootMargin: "-45% 0px -50% 0px" },
-        );
-        targets.forEach((t) => spy.observe(t));
-      })();
-
-      (function () {
-        const car = document.getElementById("projCarousel");
-        if (!car) return;
-        const slides = car.querySelectorAll(".pc-slide");
-        const bars = car.querySelectorAll(".pc-bar");
-        const progress = car.querySelector(".pc-progress");
-        const DURATION = 5000;
-        const reducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        ).matches;
-
-        let idx = 0; // single source of truth
-        let remaining = DURATION;
-        let timerId = null;
-        let timerStart = 0;
-        let hovering = false;
-
-        function render() {
-          slides.forEach((s, n) => s.classList.toggle("active", n === idx));
-          bars.forEach((b, n) => {
-            const isActive = n === idx;
-            b.classList.toggle("active", isActive);
-            b.setAttribute("aria-selected", String(isActive));
-            const fill = b.querySelector(".pc-bar-fill");
-            fill.classList.remove("filled");
-          });
-        }
-
-        function clearTimer() {
-          if (timerId) {
-            clearTimeout(timerId);
-            timerId = null;
-          }
-        }
-
-        function armIfActive() {
-          clearTimer();
-          if (reducedMotion || hovering) {
-            progress.classList.add("paused");
-            return;
-          }
-          progress.classList.remove("paused");
-          const activeFill = car.querySelector(".pc-bar.active .pc-bar-fill");
-          if (activeFill) {
-            activeFill.style.animation = "none";
-            void activeFill.offsetWidth; // reflow
-            activeFill.style.animation = "";
-          }
-          timerStart = Date.now();
-          timerId = setTimeout(() => go(idx + 1), remaining);
-        }
-
-        function go(i) {
-          idx = ((i % slides.length) + slides.length) % slides.length;
-          remaining = DURATION;
-          render();
-          armIfActive();
-        }
-
-        function pauseForHover() {
-          hovering = true;
-          if (reducedMotion) return;
-          if (timerId) {
-            remaining = Math.max(0, remaining - (Date.now() - timerStart));
-            clearTimer();
-          }
-          progress.classList.add("paused");
-        }
-
-        function resumeFromHover() {
-          hovering = false;
-          armIfActive();
-        }
-
-        car
-          .querySelector(".pc-prev")
-          .addEventListener("click", () => go(idx - 1));
-        car
-          .querySelector(".pc-next")
-          .addEventListener("click", () => go(idx + 1));
-        bars.forEach((b, n) => b.addEventListener("click", () => go(n)));
-        car.addEventListener("keydown", (e) => {
-          if (e.key === "ArrowLeft") go(idx - 1);
-          if (e.key === "ArrowRight") go(idx + 1);
-        });
-        car.addEventListener("mouseenter", pauseForHover);
-        car.addEventListener("mouseleave", resumeFromHover);
-
-        let touchX = null;
-        car.addEventListener(
-          "touchstart",
-          (e) => {
-            touchX = e.touches[0].clientX;
-          },
-          { passive: true },
-        );
-        car.addEventListener(
-          "touchend",
-          (e) => {
-            if (touchX === null) return;
-            const dx = e.changedTouches[0].clientX - touchX;
-            touchX = null;
-            if (Math.abs(dx) < 40) return;
-            go(dx < 0 ? idx + 1 : idx - 1);
-          },
-          { passive: true },
-        );
-
-        render();
-        armIfActive();
-      })();
-
-      (function () {
-        const el = document.getElementById("mucTime");
-        if (!el) return;
-        function update() {
-          const fmt = new Intl.DateTimeFormat("en-GB", {
-            timeZone: "Europe/Berlin",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          el.textContent = "— " + fmt.format(new Date()) + " local";
-        }
-        update();
-        setInterval(update, 30000);
       })();
     </script>
   </body>

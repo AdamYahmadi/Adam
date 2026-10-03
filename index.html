@@ -20,11 +20,17 @@
       property="og:description"
       content="Computer Science student at TU Munich building software for real-world systems: optimization, infrastructure tools, and computer vision."
     />
-    <meta property="og:image" content="https://adamyahmadi.com/assets/og-image.png" />
+    <meta
+      property="og:image"
+      content="https://adamyahmadi.com/assets/og-image.png"
+    />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://adamyahmadi.com/assets/og-image.png" />
+    <meta
+      name="twitter:image"
+      content="https://adamyahmadi.com/assets/og-image.png"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -49,9 +55,10 @@
         --line-strong: #353c45;
         --accent: #3dd68c;
         --accent-soft: rgba(61, 214, 140, 0.1);
-        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3),
-          0 16px 40px -16px rgba(0, 0, 0, 0.6);
-        --ff-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+        --shadow:
+          0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -16px rgba(0, 0, 0, 0.6);
+        --ff-display:
+          "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
         --ff-body: "Hanken Grotesk", -apple-system, "Segoe UI", sans-serif;
         --max: 1120px;
         --gutter: clamp(16px, 5vw, 48px);
@@ -159,7 +166,9 @@
         height: 36px;
         border-radius: 8px;
         color: var(--muted);
-        transition: color 0.15s ease, background-color 0.15s ease;
+        transition:
+          color 0.15s ease,
+          background-color 0.15s ease;
       }
       .nav-icon:hover {
         color: var(--text);
@@ -176,7 +185,9 @@
         font-size: 0.95rem;
         color: var(--muted);
         text-decoration: none;
-        transition: color 0.15s ease, background-color 0.15s ease;
+        transition:
+          color 0.15s ease,
+          background-color 0.15s ease;
       }
       .nav-links a:hover,
       .nav-links a.active {
@@ -192,7 +203,9 @@
         background: transparent;
         color: var(--text);
         cursor: pointer;
-        transition: border-color 0.15s ease, background-color 0.15s ease;
+        transition:
+          border-color 0.15s ease,
+          background-color 0.15s ease;
       }
       .icon-btn:hover {
         border-color: var(--line-strong);
@@ -488,7 +501,9 @@
         border: 1px solid var(--line);
         border-radius: 14px;
         overflow: hidden;
-        transition: transform 0.25s ease, box-shadow 0.25s ease,
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
           border-color 0.25s ease;
       }
       .card:hover,
@@ -693,7 +708,9 @@
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.14);
         backdrop-filter: blur(6px);
-        transition: color 0.15s ease, border-color 0.15s ease,
+        transition:
+          color 0.15s ease,
+          border-color 0.15s ease,
           background-color 0.15s ease;
       }
       .sl-icon:hover {
@@ -824,7 +841,9 @@
         .js .reveal {
           opacity: 0;
           transform: translateY(12px);
-          transition: opacity 0.7s ease, transform 0.7s ease;
+          transition:
+            opacity 0.7s ease,
+            transform 0.7s ease;
         }
         .js .reveal.in {
           opacity: 1;
@@ -834,7 +853,9 @@
         .js .hero-cta {
           opacity: 0;
           transform: translateY(10px);
-          transition: opacity 0.8s ease, transform 0.8s ease;
+          transition:
+            opacity 0.8s ease,
+            transform 0.8s ease;
         }
         .js .hero.typed .hero-desc,
         .js .hero.typed .hero-cta {
@@ -867,14 +888,42 @@
           </ul>
         </div>
         <div class="nav-right">
-          <a class="nav-icon" href="mailto:adam.yahmadi@tum.de" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-7.47 4.67a1 1 0 0 1-1.06 0L4 8.24V6l8 5 8-5v2.24z" /></svg>
+          <a
+            class="nav-icon"
+            href="mailto:adam.yahmadi@tum.de"
+            aria-label="Email"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-7.47 4.67a1 1 0 0 1-1.06 0L4 8.24V6l8 5 8-5v2.24z"
+              />
+            </svg>
           </a>
-          <a class="nav-icon" href="https://github.com/AdamYahmadi" target="_blank" rel="noopener" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+          <a
+            class="nav-icon"
+            href="https://github.com/AdamYahmadi"
+            target="_blank"
+            rel="noopener"
+            aria-label="GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+              />
+            </svg>
           </a>
-          <a class="nav-icon" href="https://www.linkedin.com/in/adamyahmadi/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" /></svg>
+          <a
+            class="nav-icon"
+            href="https://www.linkedin.com/in/adamyahmadi/"
+            target="_blank"
+            rel="noopener"
+            aria-label="LinkedIn"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"
+              />
+            </svg>
           </a>
           <button
             class="icon-btn nav-toggle"
@@ -884,7 +933,16 @@
             aria-controls="navLinks"
             aria-label="Open menu"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
           </button>
         </div>
       </div>
@@ -892,7 +950,9 @@
 
     <header class="wrap hero" id="top">
       <h1 aria-label="Hi, Adam here.">
-        <span class="type" aria-hidden="true">Hi, <span class="hero-name">Adam</span> here.</span><span class="caret" aria-hidden="true"></span>
+        <span class="type" aria-hidden="true"
+          >Hi, <span class="hero-name">Adam</span> here.</span
+        ><span class="caret" aria-hidden="true"></span>
       </h1>
       <p class="hero-desc">
         I'm a Computer Science student at TU Munich building software for
@@ -900,7 +960,11 @@
         infrastructure tools, and computer vision pipelines.
       </p>
       <a class="hero-cta" href="mailto:adam.yahmadi@tum.de">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-7.47 4.67a1 1 0 0 1-1.06 0L4 8.24V6l8 5 8-5v2.24z" /></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-7.47 4.67a1 1 0 0 1-1.06 0L4 8.24V6l8 5 8-5v2.24z"
+          />
+        </svg>
         Say hi
       </a>
     </header>
@@ -945,20 +1009,23 @@
       <section class="section" id="experience" aria-labelledby="exp-title">
         <div class="wrap section-grid reveal">
           <div class="section-head">
-            <h2 class="section-title" id="exp-title">Experience &amp; education</h2>
+            <h2 class="section-title" id="exp-title">
+              Experience &amp; education
+            </h2>
           </div>
           <ol class="timeline">
             <li class="tl-item">
               <div class="tl-date">2024 – 2025</div>
               <div class="tl-body">
                 <h3 class="tl-role">Driving Strategy Engineer</h3>
-                <p class="tl-org">TUfast Eco Team, Technical University of Munich</p>
+                <p class="tl-org">
+                  TUfast Eco Team, Technical University of Munich
+                </p>
                 <ul>
                   <li>
                     Developed the race strategy optimizer for the lux025 solar
-                    car (Bridgestone World Solar Challenge 2025), planning
-                    speed profiles over 3,000 km under energy and race
-                    constraints.
+                    car (Bridgestone World Solar Challenge 2025), planning speed
+                    profiles over 3,000 km under energy and race constraints.
                   </li>
                   <li>
                     Extended the PyTorch vehicle model to optimize speed
@@ -966,13 +1033,17 @@
                     optimization solvers (IPOPT, ParOpt, ALPSO).
                   </li>
                   <li>
-                    Built a PySide6 GUI for running optimizations and wrote
-                    unit tests for the control-stop simulation (pytest,
-                    GitLab CI).
+                    Built a PySide6 GUI for running optimizations and wrote unit
+                    tests for the control-stop simulation (pytest, GitLab CI).
                   </li>
                 </ul>
                 <ul class="tags" aria-label="Technologies">
-                  <li>Python</li><li>PyTorch</li><li>IPOPT</li><li>PySide6</li><li>pytest</li><li>GitLab CI</li>
+                  <li>Python</li>
+                  <li>PyTorch</li>
+                  <li>IPOPT</li>
+                  <li>PySide6</li>
+                  <li>pytest</li>
+                  <li>GitLab CI</li>
                 </ul>
               </div>
             </li>
@@ -1003,58 +1074,226 @@
           <div class="section-head">
             <div>
               <h2 class="section-title" id="proj-title">Projects</h2>
-              <p class="section-note">Things I've built and shipped on my own.</p>
+              <p class="section-note">
+                Things I've built and shipped on my own.
+              </p>
             </div>
-            <a class="text-link icon-link" href="https://github.com/AdamYahmadi" target="_blank" rel="noopener">
+            <a
+              class="text-link icon-link"
+              href="https://github.com/AdamYahmadi"
+              target="_blank"
+              rel="noopener"
+            >
               View all projects
-              <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              <svg
+                class="arrow-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
             </a>
           </div>
           <div class="projects-wrap">
-            <div class="spotlight" id="spotlight" role="region" aria-roledescription="carousel" aria-label="Featured projects">
+            <div
+              class="spotlight"
+              id="spotlight"
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Featured projects"
+            >
               <div class="sl-viewport">
                 <div class="sl-track">
-                  <article class="sl-slide" role="group" aria-roledescription="slide" aria-label="1 of 3: InfraLens" data-repo="InfraLens">
-                    <div class="sl-media"><img src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png" alt="InfraLens showing a Proxmox cluster as a topology graph" /></div>
+                  <article
+                    class="sl-slide"
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label="1 of 3: InfraLens"
+                    data-repo="InfraLens"
+                  >
+                    <div class="sl-media">
+                      <img
+                        src="https://raw.githubusercontent.com/AdamYahmadi/InfraLens/main/docs/infralens-page.png"
+                        alt="InfraLens showing a Proxmox cluster as a topology graph"
+                      />
+                    </div>
                     <div class="sl-caption">
                       <h3 class="sl-title">InfraLens</h3>
-                      <p class="sl-desc">Desktop app that maps Proxmox clusters as a live topology graph, with local-LLM diagnostics.</p>
+                      <p class="sl-desc">
+                        Desktop app that maps Proxmox clusters as a live
+                        topology graph, with local-LLM diagnostics.
+                      </p>
                       <div class="sl-links">
-                        <a class="sl-icon" href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener" aria-label="InfraLens source code on GitHub" title="Source code">
-                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+                        <a
+                          class="sl-icon"
+                          href="https://github.com/AdamYahmadi/InfraLens"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="InfraLens source code on GitHub"
+                          title="Source code"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+                            />
+                          </svg>
                         </a>
-                        <a class="sl-icon" href="infralens.html" aria-label="InfraLens project page" title="Project page">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+                        <a
+                          class="sl-icon"
+                          href="infralens.html"
+                          aria-label="InfraLens project page"
+                          title="Project page"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"
+                            />
+                          </svg>
                         </a>
                       </div>
                     </div>
                   </article>
-                  <article class="sl-slide" role="group" aria-roledescription="slide" aria-label="2 of 3: Vertex" data-repo="vertex">
-                    <div class="sl-media"><img src="assets/vertex-preview.png" alt="Vertex turning a document photo into a clean scan" loading="lazy" /></div>
+                  <article
+                    class="sl-slide"
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label="2 of 3: Vertex"
+                    data-repo="vertex"
+                  >
+                    <div class="sl-media">
+                      <img
+                        src="assets/vertex-preview.png"
+                        alt="Vertex turning a document photo into a clean scan"
+                        loading="lazy"
+                      />
+                    </div>
                     <div class="sl-caption">
                       <h3 class="sl-title">Vertex</h3>
-                      <p class="sl-desc">Turns phone photos of documents into clean, scanner-quality PDFs.</p>
+                      <p class="sl-desc">
+                        Turns phone photos of documents into clean,
+                        scanner-quality PDFs.
+                      </p>
                       <div class="sl-links">
-                        <a class="sl-icon" href="https://github.com/AdamYahmadi/vertex" target="_blank" rel="noopener" aria-label="Vertex source code on GitHub" title="Source code">
-                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+                        <a
+                          class="sl-icon"
+                          href="https://github.com/AdamYahmadi/vertex"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="Vertex source code on GitHub"
+                          title="Source code"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+                            />
+                          </svg>
                         </a>
-                        <a class="sl-icon" href="https://vertex.adamyahmadi.com" target="_blank" rel="noopener" aria-label="Vertex live app" title="Live app">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+                        <a
+                          class="sl-icon"
+                          href="https://vertex.adamyahmadi.com"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="Vertex live app"
+                          title="Live app"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"
+                            />
+                          </svg>
                         </a>
                       </div>
                     </div>
                   </article>
-                  <article class="sl-slide" role="group" aria-roledescription="slide" aria-label="3 of 3: mdtopdf" data-repo="mdtopdf">
-                    <div class="sl-media"><img src="assets/mdtopdf-preview.png" alt="mdtopdf live-preview editor" loading="lazy" /></div>
+                  <article
+                    class="sl-slide"
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label="3 of 3: mdtopdf"
+                    data-repo="mdtopdf"
+                  >
+                    <div class="sl-media">
+                      <img
+                        src="assets/mdtopdf-preview.png"
+                        alt="mdtopdf live-preview editor"
+                        loading="lazy"
+                      />
+                    </div>
                     <div class="sl-caption">
                       <h3 class="sl-title">mdtopdf</h3>
-                      <p class="sl-desc">Converts Markdown to print-ready PDFs with LaTeX math and Mermaid diagrams.</p>
+                      <p class="sl-desc">
+                        Converts Markdown to print-ready PDFs with LaTeX math
+                        and Mermaid diagrams.
+                      </p>
                       <div class="sl-links">
-                        <a class="sl-icon" href="https://github.com/AdamYahmadi/mdtopdf" target="_blank" rel="noopener" aria-label="mdtopdf source code on GitHub" title="Source code">
-                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>
+                        <a
+                          class="sl-icon"
+                          href="https://github.com/AdamYahmadi/mdtopdf"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="mdtopdf source code on GitHub"
+                          title="Source code"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+                            />
+                          </svg>
                         </a>
-                        <a class="sl-icon" href="https://mdtopdf.adamyahmadi.com" target="_blank" rel="noopener" aria-label="mdtopdf live app" title="Live app">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+                        <a
+                          class="sl-icon"
+                          href="https://mdtopdf.adamyahmadi.com"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="mdtopdf live app"
+                          title="Live app"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"
+                            />
+                          </svg>
                         </a>
                       </div>
                     </div>
@@ -1063,58 +1302,133 @@
               </div>
               <div class="sl-controls">
                 <div class="sl-dots" role="tablist" aria-label="Choose project">
-                  <button class="sl-dot" type="button" role="tab" aria-label="InfraLens"></button>
-                  <button class="sl-dot" type="button" role="tab" aria-label="Vertex"></button>
-                  <button class="sl-dot" type="button" role="tab" aria-label="mdtopdf"></button>
+                  <button
+                    class="sl-dot"
+                    type="button"
+                    role="tab"
+                    aria-label="InfraLens"
+                  ></button>
+                  <button
+                    class="sl-dot"
+                    type="button"
+                    role="tab"
+                    aria-label="Vertex"
+                  ></button>
+                  <button
+                    class="sl-dot"
+                    type="button"
+                    role="tab"
+                    aria-label="mdtopdf"
+                  ></button>
                 </div>
                 <div class="sl-buttons">
-                  <button class="icon-btn sl-prev" type="button" aria-label="Previous project">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                  <button
+                    class="icon-btn sl-prev"
+                    type="button"
+                    aria-label="Previous project"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M15 18l-6-6 6-6" />
+                    </svg>
                   </button>
-                  <button class="icon-btn sl-next" type="button" aria-label="Next project">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+                  <button
+                    class="icon-btn sl-next"
+                    type="button"
+                    aria-label="Next project"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M9 6l6 6-6 6" />
+                    </svg>
                   </button>
                 </div>
               </div>
             </div>
             <div class="projects">
-            <article class="card card-small" data-repo="cache-simulator">
-              <div class="card-body">
-                <h3 class="card-title">Cache Simulator</h3>
-                <p class="card-kicker">Cycle-accurate cache model</p>
-                <p class="card-desc">
-                  A SystemC simulator comparing direct-mapped and
-                  fully-associative caches, with LRU eviction and per-access
-                  gate-count tracking.
-                </p>
-                <ul class="tags" aria-label="Technologies">
-                  <li>C++</li><li>SystemC</li>
-                </ul>
-                <div class="card-foot">
-                  <a class="text-link icon-link" href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>Source code</a>
-                  <span class="card-stats" data-stats></span>
+              <article class="card card-small" data-repo="cache-simulator">
+                <div class="card-body">
+                  <h3 class="card-title">Cache Simulator</h3>
+                  <p class="card-kicker">Cycle-accurate cache model</p>
+                  <p class="card-desc">
+                    A SystemC simulator comparing direct-mapped and
+                    fully-associative caches, with LRU eviction and per-access
+                    gate-count tracking.
+                  </p>
+                  <ul class="tags" aria-label="Technologies">
+                    <li>C++</li>
+                    <li>SystemC</li>
+                  </ul>
+                  <div class="card-foot">
+                    <a
+                      class="text-link icon-link"
+                      href="https://github.com/AdamYahmadi/cache-simulator"
+                      target="_blank"
+                      rel="noopener"
+                      ><svg
+                        class="gh-icon"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+                        /></svg
+                      >Source code</a
+                    >
+                    <span class="card-stats" data-stats></span>
+                  </div>
                 </div>
-              </div>
-            </article>
+              </article>
 
-            <article class="card card-small" data-repo="wifi-to-qr">
-              <div class="card-body">
-                <h3 class="card-title">wifi-to-qr</h3>
-                <p class="card-kicker">Command-line utility</p>
-                <p class="card-desc">
-                  Detects the active Wi-Fi connection and prints a scannable
-                  QR code in the terminal so others can join instantly.
-                </p>
-                <ul class="tags" aria-label="Technologies">
-                  <li>Python</li><li>CLI</li>
-                </ul>
-                <div class="card-foot">
-                  <a class="text-link icon-link" href="https://github.com/AdamYahmadi/wifi-to-qr" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>Source code</a>
-                  <span class="card-stats" data-stats></span>
+              <article class="card card-small" data-repo="wifi-to-qr">
+                <div class="card-body">
+                  <h3 class="card-title">wifi-to-qr</h3>
+                  <p class="card-kicker">Command-line utility</p>
+                  <p class="card-desc">
+                    Detects the active Wi-Fi connection and prints a scannable
+                    QR code in the terminal so others can join instantly.
+                  </p>
+                  <ul class="tags" aria-label="Technologies">
+                    <li>Python</li>
+                    <li>CLI</li>
+                  </ul>
+                  <div class="card-foot">
+                    <a
+                      class="text-link icon-link"
+                      href="https://github.com/AdamYahmadi/wifi-to-qr"
+                      target="_blank"
+                      rel="noopener"
+                      ><svg
+                        class="gh-icon"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+                        /></svg
+                      >Source code</a
+                    >
+                    <span class="card-stats" data-stats></span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -1138,11 +1452,51 @@
                   runnable Dash dashboard showing the full pipeline.
                 </p>
                 <ul class="tags" aria-label="Technologies">
-                  <li>pandas</li><li>NumPy</li><li>scikit-learn</li><li>Dash</li>
+                  <li>pandas</li>
+                  <li>NumPy</li>
+                  <li>scikit-learn</li>
+                  <li>Dash</li>
                 </ul>
                 <div class="tl-links">
-                  <a class="text-link icon-link" href="assets/data-mining-paper.pdf" target="_blank" rel="noopener"><svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></svg>Read the paper</a>
-                  <a class="text-link icon-link" href="https://demo.adamyahmadi.com" target="_blank" rel="noopener"><svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7 16v-5M12 16V7M17 16v-8" /></svg>Dash demo</a>
+                  <a
+                    class="text-link icon-link"
+                    href="assets/data-mining-paper.pdf"
+                    target="_blank"
+                    rel="noopener"
+                    ><svg
+                      class="link-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"
+                      />
+                      <path d="M14 3v5h5M9 13h6M9 17h6" /></svg
+                    >Read the paper</a
+                  >
+                  <a
+                    class="text-link icon-link"
+                    href="https://demo.adamyahmadi.com"
+                    target="_blank"
+                    rel="noopener"
+                    ><svg
+                      class="link-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 20h16M7 16v-5M12 16V7M17 16v-8" /></svg
+                    >Dash demo</a
+                  >
                 </div>
               </div>
             </li>
@@ -1150,7 +1504,9 @@
               <div class="tl-date">WS 2025/26</div>
               <div class="tl-body">
                 <h3 class="tl-role">Motion Planning for Autonomous Vehicles</h3>
-                <p class="tl-org">Chair of Robotics &amp; Real-Time Systems, TU Munich</p>
+                <p class="tl-org">
+                  Chair of Robotics &amp; Real-Time Systems, TU Munich
+                </p>
                 <ul>
                   <li>
                     Converted drone-recorded traffic data into CommonRoad
@@ -1165,17 +1521,42 @@
                   </li>
                 </ul>
                 <ul class="tags" aria-label="Technologies">
-                  <li>Python</li><li>CommonRoad</li><li>Shapely</li><li>Matplotlib</li>
+                  <li>Python</li>
+                  <li>CommonRoad</li>
+                  <li>Shapely</li>
+                  <li>Matplotlib</li>
                 </ul>
                 <div class="tl-links">
-                  <a class="text-link icon-link" href="assets/commonroad.pdf" target="_blank" rel="noopener"><svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></svg>Read the paper</a>
+                  <a
+                    class="text-link icon-link"
+                    href="assets/commonroad.pdf"
+                    target="_blank"
+                    rel="noopener"
+                    ><svg
+                      class="link-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"
+                      />
+                      <path d="M14 3v5h5M9 13h6M9 17h6" /></svg
+                    >Read the paper</a
+                  >
                 </div>
               </div>
             </li>
             <li class="tl-item">
               <div class="tl-date">WS 2023/24 – SS 2024</div>
               <div class="tl-body">
-                <h3 class="tl-role">Computer Architecture &amp; Fundamentals of Programming</h3>
+                <h3 class="tl-role">
+                  Computer Architecture &amp; Fundamentals of Programming
+                </h3>
                 <p class="tl-org">TU Munich</p>
                 <ul>
                   <li>
@@ -1189,10 +1570,28 @@
                   </li>
                 </ul>
                 <ul class="tags" aria-label="Technologies">
-                  <li>C</li><li>C++</li><li>SystemC</li><li>Java</li>
+                  <li>C</li>
+                  <li>C++</li>
+                  <li>SystemC</li>
+                  <li>Java</li>
                 </ul>
                 <div class="tl-links">
-                  <a class="text-link icon-link" href="https://github.com/AdamYahmadi/cache-simulator" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z" /></svg>Cache simulator source</a>
+                  <a
+                    class="text-link icon-link"
+                    href="https://github.com/AdamYahmadi/cache-simulator"
+                    target="_blank"
+                    rel="noopener"
+                    ><svg
+                      class="gh-icon"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"
+                      /></svg
+                    >Cache simulator source</a
+                  >
                 </div>
               </div>
             </li>
@@ -1216,11 +1615,15 @@
             </div>
             <div class="skill-row">
               <dt>Tools &amp; infrastructure</dt>
-              <dd>Linux, Docker, Git, GitLab CI, pytest, SSH, Proxmox, Ollama</dd>
+              <dd>
+                Linux, Docker, Git, GitLab CI, pytest, SSH, Proxmox, Ollama
+              </dd>
             </div>
             <div class="skill-row">
               <dt>Languages</dt>
-              <dd>German (native), English (C1), Arabic (native), French (C1)</dd>
+              <dd>
+                German (native), English (C1), Arabic (native), French (C1)
+              </dd>
             </div>
           </dl>
         </div>
@@ -1239,7 +1642,9 @@
         const hero = document.querySelector(".hero");
         const el = hero.querySelector(".type");
         const caret = hero.querySelector(".caret");
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const reduced = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
         const finish = () => {
           hero.classList.add("typed");
           caret.classList.add("done");
@@ -1342,7 +1747,9 @@
         const dots = root.querySelectorAll(".sl-dot");
         const n = slides.length;
         const DELAY = 6000;
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const reduced = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
 
         const headClone = slides[n - 1].cloneNode(true);
         const tailClone = slides[0].cloneNode(true);
@@ -1402,7 +1809,9 @@
         track.addEventListener("transitionend", (e) => {
           if (e.target === track && e.propertyName === "transform") settle();
         });
-        root.querySelector(".sl-prev").addEventListener("click", () => step(-1));
+        root
+          .querySelector(".sl-prev")
+          .addEventListener("click", () => step(-1));
         root.querySelector(".sl-next").addEventListener("click", () => step(1));
         dots.forEach((d, k) => d.addEventListener("click", () => move(k + 1)));
         root.addEventListener("keydown", (e) => {
@@ -1410,21 +1819,43 @@
           step(e.key === "ArrowRight" ? 1 : -1);
           if (e.target.classList.contains("sl-dot")) dots[real()].focus();
         });
-        root.addEventListener("mouseenter", () => { hovering = true; schedule(); });
-        root.addEventListener("mouseleave", () => { hovering = false; schedule(); });
-        root.addEventListener("focusin", () => { hovering = true; schedule(); });
+        root.addEventListener("mouseenter", () => {
+          hovering = true;
+          schedule();
+        });
+        root.addEventListener("mouseleave", () => {
+          hovering = false;
+          schedule();
+        });
+        root.addEventListener("focusin", () => {
+          hovering = true;
+          schedule();
+        });
         root.addEventListener("focusout", (e) => {
-          if (!root.contains(e.relatedTarget)) { hovering = false; schedule(); }
+          if (!root.contains(e.relatedTarget)) {
+            hovering = false;
+            schedule();
+          }
         });
 
         let startX = null;
-        track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
-        track.addEventListener("touchend", (e) => {
-          if (startX === null) return;
-          const dx = e.changedTouches[0].clientX - startX;
-          startX = null;
-          if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
-        }, { passive: true });
+        track.addEventListener(
+          "touchstart",
+          (e) => {
+            startX = e.touches[0].clientX;
+          },
+          { passive: true },
+        );
+        track.addEventListener(
+          "touchend",
+          (e) => {
+            if (startX === null) return;
+            const dx = e.changedTouches[0].clientX - startX;
+            startX = null;
+            if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+          },
+          { passive: true },
+        );
 
         place(false);
         schedule();
@@ -1442,7 +1873,9 @@
         document.querySelectorAll("[data-repo]").forEach((card) => {
           const slot = card.querySelector("[data-stats]");
           if (!slot) return;
-          fetch("https://api.github.com/repos/" + user + "/" + card.dataset.repo)
+          fetch(
+            "https://api.github.com/repos/" + user + "/" + card.dataset.repo,
+          )
             .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
             .then((d) => {
               slot.textContent = "Updated " + ago(d.pushed_at);

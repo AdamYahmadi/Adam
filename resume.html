@@ -35,7 +35,8 @@
         --line-strong: #353c45;
         --accent: #3dd68c;
         --accent-soft: rgba(61, 214, 140, 0.1);
-        --ff-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+        --ff-display:
+          "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
         --ff-body: "Hanken Grotesk", -apple-system, "Segoe UI", sans-serif;
         --max: 1120px;
         --gutter: clamp(16px, 5vw, 48px);
@@ -114,7 +115,9 @@
         font: 500 0.9rem var(--ff-body);
         text-decoration: none;
         cursor: pointer;
-        transition: border-color 0.15s ease, background-color 0.15s ease;
+        transition:
+          border-color 0.15s ease,
+          background-color 0.15s ease;
       }
       .action:hover {
         border-color: var(--muted);
@@ -361,16 +364,59 @@
     <div class="topbar">
       <div class="topbar-inner">
         <a href="index.html" class="back">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M19 12H5M11 18l-6-6 6-6" />
+          </svg>
           Back to portfolio
         </a>
         <div class="topbar-actions">
-          <button class="action" type="button" onclick="window.print()" aria-label="Print résumé">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z" /></svg>
+          <button
+            class="action"
+            type="button"
+            onclick="window.print()"
+            aria-label="Print résumé"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"
+              />
+            </svg>
             <span class="label">Print</span>
           </button>
-          <a class="action primary" href="cv.pdf" target="_blank" rel="noopener" aria-label="Download PDF">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16" /></svg>
+          <a
+            class="action primary"
+            href="cv.pdf"
+            target="_blank"
+            rel="noopener"
+            aria-label="Download PDF"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3v12M7 10l5 5 5-5M4 21h16" />
+            </svg>
             <span class="label">Download PDF</span>
           </a>
         </div>
@@ -384,9 +430,27 @@
         <ul class="r-contact">
           <li>Munich, Germany</li>
           <li><a href="mailto:adam.yahmadi@tum.de">adam.yahmadi@tum.de</a></li>
-          <li><a href="https://adamyahmadi.com" target="_blank" rel="noopener">adamyahmadi.com</a></li>
-          <li><a href="https://github.com/AdamYahmadi" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/adamyahmadi/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li>
+            <a href="https://adamyahmadi.com" target="_blank" rel="noopener"
+              >adamyahmadi.com</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/AdamYahmadi"
+              target="_blank"
+              rel="noopener"
+              >GitHub</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/adamyahmadi/"
+              target="_blank"
+              rel="noopener"
+              >LinkedIn</a
+            >
+          </li>
         </ul>
       </header>
 
@@ -408,7 +472,9 @@
               <h3 class="entry-title">B.Sc. Informatics</h3>
               <span class="entry-meta">2023 – present</span>
             </div>
-            <p class="entry-sub">Technical University of Munich, Munich, Germany</p>
+            <p class="entry-sub">
+              Technical University of Munich, Munich, Germany
+            </p>
           </div>
           <div class="entry">
             <div class="entry-top">
@@ -431,7 +497,9 @@
               <h3 class="entry-title">Driving Strategy Engineer</h3>
               <span class="entry-meta">2024 – 2025</span>
             </div>
-            <p class="entry-sub">TUfast Eco Team, Technical University of Munich</p>
+            <p class="entry-sub">
+              TUfast Eco Team, Technical University of Munich
+            </p>
             <ul>
               <li>
                 Developed the race strategy optimizer for the lux025 solar car
@@ -457,21 +525,33 @@
         <div>
           <div class="entry">
             <div class="entry-top">
-              <h3 class="entry-title">InfraLens, Proxmox cluster visualizer &amp; AI assistant</h3>
+              <h3 class="entry-title">
+                InfraLens, Proxmox cluster visualizer &amp; AI assistant
+              </h3>
               <span class="entry-meta entry-links">
                 <a href="infralens.html">Live</a>
-                <a href="https://github.com/AdamYahmadi/InfraLens" target="_blank" rel="noopener">Code</a>
+                <a
+                  href="https://github.com/AdamYahmadi/InfraLens"
+                  target="_blank"
+                  rel="noopener"
+                  >Code</a
+                >
               </span>
             </div>
             <ul class="entry-stack" aria-label="Technologies">
-              <li>Python</li><li>FastAPI</li><li>React</li><li>Tauri</li><li>Proxmox API</li><li>Ollama</li><li>SSH</li>
+              <li>Python</li>
+              <li>FastAPI</li>
+              <li>React</li>
+              <li>Tauri</li>
+              <li>Proxmox API</li>
+              <li>Ollama</li>
+              <li>SSH</li>
             </ul>
             <ul>
               <li>
                 Built a Tauri/React desktop app that connects to Proxmox
                 clusters, visualizes nodes, VMs, and containers as an
-                interactive topology graph, and monitors resources in real
-                time.
+                interactive topology graph, and monitors resources in real time.
               </li>
               <li>
                 Developed a FastAPI backend for VM and container controls and
@@ -487,12 +567,26 @@
             <div class="entry-top">
               <h3 class="entry-title">Vertex, intelligent document scanner</h3>
               <span class="entry-meta entry-links">
-                <a href="https://vertex.adamyahmadi.com" target="_blank" rel="noopener">Live</a>
-                <a href="https://github.com/AdamYahmadi/vertex" target="_blank" rel="noopener">Code</a>
+                <a
+                  href="https://vertex.adamyahmadi.com"
+                  target="_blank"
+                  rel="noopener"
+                  >Live</a
+                >
+                <a
+                  href="https://github.com/AdamYahmadi/vertex"
+                  target="_blank"
+                  rel="noopener"
+                  >Code</a
+                >
               </span>
             </div>
             <ul class="entry-stack" aria-label="Technologies">
-              <li>Python</li><li>FastAPI</li><li>OpenCV</li><li>React</li><li>Docker</li>
+              <li>Python</li>
+              <li>FastAPI</li>
+              <li>OpenCV</li>
+              <li>React</li>
+              <li>Docker</li>
             </ul>
             <ul>
               <li>
@@ -510,12 +604,27 @@
             <div class="entry-top">
               <h3 class="entry-title">mdtopdf, Markdown to PDF converter</h3>
               <span class="entry-meta entry-links">
-                <a href="https://mdtopdf.adamyahmadi.com" target="_blank" rel="noopener">Live</a>
-                <a href="https://github.com/AdamYahmadi/mdtopdf" target="_blank" rel="noopener">Code</a>
+                <a
+                  href="https://mdtopdf.adamyahmadi.com"
+                  target="_blank"
+                  rel="noopener"
+                  >Live</a
+                >
+                <a
+                  href="https://github.com/AdamYahmadi/mdtopdf"
+                  target="_blank"
+                  rel="noopener"
+                  >Code</a
+                >
               </span>
             </div>
             <ul class="entry-stack" aria-label="Technologies">
-              <li>Node.js</li><li>Express</li><li>KaTeX</li><li>Mermaid</li><li>Supabase</li><li>Docker</li>
+              <li>Node.js</li>
+              <li>Express</li>
+              <li>KaTeX</li>
+              <li>Mermaid</li>
+              <li>Supabase</li>
+              <li>Docker</li>
             </ul>
             <ul>
               <li>
@@ -537,32 +646,41 @@
         <div>
           <div class="entry">
             <div class="entry-top">
-              <h3 class="entry-title">Motion Planning for Autonomous Vehicles</h3>
+              <h3 class="entry-title">
+                Motion Planning for Autonomous Vehicles
+              </h3>
               <span class="entry-meta">WS 2025/26</span>
             </div>
             <ul class="entry-stack" aria-label="Technologies">
-              <li>Python</li><li>CommonRoad</li><li>Shapely</li><li>Matplotlib</li>
+              <li>Python</li>
+              <li>CommonRoad</li>
+              <li>Shapely</li>
+              <li>Matplotlib</li>
             </ul>
             <ul>
               <li>
-                Converted drone-recorded traffic data into CommonRoad
-                simulation scenarios for benchmarking autonomous vehicle
-                motion planners.
+                Converted drone-recorded traffic data into CommonRoad simulation
+                scenarios for benchmarking autonomous vehicle motion planners.
               </li>
               <li>
                 Built a validation tool with spatial indexing to detect
-                collisions, off-road driving, and physically infeasible
-                motion, with visualizations for debugging.
+                collisions, off-road driving, and physically infeasible motion,
+                with visualizations for debugging.
               </li>
             </ul>
           </div>
           <div class="entry">
             <div class="entry-top">
-              <h3 class="entry-title">Computer Architecture &amp; Fundamentals of Programming</h3>
+              <h3 class="entry-title">
+                Computer Architecture &amp; Fundamentals of Programming
+              </h3>
               <span class="entry-meta">WS 2023/24 – SS 2024</span>
             </div>
             <ul class="entry-stack" aria-label="Technologies">
-              <li>C</li><li>C++</li><li>SystemC</li><li>Java</li>
+              <li>C</li>
+              <li>C++</li>
+              <li>SystemC</li>
+              <li>Java</li>
             </ul>
             <ul>
               <li>
@@ -584,25 +702,44 @@
           <div class="skill-line">
             <div class="skill-label">Programming</div>
             <ul class="skill-chips">
-              <li>Python</li><li>Java</li><li>C++</li><li>C</li><li>JavaScript</li>
+              <li>Python</li>
+              <li>Java</li>
+              <li>C++</li>
+              <li>C</li>
+              <li>JavaScript</li>
             </ul>
           </div>
           <div class="skill-line">
             <div class="skill-label">Frameworks &amp; libraries</div>
             <ul class="skill-chips">
-              <li>FastAPI</li><li>React</li><li>Node.js</li><li>PyTorch</li><li>NumPy</li><li>OpenCV</li>
+              <li>FastAPI</li>
+              <li>React</li>
+              <li>Node.js</li>
+              <li>PyTorch</li>
+              <li>NumPy</li>
+              <li>OpenCV</li>
             </ul>
           </div>
           <div class="skill-line">
             <div class="skill-label">Tools &amp; infrastructure</div>
             <ul class="skill-chips">
-              <li>Linux</li><li>Docker</li><li>Git</li><li>GitLab CI</li><li>pytest</li><li>SSH</li><li>Proxmox</li><li>Ollama</li>
+              <li>Linux</li>
+              <li>Docker</li>
+              <li>Git</li>
+              <li>GitLab CI</li>
+              <li>pytest</li>
+              <li>SSH</li>
+              <li>Proxmox</li>
+              <li>Ollama</li>
             </ul>
           </div>
           <div class="skill-line">
             <div class="skill-label">Languages</div>
             <ul class="skill-chips">
-              <li>German (native)</li><li>English (C1)</li><li>Arabic (native)</li><li>French (C1)</li>
+              <li>German (native)</li>
+              <li>English (C1)</li>
+              <li>Arabic (native)</li>
+              <li>French (C1)</li>
             </ul>
           </div>
         </div>
